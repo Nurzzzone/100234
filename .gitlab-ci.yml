@@ -1,0 +1,95 @@
+stages:
+    - initialization
+    - reset
+    - update
+    - pull
+    - autoload
+
+variables:
+    GIT_STRATEGY: none
+
+.log_scripts: &logging
+    before_script:
+        - echo '================================================================'
+        - echo 'JOB STARTED'
+    after_script:
+        - echo 'JOB ENDED'
+        - echo '================================================================'
+
+initialize:
+    <<: *logging
+    stage: initialization
+    when: manual
+    environment:
+        name: development
+    only:
+        - master
+    script:
+        - cd $PROJECT_PATH
+        - git clone $CI_REPOSITORY_URL .
+        - composer install
+        - npm install
+        - npm run prod
+        - git cat-file -p HEAD
+    tags:
+        - shell
+
+reset:
+    <<: *logging
+    stage: reset
+    when: manual
+    only:
+        - master
+    environment:
+        name: development
+    script:
+        - cd $PROJECT_PATH
+        - git checkout master
+        - git reset --hard "$GIT_RESET_HEAD"
+        - git cat-file -p HEAD
+    tags:
+        - shell
+
+pull:
+    <<: *logging
+    stage: pull
+    rules:
+        - if: '$CI_COMMIT_BRANCH == "master"'
+          when: always
+        - when: never
+    environment:
+        name: development
+    script:
+        - cd $PROJECT_PATH
+        - git checkout master
+        - git pull
+        - git cat-file -p HEAD
+    tags:
+        - shell
+
+update:
+    <<: *logging
+    stage: update
+    when: manual
+    environment:
+        name: development
+    script:
+        - cd $PROJECT_PATH
+        - composer update
+    tags:
+        - shell
+
+autoload:
+    <<: *logging
+    stage: autoload
+    rules:
+        - if: '$CI_COMMIT_BRANCH == "master"'
+          when: always
+        - when: never
+    environment:
+        name: development
+    script:
+        - cd $PROJECT_PATH
+        - composer dump-autoload --no-interaction
+    tags:
+        - shell
