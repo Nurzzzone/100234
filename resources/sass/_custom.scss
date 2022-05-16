@@ -1,0 +1,78 @@
+@import "./custom/theme.scss";
+@import "./custom/radio-buttons.scss";
+@import "./custom/checkbox.scss";
+@import "./custom/image-upload.scss";
+
+// ======================================================
+
+.c-header.c-header-fixed{
+    top:0px;
+}
+
+.click-file{
+    cursor:pointer;
+}
+  
+.table {
+    table-layout: fixed;
+}
+
+.table-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #bbbbbb !important;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+div[data-name="editor"] {
+    height: 375px;
+}
+
+tr[data-name="tableRow"] {
+    cursor: pointer;
+}
+
+textarea{ 
+    height:375px; 
+    min-height:375px;  
+    max-height:375px;
+    resize: none;
+}
+
+.form-control:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+.backend__map {
+    iframe {
+        width: 100%;
+    }
+}
+
+.pages__dropdown-item {
+    border-radius: 0;
+    transition: unset;
+}
+
+.pages__dropdown-item:hover {
+    border-radius: 0;
+    transition: unset;
+    background-color: rgba(0, 0, 21, 0.075);
+}
+
+
+#accordion {
+    div[type='button'] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+}

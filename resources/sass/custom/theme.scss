@@ -1,0 +1,32 @@
+@media (hover: hover), (-ms-high-contrast: none) {
+    .c-sidebar .c-sidebar-nav-link:hover, .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
+        color: #fff;
+        background: #20a8d8;
+    }
+}
+
+.c-sidebar,
+.c-sidebar.c-sidebar-minimized .c-sidebar-nav > .c-sidebar-nav-dropdown:hover,
+.c-sidebar.c-sidebar-minimized .c-sidebar-nav > .c-sidebar-nav-dropdown > .c-sidebar-nav-dropdown-items {
+    background: #2f353a;
+}
+
+.c-sidebar.c-sidebar-minimized .c-sidebar-nav-item:hover > .c-sidebar-nav-link,
+.c-sidebar.c-sidebar-minimized .c-sidebar-nav-item:hover > .c-sidebar-nav-dropdown-toggle
+.c-legacy-theme .c-sidebar .c-sidebar-nav-link:hover, .c-legacy-theme .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
+    background: #20a8d8;
+}
+
+.c-sidebar .c-sidebar-brand {
+    color: #fff;
+    background: #1f2021;
+}
+
+.breadcrumb-item a,
+.breadcrumb-item a:hover {
+    color: #20a8d8;
+}
+
+.c-sidebar .c-sidebar-minimizer {
+    background-color: #1f2021;
+}

@@ -1,0 +1,93 @@
+<?php
+
+namespace {{namespace}};
+
+use App\Models\{{model}};
+use Illuminate\Http\Request;
+use App\Traits\HasFlashMessage;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{{model}}\{{createRequest}};
+use App\Http\Requests\{{model}}\{{updateRequest}};
+use Illuminate\Support\Facades\View;
+
+class {{class}} extends Controller
+{
+    use HasFlashMessage;
+
+    protected const MODEL = {{model}}::class;
+    protected const COLUMNS = [{{tableColumns}}];
+    protected $route;
+    protected $object;
+
+    public function __construct()
+    {
+        $this->route = '{{route}}';
+        View::share('page_title', '{{pageTitle}}');
+    }
+
+    public function index()
+    {
+        return view("pages.{$this->route}.index",
+        [
+            'objects' => (self::MODEL)::paginate({{perPageItems}}),
+            'columns' => self::COLUMNS,
+            'route' => $this->route,
+        ]);
+    }
+
+    public function create()
+    {
+        $model = self::MODEL;
+
+        return view("pages.{$this->route}.create", [
+            'object' => new $model(),
+            'route' => $this->route,
+        ]);
+    }
+
+    public function store({{createRequest}} $request)
+    {
+        try {
+            (self::MODEL)::create($request->validated());
+        } catch (\Exception $exception) {
+            return $this->flashErrorMessage($request, $exception);
+        }
+        return $this->flashSuccessMessage($request, "{$this->route}.index");
+    }
+
+    public function show({{model}} ${{object}})
+    {
+        return view("pages.{$this->route}.show", [
+            'object' => ${{object}},
+            'route' => $this->route
+        ]);
+    }
+
+    public function edit({{model}} ${{object}})
+    {
+        return view("pages.{$this->route}.edit", [
+            'object' => ${{object}},
+            'route' => $this->route
+         ]);
+    }
+
+    public function update({{updateRequest}} $request, {{model}} ${{object}})
+    {
+        try {
+            ${{object}}->update($request->validated());
+        } catch (\Exception $exception) {
+            return $this->flashErrorMessage($request, $exception);
+        }
+        return $this->flashSuccessMessage($request, "{$this->route}.index");
+    }
+
+    public function destroy({{model}} ${{object}}, Request $request)
+    {
+        try {
+            ${{object}}->delete();
+        } catch (\Exception $exception) {
+            return $this->flashErrorMessage($request, $exception);
+        }
+        return $this->flashSuccessMessage($request, "{$this->route}.index");
+    }
+}
