@@ -24,9 +24,9 @@ trait HasFile
 
     /**
      * Delete image
-     * @param string $file_name
+     * @param ?string $file_name
      */
-    protected function deleteFile(string $file_name): void
+    protected function deleteFile(?string $file_name = null): void
     {
         if ($file_name !== null && File::exists($file_name)) {
             File::delete($file_name);

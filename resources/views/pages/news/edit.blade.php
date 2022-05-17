@@ -2,13 +2,15 @@
 
 @section('title', $page_title)
 
+
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/quill.css') }}">
 @endsection
 
 @php($options = [
-    'method'  => 'POST',
-    'url'     => route("$route.store"),
+    'method'  => 'PUT',
+    'url'     => route("$route.update", $object->id),
+    'enctype' => "multipart/form-data",
 ])
 
 @section('content')
@@ -22,9 +24,9 @@
                         </div>
                         <div class="card-body">
                             {{ Form::model($object, $options) }}
-                            @include("pages.$route.__form")
+                            @include("pages.{$route}.__form")
                             <div class="d-flex justify-content-end align-items-center">
-                                <a class="btn btn-success mr-1" href="{{ route("$route.index") }}">@lang('buttons.back')</a>
+                                <a class="btn btn-success mr-1" href="{{ route("{$route}.index") }}">@lang('buttons.back')</a>
                                 {{ Form::submit(trans('buttons.save'), ['class' => 'btn btn-success']) }}
                             </div>
                             {{ Form::close() }}

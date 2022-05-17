@@ -9,6 +9,7 @@
 @php($options = [
     'method'  => 'POST',
     'url'     => route("$route.store"),
+    'enctype' => "multipart/form-data",
 ])
 
 @section('content')

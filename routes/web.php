@@ -9,6 +9,7 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('user', 'UserController');
     Route::resource('role', 'RoleController');
     Route::resource('aboutUs', 'AboutUsController', ['parameters' => ['aboutUs' => 'aboutUs']]);
+    Route::resource('news', 'NewsController');
 
     Route::resource('roles', 'RolesController');
     Route::get('/roles/move/move-up',      'RolesController@moveUp')->name('roles.up');
