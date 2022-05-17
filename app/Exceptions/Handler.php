@@ -2,10 +2,8 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -44,18 +42,6 @@ class Handler extends ExceptionHandler
             return redirect()->back();
         }
 
-        if (! config('app.debug') && auth()->check() && $exception->getCode() == 0) {
-            return redirect()->back();
-        }
-
         return $retval;
-    }
-
-    protected function invalidJson($request, ValidationException $exception)
-    {
-        return response()->json([
-            'message' => trans('validation.header'),
-            'errors' => $exception->errors(),
-        ], $exception->status);
     }
 }

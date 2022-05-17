@@ -22,7 +22,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                {{ Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => trans('fields.email_address'), 'required' => '', 'autofocus' => '']) }}
+                                {{ Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => trans('fields.email'), 'required' => '', 'autofocus' => '']) }}
                             </div>
                             <div class="input-group mb-4">
                                 <div class="input-group-prepend">

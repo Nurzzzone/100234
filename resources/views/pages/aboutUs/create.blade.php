@@ -9,12 +9,14 @@
 @php($options = [
     'method'  => 'POST',
     'url'     => route("$route.store"),
+    'enctype' => "multipart/form-data",
 ])
 
 @section('content')
     <div class="container-fluid">
         <div class="fade-in">
             <div class="row">
+                @include('partials.validation')
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
@@ -44,5 +46,4 @@
 @section('scripts')
     <script src="{{ asset('js/quill.js') }}"></script>
     <script src="{{ asset('js/upload-image.js') }}"></script>
-    <script src="{{ asset('js/translation.js') }}"></script>
 @endsection

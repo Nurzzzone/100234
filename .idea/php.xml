@@ -123,6 +123,8 @@
       <path value="$PROJECT_DIR$/vendor/laravel/serializable-closure" />
       <path value="$PROJECT_DIR$/vendor/league/config" />
       <path value="$PROJECT_DIR$/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/vendor/org_heigl/ghostscript" />
+      <path value="$PROJECT_DIR$/vendor/spatie/pdf-to-image" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2">

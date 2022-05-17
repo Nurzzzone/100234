@@ -1,7 +1,7 @@
 $(document).ready(function() {
     let uploadImageDiv = $('.avatar-upload'),
-        prevFile = $('#prevFile'),
-        fileInput = $('#fileUpload');
+        prevFile = $('#prevImage'),
+        fileInput = $('#imageUpload');
 
     // setup
     uploadImageDiv.each(function(index, block) {

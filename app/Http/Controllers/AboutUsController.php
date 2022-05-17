@@ -1,35 +1,35 @@
 <?php
 
-namespace {{namespace}};
+namespace App\Http\Controllers;
 
-use App\Models\{{model}};
+use App\Models\AboutUs;
+use App\Traits\HasFile;
 use Illuminate\Http\Request;
 use App\Traits\HasFlashMessage;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\{{model}}\{{createRequest}};
-use App\Http\Requests\{{model}}\{{updateRequest}};
+use App\Http\Requests\AboutUs\CreateAboutUsRequest;
+use App\Http\Requests\AboutUs\UpdateAboutUsRequest;
 use Illuminate\Support\Facades\View;
 
-class {{class}} extends Controller
+class AboutUsController extends Controller
 {
-    use HasFlashMessage;
+    use HasFlashMessage, HasFile;
 
-    protected const MODEL = {{model}}::class;
-    protected const COLUMNS = [{{tableColumns}}];
+    protected const MODEL = AboutUs::class;
+    protected const COLUMNS = ['title' => 'title', 'is_active' => 'is_active', 'image' => 'image'];
     protected $route;
     protected $object;
 
     public function __construct()
     {
-        $this->route = '{{route}}';
-        View::share('page_title', '{{pageTitle}}');
+        $this->route = 'aboutUs';
+        View::share('page_title', 'О Нас');
     }
 
     public function index()
     {
         return view("pages.$this->route.index",
         [
-            'objects' => (self::MODEL)::paginate({{perPageItems}}),
+            'objects' => (self::MODEL)::paginate(10),
             'columns' => self::COLUMNS,
             'route' => $this->route,
         ]);
@@ -45,46 +45,52 @@ class {{class}} extends Controller
         ]);
     }
 
-    public function store({{createRequest}} $request)
+    public function store(CreateAboutUsRequest $request)
     {
         try {
-            (self::MODEL)::create($request->validated());
+            $data = $request->validated();
+            $data['image'] = $this->uploadFile($request['image'], $this->route . '\\');
+            (self::MODEL)::query()->create($data);
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function show({{model}} ${{object}})
+    public function show(AboutUs $aboutUs)
     {
         return view("pages.$this->route.show", [
-            'object' => ${{object}},
+            'object' => $aboutUs,
             'route' => $this->route
         ]);
     }
 
-    public function edit({{model}} ${{object}})
+    public function edit(AboutUs $aboutUs)
     {
         return view("pages.$this->route.edit", [
-            'object' => ${{object}},
+            'object' => $aboutUs,
             'route' => $this->route
          ]);
     }
 
-    public function update({{updateRequest}} $request, {{model}} ${{object}})
+    public function update(UpdateAboutUsRequest $request, AboutUs $aboutUs)
     {
         try {
-            ${{object}}->update($request->validated());
+            $data = $request->validated();
+            $data['image'] = $this->updateImage($data['image'] ?? null, $data['previous_image'], $aboutUs->image, $this->route);
+            $aboutUs->update($data);
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function destroy({{model}} ${{object}}, Request $request)
+    public function destroy(AboutUs $aboutUs, Request $request)
     {
         try {
-            ${{object}}->delete();
+            $this->deleteFile($aboutUs->image);
+
+            $aboutUs->delete();
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
