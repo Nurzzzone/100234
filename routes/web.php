@@ -9,6 +9,23 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('user', 'UserController');
     Route::resource('role', 'RoleController');
 
+    Route::prefix('discount')->group(function () {
+        Route::prefix('limit')->group(function () {
+            Route::resource('periodic', 'Discounts\DiscountLimitOnPeriodController',
+                array('names' => array(
+                    'create' => 'discount.limit.periodic.create',
+                    'index' => 'discount.limit.periodic.index',
+                    'store' => 'discount.limit.periodic.store',
+                    'show' => 'discount.limit.periodic.show',
+                    'update' => 'discount.limit.periodic.update',
+                    'destroy' => 'discount.limit.periodic.destroy',
+                    'edit' => 'discount.limit.periodic.edit')))
+                ->parameters([
+                'periodic' => 'discountLimit',
+            ]);
+        });
+    });
+
     Route::resource('roles', 'RolesController');
     Route::get('/roles/move/move-up',      'RolesController@moveUp')->name('roles.up');
     Route::get('/roles/move/move-down',    'RolesController@moveDown')->name('roles.down');

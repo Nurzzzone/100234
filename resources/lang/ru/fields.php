@@ -54,5 +54,11 @@ return [
     'map' => 'Карта',
     'location' => 'Местоположение',
     'position' => 'Должность',
-    'address' => 'Адресс'
+    'address' => 'Адрес',
+    'manufacturer' => 'Производитель',
+    'supervisor_discount_limit' => 'Лимит Супервайзера',
+    'product_manager_discount_limit' => 'Лимит Продакт менеджера',
+    'filial_director_discount_limit' => 'Лимит Директора филиала',
+    'sales_agent_discount_limit'    => 'Лимит Торгового представителя',
+
 ];
