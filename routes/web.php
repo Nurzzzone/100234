@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Discounts\DiscountLimitController;
+
 Auth::routes();
 
 Route::group(['middleware' => ['auth', 'get.menu']], function () {
@@ -52,4 +54,6 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
         Route::post('/update',  'MenuController@update')->name('menu.menu.update');
         Route::get('/delete',   'MenuController@delete')->name('menu.menu.delete');
     });
+
+
 });
