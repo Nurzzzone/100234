@@ -29,6 +29,7 @@ mix.copy('resources/js/map-form.js', 'public/js');
 mix.copy('resources/vendors/quill/js', 'public/js/vendors/quill');
 mix.copy('resources/vendors/jquery/jquery.min.js', 'public/js/vendors/jquery');
 mix.copy('resources/vendors/jquery-sortable-lists/jquery-sortable-lists.min.js', 'public/js');
+mix.js('resources/js/menu.js', 'public/js');
 mix.js('resources/js/menu-create.js', 'public/js');
 mix.js('resources/js/menu-edit.js', 'public/js');
 //**************** END: SCRIPTS ********************

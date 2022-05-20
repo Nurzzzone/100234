@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -93,75 +93,75 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-/* 11.12.2019 */
-var self = this;
-
-this.buildSelectParent = function (data) {
-  var result = '<option value="none">Do not have parent</option>';
-  $parentId = document.getElementById('parentId').value;
-  $menuElementId = document.getElementById('menuElementId').value;
-
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].id != $menuElementId) {
-      if (data[i].id == $parentId) {
-        result += '<option value="' + data[i].id + '" selected>' + data[i].name + '</option>';
-      } else {
-        result += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-      }
+$(document).ready(function () {
+  var buttons = $('button[data-name="editModalButton"]');
+  var form = $('#editForm');
+  var url = $(form).data('url');
+  var target;
+  $('#menu-input-parent').change(function () {
+    if ($(this).val() !== '_') {
+      $('#menu-input-slug').find('option[value="dropdown"]').attr('disabled', true);
+      $('#menu-input-slug').val('link');
+    } else {
+      $('#menu-input-slug').find('option[value="dropdown"]').attr('disabled', false);
     }
-  }
-
-  return result;
-};
-
-this.updateSelectParent = function () {
-  axios.get('/menu/element/get-parents?menu=' + document.getElementById("menu").value).then(function (response) {
-    document.getElementById("parent").innerHTML = self.buildSelectParent(response.data);
-  })["catch"](function (error) {
-    // handle error
-    console.log(error);
   });
-};
+  buttons.each(function (i, button) {
+    $(button).on('click', function (e) {
+      e.stopPropagation();
+      target = $(button).data('target');
+      $.ajax({
+        url: '/menu/element/showElement/' + target,
+        success: function success(data) {
+          $('#menu-input-name').val(data.name);
+          $('#menu-input-link').val(data.href);
+          $('#menu-input-icon').val(data.icon);
+          $('#menu-input-sequence').val(data.sequence);
 
-this.toggleDivs = function () {
-  var value = document.getElementById("type").value;
+          if (data.slug === 'dropdown') {
+            $('#menu-input-parent').find("option[value=\"".concat(data.parent_id, "\"]")).hide();
+          }
 
-  if (value === 'title') {
-    document.getElementById('div-href').classList.add('d-none');
-    document.getElementById('div-dropdown-parent').classList.add('d-none');
-    document.getElementById('div-icon').classList.add('d-none');
-  } else if (value === 'link') {
-    document.getElementById('div-href').classList.remove('d-none');
-    document.getElementById('div-dropdown-parent').classList.remove('d-none');
-    document.getElementById('div-icon').classList.remove('d-none');
-  } else {
-    document.getElementById('div-href').classList.add('d-none');
-    document.getElementById('div-dropdown-parent').classList.remove('d-none');
-    document.getElementById('div-icon').classList.remove('d-none');
-  }
-};
+          if (data.parent_id) {
+            $('#menu-input-parent').val(data.parent_id);
+          }
 
-this.updateSelectParent();
-this.toggleDivs();
-
-document.getElementById("menu").onchange = function () {
-  self.updateSelectParent();
-};
-
-document.getElementById("type").onchange = function () {
-  self.toggleDivs();
-};
+          $('#menu-input-slug').val(data.slug);
+        },
+        error: function error() {
+          alert('Произошла ошибка. Попробуйте еще раз!');
+        }
+      });
+      form.attr('action', url + target);
+      $('#update-modal').modal('show');
+    });
+  }); // form.submit(function(e) {
+  //     e.preventDefault();
+  //
+  //     $.ajax({
+  //         url: '/menu/element/updateElement/' + target,
+  //         method: 'PUT',
+  //         headers: {
+  //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //         },
+  //         data: $(this).serialize(),
+  //         success: function() {
+  //             $('#update-modal').hide();
+  //         }
+  //     })
+  // })
+});
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
 /*!*****************************************!*\
   !*** multi ./resources/js/menu-edit.js ***!
   \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\openserver\domains\admin.adkulan.kz_2\resources\js\menu-edit.js */"./resources/js/menu-edit.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.adkulan.kz_2\resources\js\menu-edit.js */"./resources/js/menu-edit.js");
 
 
 /***/ })

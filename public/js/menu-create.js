@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -93,79 +93,52 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-/* 11.12.2019 */
-var self = this;
+$(document).ready(function () {
+  var openModalButtons = $('button[data-name="modal-content-button"]');
+  var form;
+  var modal;
+  openModalButtons.each(function (i, button) {
+    modal = $('#' + $(button).data('for')); //
+    // form = modal.find('form');
 
-this.buildSelectParent = function (data) {
-  var result = '<option value="none">Do not have parent</option>';
-
-  for (var i = 0; i < data.length; i++) {
-    result += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-  }
-
-  return result;
-};
-
-this.updateSelectParent = function () {
-  axios.get('/menu/element/get-parents?menu=' + document.getElementById("menu").value).then(function (response) {
-    document.getElementById("parent").innerHTML = self.buildSelectParent(response.data);
-  })["catch"](function (error) {
-    // handle error
-    console.log(error);
-  });
-};
-
-this.toggleDivs = function () {
-  var value = document.getElementById("type").value;
-
-  if (value === 'title') {
-    document.getElementById('div-href').classList.add('d-none');
-    document.getElementById('div-dropdown-parent').classList.add('d-none');
-    document.getElementById('div-icon').classList.add('d-none');
-  } else if (value === 'link') {
-    document.getElementById('div-href').classList.remove('d-none');
-    document.getElementById('div-dropdown-parent').classList.remove('d-none');
-    document.getElementById('div-icon').classList.remove('d-none');
-  } else {
-    document.getElementById('div-href').classList.add('d-none');
-    document.getElementById('div-dropdown-parent').classList.remove('d-none');
-    document.getElementById('div-icon').classList.remove('d-none');
-  }
-};
-
-this.updateSelectParent();
-this.toggleDivs();
-
-document.getElementById("menu").onchange = function () {
-  self.updateSelectParent();
-};
-
-document.getElementById("type").onchange = function () {
-  self.toggleDivs();
-};
+    $(button).on('click', function (e) {
+      e.stopPropagation();
+      modal.modal('show');
+    });
+  }); // form.submit(function(e) {
+  //     e.preventDefault();
+  //     modal.hide();
+  //
+  //     $.ajax({
+  //         url: '/menu/element/createElement',
+  //         method: 'POST',
+  //         data: $(this).serialize(),
+  //         headers: {
+  //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //         },
+  //         beforeSend: function(xhr, settings) {
+  //             console.log(settings.data)
+  //         },
+  //         success: function() {
+  //             modal.hide();
+  //         },
+  //         error: function(response) {
+  //             alert(response.status + ': Произошла ошибка. Попробуйте еще раз!')
+  //         }
+  //     })
+  // });
+});
 
 /***/ }),
 
-/***/ "./resources/sass/style.scss":
-/*!***********************************!*\
-  !*** ./resources/sass/style.scss ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 0:
-/*!***********************************************************************!*\
-  !*** multi ./resources/js/menu-create.js ./resources/sass/style.scss ***!
-  \***********************************************************************/
+/***/ 1:
+/*!*******************************************!*\
+  !*** multi ./resources/js/menu-create.js ***!
+  \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\openserver\domains\admin.adkulan.kz_2\resources\js\menu-create.js */"./resources/js/menu-create.js");
-module.exports = __webpack_require__(/*! C:\openserver\domains\admin.adkulan.kz_2\resources\sass\style.scss */"./resources/sass/style.scss");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.adkulan.kz_2\resources\js\menu-create.js */"./resources/js/menu-create.js");
 
 
 /***/ })

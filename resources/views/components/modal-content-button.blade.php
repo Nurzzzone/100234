@@ -1,0 +1,1 @@
+<button class="btn {{ $class }}" type="button" data-toggle="modal" data-name="modal-content-button" data-for="{{ $for }}">@lang('buttons.create')</button>

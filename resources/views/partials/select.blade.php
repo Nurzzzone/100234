@@ -5,6 +5,7 @@
             'class' => ['form-control', $errors->has($field) ? 'border-danger' : ''],
             'placeholder' => empty($select_options)? trans('messages.data.unavailable'): null,
             empty($select_options)? 'disabled': '',
+            'id' => $id ?? '_select-input'
         ];
     @endphp
     <td>{{ Form::select($field, $select_options, $default, $options) }}</td>
