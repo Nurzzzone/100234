@@ -27,18 +27,6 @@ class GetSidebarMenu implements MenuInterface{
             ->orderBy('menus.sequence', 'asc')->get();       
     }
 
-    private function getGuestMenu( $menuId ){
-        $this->getMenuFromDB($menuId, 'guest');
-    }
-
-    private function getUserMenu( $menuId ){
-        $this->getMenuFromDB($menuId, 'user');
-    }
-
-    private function getAdminMenu( $menuId ){
-        $this->getMenuFromDB($menuId, 'Администратор');
-    }
-
     public function get($role, $menuId=2){
         $this->getMenuFromDB($menuId, $role);
         $rfd = new RenderFromDatabaseData;

@@ -111,7 +111,7 @@ $(document).ready(function () {
       e.stopPropagation();
       target = $(button).data('target');
       $.ajax({
-        url: '/menu/element/showElement/' + target,
+        url: '/menu/' + target,
         success: function success(data) {
           $('#menu-input-name').val(data.name);
           $('#menu-input-link').val(data.href);
@@ -161,7 +161,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.adkulan.kz_2\resources\js\menu-edit.js */"./resources/js/menu-edit.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.akulan.kz\resources\js\menu-edit.js */"./resources/js/menu-edit.js");
 
 
 /***/ })

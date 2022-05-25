@@ -21,7 +21,7 @@ $(document).ready(function () {
             actions: {
                 onDrop: function (data) {
                     $.ajax({
-                        url: '/menu/element/updateSequence/',
+                        url: '/menu/sequence/',
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

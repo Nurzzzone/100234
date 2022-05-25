@@ -138,7 +138,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.adkulan.kz_2\resources\js\menu-create.js */"./resources/js/menu-create.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.akulan.kz\resources\js\menu-create.js */"./resources/js/menu-create.js");
 
 
 /***/ })

@@ -21,6 +21,6 @@ class Help extends Model
 
     public function dropdown()
     {
-        return $this->hasMany(DropDown::class, 'page_id', 'GUID');
+        return $this->hasMany(DropDown::class, 'parent_id', 'GUID');
     }
 }

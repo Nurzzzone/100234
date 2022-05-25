@@ -18,13 +18,13 @@
                         </div>
 
                         <div class="card-body">
-                            <x-modal-content id="create-modal" action="/menu/element/createElement">
-                                @include('pages.editmenu.__form')
+                            <x-modal-content id="create-modal" action="/menu">
+                                @include('pages.menu.__form')
                             </x-modal-content>
 
-                            @include('pages.editmenu.__edit-modal', ['url' => "/menu/element/updateElement/"])
+                            @include('pages.menu.__edit-modal', ['url' => "/menu/"])
 
-                            @include('partials.modal', ['url' => "/menu/element/deleteElement/"])
+                            @include('partials.modal', ['url' => "/menu/"])
 
                             <div id="menu" data-value="{{ $menuElements->toJson() }}"></div>
                         </div>

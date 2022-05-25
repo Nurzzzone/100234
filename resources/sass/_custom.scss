@@ -47,6 +47,10 @@ textarea{
     resize: none;
 }
 
+.textarea-editor p {
+    margin: 0;
+}
+
 .form-control:focus {
     border-color: none;
     box-shadow: none;

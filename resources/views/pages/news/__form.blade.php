@@ -2,6 +2,7 @@
     <tbody>
         @include('partials.input', ['input' => 'text', 'field' => "title", 'current_value' => $object->title, 'label' => trans('fields.title')])
         @include('partials.input', ['input' => 'text', 'field' => "description", 'current_value' => $object->description, 'label' => trans('fields.description')])
+        @include('partials.input', ['input' => 'datetimeLocal', 'field' => "starts_at", 'current_value' => $object->starts_at, 'label' => trans('fields.start')])
         @include('partials.image-field', ['current_image' => $object->image])
         @include('partials.textarea', ['field' => "content", 'current_value' => $object->content])
         @include('partials.active')

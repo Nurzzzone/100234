@@ -105,7 +105,7 @@ $(document).ready(function () {
       actions: {
         onDrop: function onDrop(data) {
           $.ajax({
-            url: '/menu/element/updateSequence/',
+            url: '/menu/sequence/',
             method: 'POST',
             headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -155,8 +155,8 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\OpenServer\domains\admin.adkulan.kz_2\resources\js\menu.js */"./resources/js/menu.js");
-module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.adkulan.kz_2\resources\sass\style.scss */"./resources/sass/style.scss");
+__webpack_require__(/*! C:\OpenServer\domains\admin.akulan.kz\resources\js\menu.js */"./resources/js/menu.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\admin.akulan.kz\resources\sass\style.scss */"./resources/sass/style.scss");
 
 
 /***/ })

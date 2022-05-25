@@ -20,7 +20,7 @@ $(document).ready(function() {
             target = $(button).data('target');
 
             $.ajax({
-                url: '/menu/element/showElement/' + target,
+                url: '/menu/' + target,
                 success: function(data) {
                     $('#menu-input-name').val(data.name)
                     $('#menu-input-link').val(data.href)

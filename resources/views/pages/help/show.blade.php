@@ -9,9 +9,18 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
                         <div class="card-body">
+                            <table class="table table-striped table-bordered datatable mb-3">
+                                <tbody>
+                                    @include('partials.tr-text', ['data' => $object->title, 'label' => trans('fields.name'), 'tr' => 'text'])
+                                    @include('partials.tr-active', ['data' => $object->is_active])
+                                    @include('partials.tr-active', ['data' => $object->in_footer, 'label' => trans('fields.in_footer')])
+                                </tbody>
+                            </table>
                             <table class="table table-striped table-bordered datatable mb-0">
                                 <tbody>
-                                    @include('partials.tr-text', ['data' => $object->name, 'locale' => 'fields.name', 'tr' => 'text'])
+                                    @foreach($object->dropdown as $dropdown)
+                                        @include('partials.tr-text', ['data' => [$dropdown->title, $dropdown->description], 'tr' => 'text-multiple'])
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

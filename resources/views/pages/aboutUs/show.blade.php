@@ -11,7 +11,7 @@
                         <div class="card-body">
                             <table class="table table-striped table-bordered datatable mb-0">
                                 <tbody>
-                                    @include('partials.tr-text', ['data' => $object->name, 'locale' => 'fields.name', 'tr' => 'text'])
+                                    @include('partials.tr-text', ['data' => $object->title, 'label' => trans('fields.title'), 'tr' => 'text'])
                                 </tbody>
                             </table>
                         </div>

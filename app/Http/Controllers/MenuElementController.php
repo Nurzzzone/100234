@@ -7,11 +7,8 @@ use App\Models\Auth\Role;
 use App\Models\Menulist;
 use App\Models\Menurole;
 use App\Models\Menus;
-use App\Services\RolesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
-
 
 class MenuElementController extends Controller
 {
@@ -20,7 +17,7 @@ class MenuElementController extends Controller
         $menuId = Menulist::first()->id;
         $getSidebarMenu = new GetSidebarMenu();
 
-        return view('pages.editmenu.index', array(
+        return view('pages.menu.index', array(
             'menulist' => Menulist::all(),
             'role' => 'Администратор',
             'roles' => Role::query()->orderBy('name')->pluck('name', 'id')->prepend(null),
@@ -41,7 +38,7 @@ class MenuElementController extends Controller
         return redirect()->back();
     }
 
-    public function createElement(Request $request)
+    public function store(Request $request)
     {
         $data = $this->validationData($request);
         $data['sequence'] = Menus::query()->latest('sequence')->first()->sequence + 1;
@@ -58,24 +55,25 @@ class MenuElementController extends Controller
         return redirect()->back();
     }
 
-    public function showElement(Menus $menuElement)
+    public function show(Menus $menuElement)
     {
         return $menuElement;
     }
 
-    public function updateElement(Menus $menuElement, Request $request)
+    public function update(Menus $menuElement, Request $request)
     {
         $data = $this->validationData($request);
 
         $data['parent_id'] = $data['parent_id'] !== '_' ? $data['parent_id'] : null;
         $data['sequence'] = $data['sequence'] ?? Menus::query()->latest('sequence')->first()->sequence + 1;
+        unset($data['sequence']);
 
         $menuElement->update($data);
 
         return redirect()->back();
     }
 
-    public function updateSequence(Request $request)
+    public function sequence(Request $request)
     {
 //        $current_sequence = Menus::query()->orderBy('sequence')->get(['id', 'parent_id', 'sequence']);
 //
