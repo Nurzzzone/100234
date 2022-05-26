@@ -56,5 +56,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/map-show.min.js') }}"></script>
+    <script src="{{ asset('js/src/map-show.js') }}"></script>
 @endsection

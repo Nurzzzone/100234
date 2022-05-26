@@ -37,8 +37,8 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/menu.min.js') }}"></script>
-    <script src="{{ asset('js/menu-create.min.js') }}"></script>
-    <script src="{{ asset('js/menu-edit.min.js') }}"></script>
-    <script src="{{ asset('js/modal.min.js') }}"></script>
+    <script src="{{ asset('js/src/menu.js') }}"></script>
+    <script src="{{ asset('js/src/menu-create.js') }}"></script>
+    <script src="{{ asset('js/src/menu-edit.js') }}"></script>
+    <script src="{{ asset('js/src/modal.js') }}"></script>
 @endsection

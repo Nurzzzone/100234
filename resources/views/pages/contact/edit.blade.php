@@ -48,6 +48,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/quill.min.js') }}"></script>
+    <script src="{{ asset('js/src/quill.js') }}"></script>
     <script src="{{ asset('js/map-form.min.js') }}"></script>
 @endsection

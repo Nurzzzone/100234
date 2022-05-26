@@ -42,6 +42,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/quill.min.js') }}"></script>
-    <script src="{{ asset('js/upload-image.min.js') }}"></script>
+    <script src="{{ asset('js/src/quill.js') }}"></script>
+    <script src="{{ asset('js/src/upload-image.js') }}"></script>
 @endsection

@@ -15,33 +15,18 @@ mix.copy([
 //******************* SCRIPTS ***********************
 mix.copy('resources/vendors/quill/js', 'public/js/vendors/quill');
 mix.copy('resources/vendors/jquery/jquery.min.js', 'public/js/vendors/jquery');
+mix.copy('node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js', 'public/js');
 
-mix.minify([
-    'resources/js/modal.js',
-    'resources/js/quill.js',
-    'resources/js/table-row.js',
-    'resources/js/map-show.js',
-    'resources/js/map-form.js',
-    'resources/js/upload-image.js',
-    'resources/js/sortable.js',
-    'resources/js/menu-edit.js',
-    'resources/js/menu-create.js',
-    'resources/js/menu.js'
-]);
-
-mix.copy([
-    'resources/js/modal.min.js',
-    'resources/js/quill.min.js',
-    'resources/js/table-row.min.js',
-    'resources/js/map-show.min.js',
-    'resources/js/map-form.min.js',
-    'resources/js/upload-image.min.js',
-    'resources/js/sortable.min.js',
-    'resources/js/menu-edit.min.js',
-    'resources/js/menu-create.min.js',
-    'resources/js/menu.min.js',
-    'node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js'
-], 'public/js');
+mix.js('resources/js/modal.js',         'public/js/src/modal.js')
+    .js('resources/js/quill.js',        'public/js/src/quill.js')
+    .js('resources/js/table-row.js',    'public/js/src/table-row.js')
+    .js('resources/js/map-show.js',     'public/js/src/map-show.js')
+    .js('resources/js/map-form.js',     'public/js/src/map-form.js')
+    .js('resources/js/upload-image.js', 'public/js/src/upload-image.js')
+    .js('resources/js/sortable.js',     'public/js/src/sortable.js')
+    .js('resources/js/menu-edit.js',    'public/js/src/menu-edit.js')
+    .js('resources/js/menu-create.js',  'public/js/src/menu-create.js')
+    .js('resources/js/menu.js',         'public/js/src/menu.js')
 //**************** END: SCRIPTS ********************
 
 //******************* OTHER ***********************
