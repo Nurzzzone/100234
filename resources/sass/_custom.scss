@@ -81,3 +81,15 @@ textarea{
         appearance: none;
     }
 }
+
+table th, table td
+{
+    width: 100px;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.ui-sortable-helper {
+    display: table;
+    table-layout: fixed;
+}

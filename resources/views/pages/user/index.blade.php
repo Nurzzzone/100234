@@ -21,6 +21,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/table-row.js') }}"></script>
-    <script src="{{ asset('js/modal.js') }}"></script>
+    <script src="{{ asset('js/table-row.min.js') }}"></script>
+    <script src="{{ asset('js/modal.min.js') }}"></script>
 @endsection

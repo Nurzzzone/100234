@@ -2,27 +2,6 @@
 
 @section('title', $page_title)
 
-@section('header-scripts')
-    <style type="text/css">
-        table th, table td
-        {
-            width: 100px;
-            padding: 5px;
-            border: 1px solid #ccc;
-        }
-        .selected
-        {
-            background-color: #666;
-            color: #fff;
-        }
-
-        .ui-sortable-helper {
-            display: table;
-            table-layout: fixed;
-        }
-    </style>
-@endsection
-
 @section('content')
     <div class="container-fluid">
         <div class="animated fadeIn">
@@ -48,39 +27,8 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/table-row.js') }}"></script>
+    <script src="{{ asset('js/table-row.min.js') }}"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            const table = $('#sortable-table');
-            let sequence = [];
-
-
-            $("#sortable-table").sortable({
-                items: 'tr',
-                cursor: 'pointer',
-                dropOnEmpty: false,
-                update: function() {
-                    let items = $(table).find('tbody').find('tr');
-
-                    items.each(function(key, item) {
-                        sequence.push({
-                            id: $(item).data('id'),
-                            sequence: key + 1
-                        });
-                    });
-
-                    $.ajax({
-                        url: $('#sortable-table').data('update-sequence-url'),
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: { sequence: sequence },
-                    });
-                }
-            })
-        });
-    </script>
-    <script src="{{ asset('js/modal.js') }}"></script>
+    <script src="{{ asset('js/sortable.min.js') }}"></script>
+    <script src="{{ asset('js/modal.min.js') }}"></script>
 @endsection
