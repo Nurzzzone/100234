@@ -20,16 +20,29 @@ class PopularCategoryRepository
             ->paginate(10);
     }
 
-    public function getAvailableOptions(): \Illuminate\Support\Collection
+    public function getAvailableOptions(?string $hierarchy_id = null): \Illuminate\Support\Collection
     {
         return Hierarchy::query()
             ->orderBy('name')
             ->where('parent', Uuid::NIL)
-            ->whereNotIn('GUID', function($query) {
+            ->whereNotIn('GUID', function($query) use($hierarchy_id) {
                 $query->select('hierarchy_id')
                     ->from('popular_categories')
-                    ->where('hierarchy_type', 'adkulan_hierarchy');
+                    ->where('hierarchy_type', 'adkulan_hierarchy')
+                    ->when($hierarchy_id, function($query) use ($hierarchy_id) {
+                        $query->where('hierarchy_id', '!=', $hierarchy_id);
+                    });
             })
             ->pluck('name', 'GUID');
+    }
+
+    public function getLatestSequence()
+    {
+        $latest = PopularCategory::query()
+            ->latest('sequence')
+            ->first()
+            ->sequence;
+
+        return ++$latest;
     }
 }

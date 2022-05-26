@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <div class="alert alert-success" role="alert">{{ Session::get('message') }}
-                <button id="dismiss-success-button" type="button" class="close" aria-label="Close">
+                <button id="dismiss-success-button" type="button" data-dismiss="alert" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-12">
             <div class="alert alert-danger" role="alert">{{ Session::get('error') }}
-                <button id="dismiss-error-button" type="button" class="close" aria-label="Close">
+                <button id="dismiss-error-button" type="button" data-dismiss="alert" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

@@ -8,5 +8,10 @@
             'id' => $id ?? '_select-input'
         ];
     @endphp
-    <td>{{ Form::select($field, $select_options, $default, $options) }}</td>
+    <td>
+        {{ Form::select($field, $select_options, $default, $options) }}
+        @if($errors->has($field))
+            <small class="text-danger">{{ $errors->first($field) }}</small>
+        @endif
+    </td>
 </tr>

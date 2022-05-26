@@ -40,6 +40,7 @@
     <main class="c-main">
       <div class="container-fluid">
         @include('partials.flash-message')
+        @include('partials.validation')
       </div>
       @yield('content')
     </main>

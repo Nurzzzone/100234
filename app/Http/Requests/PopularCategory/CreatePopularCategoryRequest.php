@@ -25,18 +25,9 @@ class CreatePopularCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'hierarchy_id' => ['required', 'string'],
+            'is_active' => ['nullable', 'boolean'],
+            'description' => ['nullable', 'string', 'max:100'],
         ];
-    }
-
-    public function validated()
-    {
-        $request = $this->validator->validated();
-
-        if ($this->has('name')) {
-            $request['slug'] = Str::slug($this->name);
-        }
-        
-        return $request;
     }
 }

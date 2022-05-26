@@ -46,13 +46,17 @@ class PopularCategoryController extends Controller
         ]);
     }
 
-    public function store(CreatePopularCategoryRequest $request)
+    public function store(CreatePopularCategoryRequest $request, PopularCategoryRepository $repository)
     {
-        try {
-            (self::MODEL)::create($request->validated());
-        } catch (\Exception $exception) {
-            return $this->flashErrorMessage($request, $exception);
-        }
+        (self::MODEL)::create([
+            'GUID' => uuid4(),
+            'hierarchy_id' => $request->hierarchy_id,
+            'hierarchy_type' => 'adkulan_hierarchy',
+            'description' => $request->description,
+            'sequence' => $repository->getLatestSequence(),
+            'is_active' => $request->is_active
+        ]);
+
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
@@ -68,7 +72,7 @@ class PopularCategoryController extends Controller
     {
         return view("pages.$this->route.edit", [
             'object' => $popularCategory,
-            'hierarchies' => $repository->getAvailableOptions(),
+            'hierarchies' => $repository->getAvailableOptions($popularCategory->hierarchy_id),
             'route' => $this->route
          ]);
     }

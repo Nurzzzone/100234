@@ -19,6 +19,7 @@ class PopularCategory extends Outside
     public $timestamps = false;
 
     protected $fillable = [
+        'GUID',
         'hierarchy_id',
         'hierarchy_type',
         'description',
