@@ -13,6 +13,9 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('help', 'HelpController');
     Route::post('help/updateSequence', 'HelpController@updateSequence')->name('help.updateSequence');
 
+    Route::resource('security', 'SecurityController');
+    Route::post('security/updateSequence', 'SecurityController@updateSequence')->name('security.updateSequence');
+
     Route::resource('roles', 'RolesController');
 
     Route::resource('popularCategory', 'PopularCategoryController');

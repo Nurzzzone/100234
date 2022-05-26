@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 
         $("#sortable-table").sortable({
-            items: 'tr',
+            items: 'tbody tr',
             cursor: 'pointer',
             dropOnEmpty: false,
             update: function() {
