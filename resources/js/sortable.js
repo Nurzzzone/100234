@@ -26,6 +26,8 @@ $(document).ready(function() {
                     },
                     data: { sequence: sequence },
                 });
+
+                sequence = []
             }
         })
     });

@@ -1,4 +1,4 @@
-<table @class(['table-hover' => $objects->isNotEmpty(), 'table table-responsive-sm table-bordered border-top-0 mb-0'])>
+<table id="sortable-table" data-update-sequence-url="{{ route('help.updateSequence') }}" @class(['table-hover' => $objects->isNotEmpty(), 'table table-responsive-sm table-bordered border-top-0 mb-0'])>
     <thead>
     <tr>
         @foreach ($columns as $key => $column)
@@ -9,7 +9,7 @@
     </thead>
     <tbody>
         @foreach ($objects as $object)
-            <tr data-name="tableRow" data-href="{{ route("$route.show", $object->getKey()) }}">
+            <tr data-id="{{ $object->getKey() }}" data-name="tableRow" data-href="{{ route("$route.show", $object->getKey()) }}">
                 @foreach ($columns as $column)
                     <td class="{{ $object->$column !== null ? '': 'text-muted' }}">{!! $object->$column !== null? $object->$column: trans('messages.data.unavailable') !!}</td>
                 @endforeach

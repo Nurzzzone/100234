@@ -11,7 +11,10 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('aboutUs', 'AboutUsController', ['parameters' => ['aboutUs' => 'aboutUs']]);
     Route::resource('news', 'NewsController');
     Route::resource('help', 'HelpController');
+    Route::post('help/updateSequence', 'HelpController@updateSequence')->name('help.updateSequence');
+
     Route::resource('roles', 'RolesController');
+
     Route::resource('popularCategory', 'PopularCategoryController');
     Route::post('popularCategory/updateSequence', 'PopularCategoryController@updateSequence')->name('popularCategory.updateSequence');
 

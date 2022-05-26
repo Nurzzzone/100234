@@ -27,4 +27,6 @@
 @section('scripts')
     <script src="{{ asset('js/src/table-row.js') }}"></script>
     <script src="{{ asset('js/src/modal.js') }}"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="{{ asset('js/src/sortable.js') }}"></script>
 @endsection

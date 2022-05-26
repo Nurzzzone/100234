@@ -19,6 +19,12 @@ class Help extends Model
 
     public $incrementing = false;
 
+    protected $fillable = [
+        'order'
+    ];
+
+    public $timestamps = false;
+
     public function dropdown()
     {
         return $this->hasMany(DropDown::class, 'parent_id', 'GUID');

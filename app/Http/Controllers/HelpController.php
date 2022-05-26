@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Help\CreateHelpRequest;
 use App\Http\Requests\Help\UpdateHelpRequest;
+use App\Models\Outside\PopularCategory;
 use App\Models\StaticPages\Help;
 use App\Traits\HasFlashMessage;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class HelpController extends Controller
     {
         return view("pages.$this->route.index",
         [
-            'objects' => (self::MODEL)::paginate(10),
+            'objects' => (self::MODEL)::query()->orderBy('order')->paginate(10),
             'columns' => self::COLUMNS,
             'route' => $this->route,
         ]);
@@ -88,5 +89,16 @@ class HelpController extends Controller
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
+    }
+
+    public function updateSequence(Request $request)
+    {
+        foreach($request->sequence as $sequence) {
+            Help::query()->whereKey($sequence['id'])->update([
+                'order' => $sequence['sequence'],
+            ]);
+        }
+
+        return response()->json(['message' => 'success']);
     }
 }
