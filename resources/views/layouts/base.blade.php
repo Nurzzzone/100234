@@ -11,21 +11,6 @@
   <link href="{{ asset('css/style.css') }}" rel="stylesheet"> {{-- styles --}}
   @yield('css')
   @yield('header-scripts')
-  {{--    <script src="{{ asset('js/app.js') }}" defer></script>--}}
-  <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-118965717-3');
-    gtag('config', 'UA-118965717-5');
-  </script>
-  <link href="{{ asset('css/coreui-chartjs.css') }}" rel="stylesheet">
 </head>
 
 <body class="c-app">

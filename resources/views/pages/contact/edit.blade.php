@@ -2,10 +2,6 @@
 
 @section('title', $page_title)
 
-@section('css')
-    <link href="{{ asset('css/quill.css') }}" rel="stylesheet">
-@endsection
-
 @php($options = [
     'method'  => 'PUT',
     'url'     => route("$route.update", $object->GUID)
@@ -42,12 +38,6 @@
     </div>
 @endsection
 
-@section('vendor-scripts')
-    <script src="{{ asset('js/vendors/quill/quill.min.js') }}"></script>
-    <script src="{{ asset('js/vendors/quill/highlight.min.js') }}"></script>
-@endsection
-
 @section('scripts')
-    <script src="{{ asset('js/src/quill.js') }}"></script>
-    <script src="{{ asset('js/map-form.min.js') }}"></script>
+    <script src="{{ asset('js/src/map-form.js') }}"></script>
 @endsection
