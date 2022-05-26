@@ -15,6 +15,7 @@ class EntityColumn extends Component
 
     public function __construct(Model $object, string $column, bool $plainText = false)
     {
+
         $this->object = $object;
         $this->plainText = $plainText;
         $this->column = $this->resolveColumn($column);

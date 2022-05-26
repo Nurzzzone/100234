@@ -10,7 +10,7 @@
         @foreach ($objects as $object)
             <tr data-name="tableRow" data-href="{{ route("$route.show", $object->getKey()) }}">
                 @foreach ($columns as $column)
-                    <td>{!! $object->$column !!}</td>
+                    <x-entity-column :object="$object" column="{{ $column }}"></x-entity-column>
                 @endforeach
             </tr>
         @endforeach

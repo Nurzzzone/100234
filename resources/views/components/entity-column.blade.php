@@ -1,7 +1,7 @@
 @if(! $plainText)
     <td class="{{ $class }}">
-        {!! $column ?? trans('messages.data.unavailable') !!}
+        {!! empty($column)? trans('messages.data.unavailable'): $column !!}
     </td>
 @else
-    {!! $object->$column !== null? $object->$column: trans('messages.data.unavailable') !!}
+    {!! empty($column)? trans('messages.data.unavailable'): $column !!}
 @endif

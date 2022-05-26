@@ -11,7 +11,7 @@
         @foreach ($objects as $object)
             <tr data-id="{{ $object->getKey() }}" data-name="tableRow" data-href="{{ route("$route.show", $object->getKey()) }}">
                 @foreach ($columns as $column)
-                    <td class="{{ $object->$column !== null ? '': 'text-muted' }}">{!! $object->$column !== null? $object->$column: trans('messages.data.unavailable') !!}</td>
+                    <x-entity-column :object="$object" column="{{ $column }}"></x-entity-column>
                 @endforeach
                 <td>
                     <div class="btn-group d-flex">
