@@ -12,6 +12,8 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('news', 'NewsController');
     Route::resource('help', 'HelpController');
     Route::resource('roles', 'RolesController');
+    Route::resource('popularCategory', 'PopularCategoryController');
+    Route::post('popularCategory/updateSequence', 'PopularCategoryController@updateSequence')->name('popularCategory.updateSequence');
 
     Route::resource('menu', 'MenuElementController', ['except' => ['create', 'edit'], 'parameters' => ['menu' => 'menuElement']]);
     Route::post('/menu/sequence', 'MenuElementController@sequence');
