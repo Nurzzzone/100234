@@ -21,6 +21,7 @@
                         :disabled="button.active">{{ button.value }}</button>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -94,6 +95,11 @@ export default {
     color: #636f83 !important;
     border-color: #d8dbe0 !important;
     background-color: #ffffff !important;
+}
+
+.dropdown-item:active, .dropdown-item:hover, .dropdown-item:focus {
+    background-color: #ebedef !important;
+    color: #636f83 !important;
 }
 
 #loader-wrapper {

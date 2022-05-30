@@ -11,11 +11,13 @@
     "/js/src/sortable.js": "/js/src/sortable.js",
     "/js/src/table-row.js": "/js/src/table-row.js",
     "/js/src/upload-image.js": "/js/src/upload-image.js",
+    "/js/vendors/sidebar/sidebar.js": "/js/vendors/sidebar/sidebar.js",
     "/css/quill.css": "/css/quill.css",
     "/css/cropper.css": "/css/cropper.css",
     "/css/flag.min.css": "/css/flag.min.css",
     "/css/brand.min.css": "/css/brand.min.css",
     "/css/free.min.css": "/css/free.min.css",
-    "/js/vendors/jquery/jquery.min.js": "/js/vendors/jquery/jquery.min.js",
-    "/js/coreui.bundle.min.js": "/js/coreui.bundle.min.js"
+    "/js/vendors/popper.min.js": "/js/vendors/popper.min.js",
+    "/js/vendors/jquery.min.js": "/js/vendors/jquery.min.js",
+    "/js/vendors/bootstrap.min.js": "/js/vendors/bootstrap.min.js"
 }

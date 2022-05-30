@@ -17,8 +17,9 @@ mix.sass('resources/sass/style.scss', 'public/css');
 
 //******************* SCRIPTS ***********************
 mix.copy('resources/vendors/quill/js', 'public/js/vendors/quill');
-mix.copy('resources/vendors/jquery/jquery.min.js', 'public/js/vendors/jquery');
-mix.copy('node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js', 'public/js');
+mix.copy('resources/vendors/popper.min.js', 'public/js/vendors/');
+mix.copy('node_modules/jquery/dist/jquery.min.js', 'public/js/vendors/');
+mix.copy('node_modules/bootstrap/dist/js/bootstrap.min.js', 'public/js/vendors/');
 
 mix.js('resources/js/modal.js',         'public/js/src/modal.js')
     .js('resources/js/quill.js',        'public/js/src/quill.js')
@@ -30,6 +31,15 @@ mix.js('resources/js/modal.js',         'public/js/src/modal.js')
     .js('resources/js/menu-edit.js',    'public/js/src/menu-edit.js')
     .js('resources/js/menu-create.js',  'public/js/src/menu-create.js')
     .js('resources/js/menu.js',         'public/js/src/menu.js')
+
+mix.js([
+    'resources/vendors/sidebar/sidebar.js',
+    'resources/vendors/sidebar/class-toggler.js',
+    'resources/vendors/sidebar/dom/data.js',
+    'resources/vendors/sidebar/dom/event-handler.js',
+    'resources/vendors/sidebar/dom/manipulator.js',
+    'resources/vendors/sidebar/util/index.js',
+],'public/js/vendors/sidebar/sidebar.js')
 //**************** END: SCRIPTS ********************
 
 //******************* OTHER ***********************

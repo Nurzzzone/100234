@@ -11,7 +11,6 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet"> {{-- styles --}}
     @yield('css')
     @yield('header-scripts')
-
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 
