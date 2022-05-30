@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Outside\Outside;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class News extends Model
+class News extends Outside
 {
     use HasFactory;
-
-    protected $connection = 'adkulan_dev';
 
     protected $table = 'news';
 
@@ -30,5 +28,10 @@ class News extends Model
     public function getStartsAtAttribute($value)
     {
         return Carbon::parse($value);
+    }
+
+    protected function getEditUrlAttribute(): ?string
+    {
+        return route('news.edit', $this->getKey());
     }
 }

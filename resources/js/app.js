@@ -19,7 +19,13 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('v-table', require('./components/Table/Table.vue').default);
+Vue.component('v-table-head', require('./components/Table/TableHead.vue').default);
+Vue.component('v-table-body', require('./components/Table/TableBody.vue').default);
+Vue.component('v-table-data', require('./components/Table/TableData.vue').default);
+Vue.component('v-table-tools', require('./components/Table/TableTools.vue').default);
+Vue.component('v-pagination', require('./components/Pagination/Pagination.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -28,5 +34,5 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app',
+    el: '#app'
 });

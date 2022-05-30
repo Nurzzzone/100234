@@ -6,6 +6,11 @@
 
 // ======================================================
 
+button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 .c-header.c-header-fixed{
     top:0px;
 }

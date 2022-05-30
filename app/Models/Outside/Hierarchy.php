@@ -25,4 +25,9 @@ class Hierarchy extends Outside
         'parent',
         'laravel_through_key'
     ];
+
+    protected function getEditUrlAttribute(): ?string
+    {
+        return null;
+    }
 }
