@@ -32,4 +32,9 @@ class PopularCategory extends Outside
     {
         return $this->belongsTo(Hierarchy::class, 'hierarchy_id', 'GUID');
     }
+
+    protected function getEditUrlAttribute(): ?string
+    {
+        return route('popularCategory.edit', $this->getKey());
+    }
 }

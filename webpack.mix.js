@@ -1,7 +1,7 @@
 const mix = require('laravel-mix');
 
+mix.js('resources/js/app.js', 'public/js');
 //******************* CSS ***********************
-mix.sass('resources/sass/style.scss', 'public/css'); //main css
 
 mix.copy([
     'resources/vendors/quill/css/quill.css',
@@ -10,6 +10,9 @@ mix.copy([
     'node_modules/@coreui/icons/css/brand.min.css',
     'node_modules/@coreui/icons/css/free.min.css'
 ], 'public/css');
+
+mix.sass('resources/sass/style.scss', 'public/css');
+
 //**************** END: CSS ********************
 
 //******************* SCRIPTS ***********************
