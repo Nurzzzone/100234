@@ -14,10 +14,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="fade-in">
-            @include('partials.flash-message')
-            <div class="row">
-                @include('partials.validation')
+        <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
@@ -35,7 +32,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 @endsection
 

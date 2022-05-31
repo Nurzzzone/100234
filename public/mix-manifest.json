@@ -16,8 +16,5 @@
     "/css/cropper.css": "/css/cropper.css",
     "/css/flag.min.css": "/css/flag.min.css",
     "/css/brand.min.css": "/css/brand.min.css",
-    "/css/free.min.css": "/css/free.min.css",
-    "/js/vendors/popper.min.js": "/js/vendors/popper.min.js",
-    "/js/vendors/jquery.min.js": "/js/vendors/jquery.min.js",
-    "/js/vendors/bootstrap.min.js": "/js/vendors/bootstrap.min.js"
+    "/css/free.min.css": "/css/free.min.css"
 }

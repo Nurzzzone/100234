@@ -27,8 +27,8 @@
 @endsection
 
 @section('scripts')
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="{{ asset('js/src/table-row.js') }}"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script src="{{ asset('js/src/sortable.js') }}"></script>
     <script src="{{ asset('js/src/modal.js') }}"></script>
 @endsection

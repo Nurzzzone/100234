@@ -12,6 +12,7 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('news', 'NewsController');
     Route::resource('help', 'HelpController');
     Route::post('help/updateSequence', 'HelpController@updateSequence')->name('help.updateSequence');
+    Route::resource('flashNotification', 'FlashNotificationController');
 
     Route::resource('security', 'SecurityController');
     Route::post('security/updateSequence', 'SecurityController@updateSequence')->name('security.updateSequence');

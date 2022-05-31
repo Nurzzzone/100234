@@ -8,8 +8,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="fade-in">
-            <div class="row mb-4">
+        <div class="row mb-4">
                 <div class="col-sm-12">
                     <div class="card">
 
@@ -32,7 +31,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 @endsection
 

@@ -17,9 +17,6 @@ mix.sass('resources/sass/style.scss', 'public/css');
 
 //******************* SCRIPTS ***********************
 mix.copy('resources/vendors/quill/js', 'public/js/vendors/quill');
-mix.copy('resources/vendors/popper.min.js', 'public/js/vendors/');
-mix.copy('node_modules/jquery/dist/jquery.min.js', 'public/js/vendors/');
-mix.copy('node_modules/bootstrap/dist/js/bootstrap.min.js', 'public/js/vendors/');
 
 mix.js('resources/js/modal.js',         'public/js/src/modal.js')
     .js('resources/js/quill.js',        'public/js/src/quill.js')

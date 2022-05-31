@@ -15,8 +15,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="fade-in">
-            <div class="row">
+        <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
@@ -34,7 +33,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 @endsection
 
