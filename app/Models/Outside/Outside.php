@@ -10,10 +10,4 @@ abstract class Outside extends Model
     use HasFactory;
 
     protected $connection = 'adkulan_dev';
-
-    protected $appends = [
-        'editUrl'
-    ];
-
-    abstract protected function getEditUrlAttribute(): ?string;
 }

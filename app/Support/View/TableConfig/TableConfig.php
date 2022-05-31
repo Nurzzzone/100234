@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\View\EntityColumns;
+namespace App\Support\View\TableConfig;
 
 use Illuminate\Contracts\Support\Jsonable;
 

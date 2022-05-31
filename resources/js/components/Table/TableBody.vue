@@ -1,7 +1,7 @@
 <template>
     <tbody>
         <tr v-for="object in objects" :key="object.id" data-name="tableRow">
-            <v-table-data v-for="(column, index) in  tableConfig.columns" :key="index" :label="object[column.columnName]"></v-table-data>
+            <v-table-data v-for="(column, index) in  tableConfig.columns" :key="index" :label="resolveLabel(object, column.columnName)"></v-table-data>
 
             <!-- Buttons -->
             <v-table-data v-if="tableConfig.tools.buttonsEnabled">
@@ -29,6 +29,26 @@ export default {
     data() {
         return {
             tableConfig: this.$parent.tableConfig,
+        }
+    },
+    methods: {
+        resolveLabel(object, columnName) {
+            if (! columnName.includes('.')) {
+                return object[columnName];
+            }
+
+            if ((columnName.match('\.+') || []).length === 1) {
+                let relationName = columnName.split('.')[0];
+                columnName = columnName.split('.')[1];
+
+                return object[relationName][columnName];
+            }
+
+            return this.getNestedColumn();
+        },
+
+        getNestedColumn() {
+            return 'надо дописать';
         }
     }
 }

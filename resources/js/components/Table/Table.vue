@@ -47,6 +47,9 @@ export default {
     methods: {
         updatePaginationInstance(paginationInstance) {
             this.mutablePaginationInstance = paginationInstance;
+        },
+        getPaginationLinksCount() {
+            return this.mutablePaginationInstance.links.slice(1, -1).length;
         }
     }
 }

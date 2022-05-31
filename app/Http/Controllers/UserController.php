@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Support\View\EntityColumns\UserTableConfig;
+use App\Support\View\TableConfig\UserTableConfig;
 use App\Traits\HasFlashMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index(Request $request, UserTableConfig $tableConfig)
     {
         if (! $request->ajax()) {
-            return view("pages.{$this->route}.index",
+            return view("pages.index",
                 [
                     'objects' => (self::MODEL)::paginate(request('perPage', 10)),
                     'tableConfig' => $tableConfig,

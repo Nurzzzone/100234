@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <div v-if="tableConfig.perPageButtonEnabled" class="dropdown">
+        <div v-if="this.$parent.getPaginationLinksCount() > 10 && tableConfig.perPageButtonEnabled" class="dropdown">
             <button class="btn btn-outline-dark dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 кол-во элементов: {{ getActivePerPageButton() }}
             </button>
