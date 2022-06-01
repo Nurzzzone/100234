@@ -6,7 +6,6 @@ use App\Models\OnlinePayment\ForteBankPayment;
 use App\Repositories\OnlinePayment\FortePaymentRepository;
 use App\Support\View\TableConfig\OnlinePayment\ForteBankPaymentTableConfig;
 use App\Traits\HasFlashMessage;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
 class ForteBankPaymentController extends Controller

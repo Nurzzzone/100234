@@ -17,7 +17,7 @@ abstract class TableConfig implements Jsonable
 
     protected $searchUrl;
 
-    private static $filterStructure = ['label', 'type', 'options', 'paramName'];
+    private const filterStructure = ['label', 'type', 'options', 'paramName'];
 
     protected static $filterTypes = [
         'dropdown',
@@ -71,7 +71,7 @@ abstract class TableConfig implements Jsonable
                 throw new \Exception('Filter must be associative array!');
             }
 
-            foreach(static::$filterStructure as $key) {
+            foreach(self::filterStructure as $key) {
                 if (! array_key_exists('type', $filter)) {
                     throw new \Exception("Key $key is required!");
                 }
