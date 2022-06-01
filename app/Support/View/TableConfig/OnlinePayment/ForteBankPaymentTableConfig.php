@@ -55,8 +55,8 @@ class ForteBankPaymentTableConfig extends TableConfig
                 'type' => 'radio',
                 'paramName' => 'payment.is_sent',
                 'options' => [
-                    '0' => 'Отправлен',
-                    '1' => 'Не отправлен'
+                    '0' => 'Не отправлен',
+                    '1' => 'Отправлен'
                 ]
             ]
         ];
