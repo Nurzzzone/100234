@@ -1,91 +1,91 @@
 <template>
     <div>
-        <div v-if="tableConfig.searchEnabled" class="search-input position-relative mb-2">
-            <input v-model="searchObjectsInput" type="text" class="form-control" placeholder="Поиск...">
-            <div id="loader-wrapper" class="position-absolute mr-3">
-                <div class="spinner-border spinner-border-sm" role="status">
-                    <span class="sr-only"></span>
+        <div class="d-flex">
+            <div v-if="getTableTools.searchEnabled" class="search-input position-relative mb-2 w-100">
+                <input @change="fireDelayedSearch"
+                       type="text"
+                       class="form-control"
+                       placeholder="Поиск..."
+                       :value="searchObjectsInput"
+                >
+
+                <div id="loader-wrapper" class="position-absolute mr-3">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="sr-only"></span>
+                    </div>
                 </div>
             </div>
+
+            <button v-if="showTableFilters"
+                    id="filtersButton"
+                    type="button"
+                    class="btn btn-outline-dark h-100 ml-2"
+                    data-toggle="modal"
+                    data-target="#filters"><i class="cil-apps "></i>
+            </button>
         </div>
 
-        <div v-if="this.$parent.getPaginationLinksCount() > 10 && tableConfig.perPageButtonEnabled" class="dropdown">
-            <button class="btn btn-outline-dark dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                кол-во элементов: {{ getActivePerPageButton() }}
+        <div v-if="showPerPageButton" class="dropdown">
+            <button class="btn btn-outline-dark dropdown-toggle"
+                    role="button"
+                    id="perPageDropdown"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"><span>кол-во элементов: {{ getActivePerPageButton }}</span>
             </button>
 
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-menu" aria-labelledby="perPageDropdown">
                 <button v-for="button in perPageButtons"
                         @click="changePerPageItems(button.value)"
                         class="dropdown-item"
-                        :disabled="button.active">{{ button.value }}</button>
+                        :disabled="button.active">{{ button.value }}
+                </button>
             </div>
         </div>
 
+        <table-filters></table-filters>
     </div>
 </template>
 
 <script>
+import TableFilters from "./TableFilters";
+import { mapGetters, mapState } from 'vuex';
+
 export default {
     name: "TableTools",
-    data() {
-        return {
-            searchObjectsInput: this.$parent.searchKeyword,
-            tableConfig: this.$parent.tableConfig.tools,
-            url: this.$parent.tableConfig.tools.searchUrl,
-            perPageButtons: [
-                {value: 10, active: true},
-                {value: 20, active: false},
-                {value: 50, active: false},
-                {value: 100, active: false},
-            ],
-        }
-    },
-    watch: {
-        'searchObjectsInput': {
-            handler: function() {
-                document.getElementById('loader-wrapper').style.display = 'block';
-
-                this.fireDelayedSearch();
-            }
-        }
+    components: { TableFilters },
+    computed: {
+        ...mapState({
+            searchObjectsInput: state => state.table.searchKeyword,
+            perPageButtons: state => state.table.perPageButtons
+        }),
+        ...mapGetters([
+            'getTableTools',
+            'getActivePerPageButton',
+            'showPerPageButton',
+            'showTableFilters',
+        ])
     },
     methods: {
-        fireDelayedSearch: _.debounce(function() {
-            axios.get(String(this.url), {
-                params: {
-                    searchKeyword: this.searchObjectsInput,
-                    perPage: this.getActivePerPageButton()
-                }
-            }).then((response) => {
-                this.$parent.updatePaginationInstance(response.data);
-                this.$parent.searchKeyword = this.searchObjectsInput;
-            }).finally(() => {
+        search: _.debounce(function(e) {
+            this.$store.commit('setSearchKeyword', e.target.value);
+
+            this.$store.dispatch('updatePaginationInstance').finally(() => {
                 document.getElementById('loader-wrapper').style.display = 'none';
             });
         }, 1500),
 
-        changePerPageItems(quantity) {
-            this.$parent.perPage = quantity;
-            this.$parent.searchKeyword = this.searchObjectsInput;
+        fireDelayedSearch(e) {
+            document.getElementById('loader-wrapper').style.display = 'block';
 
-            axios.get(String(this.url), {
-                params: {
-                    searchKeyword: this.searchObjectsInput,
-                    perPage: quantity,
-                }
-            }).then((response) => {
-                this.$parent.updatePaginationInstance(response.data);
-
-                this.perPageButtons.forEach(function(button) {
-                    button.active = button.value === quantity;
-                })
-            });
+            this.search(e);
         },
 
-        getActivePerPageButton() {
-            return this.perPageButtons.find((button) => button.active).value;
-        }
+        changePerPageItems(quantity) {
+            this.$store.commit('setPerPageQuantity', quantity);
+
+            this.$store.dispatch('updatePaginationInstance');
+        },
     }
 }
 </script>
@@ -95,6 +95,10 @@ export default {
     color: #636f83 !important;
     border-color: #d8dbe0 !important;
     background-color: #ffffff !important;
+}
+#filtersButton {
+    color: #636f83 !important;
+    border-color: #d8dbe0 !important;
 }
 
 .dropdown-item:active, .dropdown-item:hover, .dropdown-item:focus {

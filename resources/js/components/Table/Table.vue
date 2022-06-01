@@ -8,7 +8,7 @@
                        :class="{ 'table-hover': hover }"
                        :data-update-sequence-url="updateSequenceUrl"
                        class="table table-responsive-sm table-bordered border-top-0 mb-0">
-                    <slot :objects="mutablePaginationInstance.data">
+                    <slot>
                         <!-- TableHeadComponent -->
                         <!-- TableBodyComponent -->
                     </slot>
@@ -17,7 +17,7 @@
 
             <!-- PaginationComponent -->
             <div class="card-footer">
-                <v-pagination :searchKeyword="searchKeyword" :perPage="perPage" :pagination="mutablePaginationInstance"></v-pagination>
+                <v-pagination></v-pagination>
             </div>
         </div>
 
@@ -37,20 +37,9 @@ export default {
         hover: String,
         tableConfig: Object
     },
-    data() {
-        return {
-            mutablePaginationInstance: this.paginationInstance,
-            perPage: 10,
-            searchKeyword: null,
-        }
-    },
-    methods: {
-        updatePaginationInstance(paginationInstance) {
-            this.mutablePaginationInstance = paginationInstance;
-        },
-        getPaginationLinksCount() {
-            return this.mutablePaginationInstance.links.slice(1, -1).length;
-        }
+    created() {
+        this.$store.commit('setPaginationInstance', this.paginationInstance);
+        this.$store.commit('setTableConfig', this.tableConfig);
     }
 }
 </script>

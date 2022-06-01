@@ -9,7 +9,10 @@ class FortePaymentRepository extends BaseRepository
 {
     public function getPaginatedResult()
     {
-        return ForteBankPayment::query()->with('payment')->paginate($this->perPageQuantity);
+        return ForteBankPayment::query()
+            ->with('payment')
+            ->orderBy('created_at', 'DESC')
+            ->paginate($this->perPageQuantity);
     }
 
     public function getPaginatedSearchResult()
@@ -22,6 +25,12 @@ class FortePaymentRepository extends BaseRepository
                     ->orWhere('order_id', 'LIKE', "%$this->searchQuery%")
                     ->orWhere('status_description', 'LIKE', "%$this->searchQuery%");
             })
+            ->when(request()->filled('filters'), function($query) {
+                foreach(json_decode(request('filters'), true) as $column => $value) {
+                    $query->where($column, 'LIKE', "%$value%");
+                }
+            })
+            ->orderBy('created_at', 'DESC')
             ->paginate($this->perPageQuantity);
     }
 }

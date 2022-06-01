@@ -52,12 +52,14 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
+
 export default {
     name: "Pagination",
-    props: {
-        pagination: Object,
-        perPage: Number,
-        searchKeyword: String,
+    computed: {
+        ...mapState({
+            pagination: state => state.table.pagination
+        })
     },
     methods: {
         hasPages() {
@@ -79,14 +81,7 @@ export default {
             return String(this.pagination.next_page_url);
         },
         changeCurrentPage(url) {
-            axios.get(url, {
-                params: {
-                    perPage: this.perPage,
-                    searchKeyword: this.searchKeyword,
-                }
-            }).then((response) => {
-                this.$parent.updatePaginationInstance(response.data);
-            });
+            this.$store.dispatch('updatePaginationInstance', url);
         }
     }
 }

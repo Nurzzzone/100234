@@ -2,6 +2,7 @@
 
 namespace App\Support\View\TableConfig\OnlinePayment;
 
+use App\Models\OnlinePayment\Payment;
 use App\Support\View\TableConfig\TableConfig;
 
 class ForteBankPaymentTableConfig extends TableConfig
@@ -24,6 +25,40 @@ class ForteBankPaymentTableConfig extends TableConfig
             ['label' => 'Статус', 'columnName' => 'status_description'],
             ['label' => trans('fields.type'), 'columnName' => 'payment.type'],
             ['label' => trans('fields.is_sent'), 'columnName' => 'payment.is_sent'],
+        ];
+    }
+
+    protected function filters(): array
+    {
+        return [
+            [
+                'label' => 'Статус',
+                'type' => 'dropdown',
+                'paramName' => 'status',
+                'options' => [
+                    'CREATED' => 'Заказ создан',
+                    'DECLINED' => 'Отказ в оплате',
+                    'EXPIRED' => 'Время оплаты истекло',
+                    'CANCELED' => 'Заказ отменен',
+                    'ERROR' => 'Ошибка',
+                    'CONNECTION_ERROR' => 'Ошибка подключения к серверу',
+                ]
+            ],
+            [
+                'label' => trans('fields.type'),
+                'type' => 'dropdown',
+                'paramName' => 'payment.type',
+                'options' => Payment::$types
+            ],
+            [
+                'label' => trans('fields.is_sent'),
+                'type' => 'radio',
+                'paramName' => 'payment.is_sent',
+                'options' => [
+                    '0' => 'Отправлен',
+                    '1' => 'Не отправлен'
+                ]
+            ]
         ];
     }
 }

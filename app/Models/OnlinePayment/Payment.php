@@ -15,7 +15,7 @@ class Payment extends Outside
 
     public $incrementing = false;
 
-    protected static $types = [
+    public static $types = [
         'PURCHASE'  => 'Покупка на сайте',
         'DEPOSIT'   => 'Пополнение счета',
         'DEPT'      => 'Погашение долга'
