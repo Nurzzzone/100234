@@ -28,7 +28,7 @@
             </button>
         </div>
 
-        <div v-if="showPerPageButton" class="dropdown">
+        <div v-if="showPerPageButton" class="dropdown d-inline-block">
             <button class="btn btn-outline-dark dropdown-toggle"
                     role="button"
                     id="perPageDropdown"
@@ -37,7 +37,7 @@
                     aria-expanded="false"><span>кол-во элементов: {{ getActivePerPageButton }}</span>
             </button>
 
-            <div class="dropdown-menu" aria-labelledby="perPageDropdown">
+            <div class="dropdown-menu w-100 mt-1" aria-labelledby="perPageDropdown">
                 <button v-for="button in perPageButtons"
                         @click="changePerPageItems(button.value)"
                         class="dropdown-item"
@@ -103,9 +103,10 @@ export default {
     border-color: #d8dbe0 !important;
     background-color: #ffffff !important;
 }
-#filtersButton {
+
+#filtersButton:hover, #filtersButton:active {
     color: #636f83 !important;
-    border-color: #d8dbe0 !important;
+    border-color: #768192 !important;
 }
 
 .dropdown-item:active, .dropdown-item:hover, .dropdown-item:focus {

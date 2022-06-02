@@ -8,8 +8,10 @@
                         <tr v-for="(filter, index) in this.getTableFilters" v-if="filter.type === 'dropdown'" :key="index">
                             <th class="align-middle">{{ filter.label }}</th>
                             <td>
-                                <select class="form-control" @input="setQueryParam(filter.paramName, $event.target.value)">
-                                    <option v-for="(option, index) in filter.options" :key="index" :value="index">{{ option }}</option>
+                                <select class="form-control"
+                                        @input="setFiltersQueryParam({key:filter.paramName, value: $event.target.value})">
+                                    <option v-for="(option, index) in filter.options"
+                                            :key="index" :value="index">{{ option }}</option>
                                 </select>
                             </td>
                         </tr>
@@ -17,7 +19,7 @@
                             <th class="align-middle">{{ filter.label }}</th>
                             <td>
                                 <div v-for="(option, index) in filter.options" :key="index" class="form-check">
-                                    <input @input="setQueryParam(filter.paramName, $event.target.value)"
+                                    <input @input="setFiltersQueryParam({key:filter.paramName, value: $event.target.value})"
                                            class="form-check-input"
                                            name="filter.paramName"
                                            type="radio"
@@ -31,10 +33,14 @@
                         </tr>
                         </tbody>
                     </table>
-                    <button @click.prevent="update"
+                    <button @click="updatePaginationInstance()"
                             type="button"
                             class="btn btn-outline-dark mt-2 float-right"
                             data-dismiss="modal">Применить</button>
+                    <button @click="resetFilters"
+                            type="button"
+                            class="btn btn-outline-dark mt-2 mr-2 float-right"
+                            data-dismiss="modal">Очистить фильтры</button>
                 </div>
             </div>
         </div>
@@ -42,7 +48,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
     name: "TableFilters",
@@ -53,11 +59,16 @@ export default {
         ])
     },
     methods: {
-        update() {
-            this.$store.dispatch('updatePaginationInstance')
-        },
-        setQueryParam(key, value) {
-            this.$store.commit('setFiltersQueryParam', { key, value })
+        ...mapActions([
+            'updatePaginationInstance'
+        ]),
+        ...mapMutations([
+            'setFiltersQueryParam',
+            'resetFiltersQueryParam',
+        ]),
+        resetFilters() {
+            this.resetFiltersQueryParam();
+            this.updatePaginationInstance();
         }
     }
 }

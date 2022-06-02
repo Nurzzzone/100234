@@ -20,14 +20,20 @@ export default {
         // Получение столбцов
         getTableColumns: state => state.tableConfig.columns,
 
-        // Получение фильтров
-        getTableFilters: state => state.tableConfig.filters,
-
         // Получение кнопок
         getTableTools: state => state.tableConfig.tools,
 
         // Получение записей для отображение в таблице
         getTableObjects: state => state.pagination.data,
+
+        // Получение фильтров
+        getTableFilters(state) {
+            for (let filter of state.tableConfig.filters) {
+                filter.options = {"": "Все", ...filter.options}
+            }
+
+            return state.tableConfig.filters;
+        },
 
         // Получение кол-во ссылок на страницы
         getPaginationLinksCount(state) {
@@ -71,6 +77,11 @@ export default {
         // Сохранение параметров для запроса нового отфильтрованного списка
         setFiltersQueryParam(state, { key, value }) {
             state.filtersQueryParams[key] = value;
+            console.log(state.filtersQueryParams);
+        },
+
+        resetFiltersQueryParam(state) {
+            state.filtersQueryParams = {};
         },
 
         setPerPageQuantity(state, value) {
@@ -82,7 +93,7 @@ export default {
 
     actions: {
         // Получение экземпляра класса LengthAwarePaginator
-        updatePaginationInstance({ commit, state, getters }, url = null) {
+        updatePaginationInstance({ commit, state, getters }, url = undefined) {
             return axios.get(url ?? getters.getTableTools.searchUrl, {
                 params: {
                     filters: state.filtersQueryParams,
