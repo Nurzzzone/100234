@@ -1,7 +1,7 @@
 <template>
-    <div class="form-group px-2 mb-0 mt-2">
+    <div class="form-group mb-0">
         <input type="text"
-               @input="filterSidebarSections('#sidebar-menu > li')"
+               @input="filterSidebarSections('#sidebar-menu > li:not(:first-child)')"
                v-model="searchingSectionName"
                class="form-control bg-transparent text-white"
                style="border-color: hsla(0, 0%, 100%, .6)"
@@ -52,6 +52,8 @@ export default {
 
             if (counter === children.length) {
                 section.style.display = 'none';
+            } else {
+                section.style.display = 'block';
             }
 
             counter = 0;

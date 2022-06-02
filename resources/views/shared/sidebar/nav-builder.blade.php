@@ -1,6 +1,7 @@
-<v-sidebar-search></v-sidebar-search>
-
-<ul class="c-sidebar-nav mt-2" id="sidebar-menu">
+<ul class="c-sidebar-nav" id="sidebar-menu">
+    <li class="c-sidebar-nav-item py-2" style="padding: 0.75rem 1rem;">
+        <v-sidebar-search></v-sidebar-search>
+    </li>
     @isset($appMenus['sidebar menu'])
         @foreach($appMenus['sidebar menu'] as $element)
             @if($element['slug'] === 'link')
