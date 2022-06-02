@@ -15,7 +15,6 @@
 
 @yield('content')
 
-<script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
 @yield('javascript')
 </body>
 </html>

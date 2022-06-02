@@ -35,7 +35,7 @@
                                 {{ Form::password('password', ['class' => 'form-control', 'placeholder' => trans('fields.password'), 'required' => '']) }}
                             </div>
                             <div class="d-flex align-items-center justify-content-end">
-                                {{ Form::button(trans('buttons.login'), ['class' => 'btn btn-dark px-4', 'type' => 'submit']) }}
+                                {{ Form::button(trans('buttons.login'), ['class' => 'btn btn-outline-dark px-4', 'type' => 'submit']) }}
                             </div>
                             {{ Form::close() }}
                         </div>

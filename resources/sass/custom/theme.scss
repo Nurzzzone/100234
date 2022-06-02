@@ -1,3 +1,7 @@
+body {
+    font-size: 0.800rem !important;
+}
+
 @media (hover: hover), (-ms-high-contrast: none) {
     .c-sidebar .c-sidebar-nav-link:hover, .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
         color: #fff;
@@ -29,4 +33,18 @@
 
 .c-sidebar .c-sidebar-minimizer {
     background-color: #1f2021;
+}
+
+.c-sidebar {
+    width: 240px;
+}
+
+@media (min-width: 992px) and (min-width: 992px) {
+    html:not([dir="rtl"]) .c-sidebar.c-sidebar-lg-show:not(.c-sidebar-right).c-sidebar-fixed~.c-wrapper, html:not([dir=rtl]) .c-sidebar.c-sidebar-show:not(.c-sidebar-right).c-sidebar-fixed~.c-wrapper {
+        margin-left: 240px;
+    }
+}
+
+.ps__rail-y:hover {
+    background-color: #1f2021 !important;
 }
