@@ -1,6 +1,6 @@
 <v-sidebar-search></v-sidebar-search>
 
-<ul class="c-sidebar-nav" id="sidebar-menu">
+<ul class="c-sidebar-nav mt-2" id="sidebar-menu">
     @isset($appMenus['sidebar menu'])
         @foreach($appMenus['sidebar menu'] as $element)
             @if($element['slug'] === 'link')
