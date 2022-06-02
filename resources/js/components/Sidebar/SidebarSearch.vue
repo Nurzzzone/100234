@@ -28,7 +28,7 @@ export default {
                 if (! sectionName.includes(this.searchingSectionName) && section.getElementsByTagName('ul').length > 0) {
                     this.filterSidebarSections('ul > li', section);
                     this.hideEmptySection(section);
-                } else if (sectionName.includes(this.searchingSectionName)) {
+                } else if (sectionName.includes(this.searchingSectionName.toLowerCase().trim())) {
                     this.filterSidebarSections('ul > li', section);
                     this.hideEmptySection(section);
                     section.style.display = 'block';
