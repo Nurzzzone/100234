@@ -1,4 +1,6 @@
-<ul class="c-sidebar-nav">
+<v-sidebar-search></v-sidebar-search>
+
+<ul class="c-sidebar-nav" id="sidebar-menu">
     @isset($appMenus['sidebar menu'])
         @foreach($appMenus['sidebar menu'] as $element)
             @if($element['slug'] === 'link')
@@ -19,4 +21,5 @@
 <button class="c-sidebar-minimizer c-class-toggler" 
         type="button" 
         data-target="_parent"
-        data-class="c-sidebar-minimized"></button>
+        data-class="c-sidebar-minimized">
+</button>

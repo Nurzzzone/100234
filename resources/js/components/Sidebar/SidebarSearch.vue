@@ -1,0 +1,56 @@
+<template>
+    <div class="form-group px-2 mb-0 mt-2">
+        <input type="text"
+               @input="filterSidebarSections('#sidebar-menu > li')"
+               v-model="searchingSectionName"
+               class="form-control bg-transparent text-white"
+               style="border-color: hsla(0, 0%, 100%, .6)"
+               placeholder="Поиск..."
+        >
+    </div>
+</template>
+
+<script>
+export default {
+    name: "SidebarSearch",
+    data() {
+        return {
+            searchingSectionName: ""
+        }
+    },
+    methods: {
+        filterSidebarSections(querySelector, parentNode = document) {
+            const sections = parentNode.querySelectorAll(querySelector);
+
+            for (let section of sections) {
+                const sectionName = section.getElementsByTagName('span')[0].textContent.toLowerCase();
+
+                if (! sectionName.includes(this.searchingSectionName) && section.getElementsByTagName('ul').length > 0) {
+                    this.filterSidebarSections('ul > li', section);
+                    this.hideEmptySection(section);
+                } else if (! sectionName.includes(this.searchingSectionName)) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            }
+        },
+        hideEmptySection(section) {
+            const children = section.querySelectorAll('ul > li');
+            let counter = 0;
+
+            for (let child of children) {
+                if (child.style.display === 'none') {
+                    counter++
+                }
+            }
+
+            if (counter === children.length) {
+                section.style.display = 'none';
+            }
+
+            counter = 0;
+        }
+    }
+}
+</script>

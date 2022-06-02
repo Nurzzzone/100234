@@ -26,13 +26,13 @@
         <div class="global-loader"></div>
         <span class="global-loader-text font-lg mt-4">Пожалуйста подождите осталось совсем немного</span>
     </div>
-    <div class="c-app">
+    <div class="c-app" id="app">
         <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
             @include('shared.sidebar.brand')
             @include('shared.sidebar.nav-builder')
         </div>
 
-        <div class="c-wrapper" id="app">
+        <div class="c-wrapper">
             @include('shared.header.index')
             <div class="c-body">
                 <main class="c-main">

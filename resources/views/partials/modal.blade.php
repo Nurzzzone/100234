@@ -14,8 +14,8 @@
                     ];
                 @endphp
                 {{ Form::open($options) }}
-                {{ Form::button( trans('buttons.close'), ['class' => 'btn btn-light', 'type' => 'button', 'data-dismiss'=>'modal']) }}
-                {{ Form::button( trans('buttons.delete'), ['class' => 'btn btn-danger ml-1', 'type' => 'submit', 'id' => 'delete-member']) }}
+                {{ Form::button( trans('buttons.close'), ['class' => 'btn btn-light', 'type' => 'button', 'data-dismiss'=> 'modal']) }}
+                {{ Form::button( trans('buttons.delete'), ['class' => 'btn btn-outline-dark ml-1', 'type' => 'submit', 'id' => 'delete-member']) }}
                 {{ Form::close() }}
             </div>
         </div>

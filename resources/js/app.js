@@ -11,24 +11,16 @@ require('./bootstrap');
 window.Vue = require('vue');
 window.Vuex = require('vuex');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('v-table', require('./components/Table/Table.vue').default);
 Vue.component('v-table-head', require('./components/Table/TableHead.vue').default);
 Vue.component('v-table-body', require('./components/Table/TableBody.vue').default);
 Vue.component('v-table-data', require('./components/Table/TableData.vue').default);
 Vue.component('v-table-tools', require('./components/Table/TableTools.vue').default);
 Vue.component('v-pagination', require('./components/Pagination/Pagination.vue').default);
+Vue.component('v-sidebar-search', require('./components/Sidebar/SidebarSearch.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
