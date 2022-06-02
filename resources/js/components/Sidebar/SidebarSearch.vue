@@ -23,17 +23,22 @@ export default {
             const sections = parentNode.querySelectorAll(querySelector);
 
             for (let section of sections) {
-                const sectionName = section.getElementsByTagName('span')[0].textContent.toLowerCase();
+                const sectionName = this.getSectionName(section);
 
                 if (! sectionName.includes(this.searchingSectionName) && section.getElementsByTagName('ul').length > 0) {
                     this.filterSidebarSections('ul > li', section);
                     this.hideEmptySection(section);
-                } else if (! sectionName.includes(this.searchingSectionName)) {
-                    section.style.display = 'none';
-                } else {
+                } else if (sectionName.includes(this.searchingSectionName)) {
+                    this.filterSidebarSections('ul > li', section);
+                    this.hideEmptySection(section);
                     section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
                 }
             }
+        },
+        getSectionName(section) {
+            return section.getElementsByTagName('span')[0].textContent.toLowerCase().trim();
         },
         hideEmptySection(section) {
             const children = section.querySelectorAll('ul > li');
