@@ -82,7 +82,7 @@ export default {
 
     actions: {
         // Получение экземпляра класса LengthAwarePaginator
-        updatePaginationInstance({ commit, state, getters }, url) {
+        updatePaginationInstance({ commit, state, getters }, url = null) {
             return axios.get(url ?? getters.getTableTools.searchUrl, {
                 params: {
                     filters: state.filtersQueryParams,

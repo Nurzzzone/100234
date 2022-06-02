@@ -1,18 +1,21 @@
 <template>
     <div>
         <div class="d-flex">
-            <div v-if="getTableTools.searchEnabled" class="search-input position-relative mb-2 w-100">
-                <input @change="fireDelayedSearch"
-                       type="text"
+            <div v-if="getTableTools.searchEnabled" class="input-group mb-2 w-100">
+                <input type="text"
                        class="form-control"
                        placeholder="Поиск..."
-                       :value="searchObjectsInput"
+                       @input="setSearchKeyword($event.target.value)"
+                       :value="searchKeyword"
+                       @keypress.enter="fireSearch"
                 >
-
-                <div id="loader-wrapper" class="position-absolute mr-3">
-                    <div class="spinner-border spinner-border-sm" role="status">
-                        <span class="sr-only"></span>
-                    </div>
+                <div class="input-group-append">
+                    <button @click="fireSearch" id="search-button" class="btn btn-outline-dark search" type="button">
+                        <i id="search-icon" class="cil-search"></i>
+                        <span id="loader-icon" class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only"></span>
+                        </span>
+                    </button>
                 </div>
             </div>
 
@@ -49,14 +52,14 @@
 
 <script>
 import TableFilters from "./TableFilters";
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
     name: "TableTools",
     components: { TableFilters },
     computed: {
         ...mapState({
-            searchObjectsInput: state => state.table.searchKeyword,
+            searchKeyword: state => state.table.searchKeyword,
             perPageButtons: state => state.table.perPageButtons
         }),
         ...mapGetters([
@@ -64,27 +67,31 @@ export default {
             'getActivePerPageButton',
             'showPerPageButton',
             'showTableFilters',
-        ])
+        ]),
     },
     methods: {
-        search: _.debounce(function(e) {
-            this.$store.commit('setSearchKeyword', e.target.value);
+        ...mapMutations([
+            'setSearchKeyword',
+            'setPerPageQuantity',
+        ]),
 
-            this.$store.dispatch('updatePaginationInstance').finally(() => {
-                document.getElementById('loader-wrapper').style.display = 'none';
-            });
-        }, 1500),
-
-        fireDelayedSearch(e) {
-            document.getElementById('loader-wrapper').style.display = 'block';
-
-            this.search(e);
-        },
+        ...mapActions([
+            'updatePaginationInstance'
+        ]),
 
         changePerPageItems(quantity) {
-            this.$store.commit('setPerPageQuantity', quantity);
+            this.setPerPageQuantity(quantity);
+            this.updatePaginationInstance();
+        },
 
-            this.$store.dispatch('updatePaginationInstance');
+        fireSearch() {
+            document.getElementById('loader-icon').style.display = 'block';
+            document.getElementById('search-icon').style.display = 'none';
+
+            this.updatePaginationInstance().finally(() => {
+                document.getElementById('loader-icon').style.display = 'none';
+                document.getElementById('search-icon').style.display = 'block';
+            });
         },
     }
 }
@@ -106,11 +113,17 @@ export default {
     color: #636f83 !important;
 }
 
-#loader-wrapper {
-    color: #3c4b64 !important;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
+#loader-icon {
+    color: #a9b7cf!important;
     display: none;
 }
+
+#search-button {
+    border-color: #d8dbe0 !important;
+}
+
+#search-button:hover, #search-button:active, #search-button:focus {
+    border-color: #768192 !important;
+}
+
 </style>
