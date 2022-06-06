@@ -19,6 +19,8 @@ abstract class TableConfig implements Jsonable
 
     private const filterStructure = ['label', 'type', 'options', 'paramName'];
 
+    private const allowedColumnTypes = ['text', 'check', 'toggle', 'image'];
+
     protected static $filterTypes = [
         'dropdown',
         'radio',
@@ -29,8 +31,8 @@ abstract class TableConfig implements Jsonable
     public function toJson($options = 0): string
     {
         return collect([
-            'columns'   => $this->columns(),
             'tools'     => $this->tools(),
+            'columns'   => $this->validateColumns(),
             'filters'   => $this->validatedFilters(),
         ])->toJson($options);
     }
@@ -54,6 +56,32 @@ abstract class TableConfig implements Jsonable
     protected function filters(): array
     {
         return [];
+    }
+
+    final protected function validateColumns() {
+        if (empty($this->columns())) {
+            return [];
+        }
+
+        if (Arr::isAssoc($this->columns())) {
+            throw new \Exception('Associative array not allowed!');
+        }
+
+        foreach ($this->columns() as $column) {
+            if (! Arr::isAssoc($column)) {
+                throw new \Exception('Column must be associative array!');
+            }
+
+            if (! array_key_exists('columnName', $column)) {
+                throw new \Exception('Key "columnName" is required!');
+            }
+
+            if (array_key_exists('type', $column) && ! in_array($column['type'], self::allowedColumnTypes)) {
+                throw new \Exception('Allowed column types: text, check, toggle, image');
+            }
+        }
+
+        return $this->columns();
     }
 
     final protected function validatedFilters()

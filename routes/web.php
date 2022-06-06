@@ -10,6 +10,7 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('role', 'RoleController');
     Route::resource('aboutUs', 'AboutUsController', ['parameters' => ['aboutUs' => 'aboutUs']]);
     Route::resource('news', 'NewsController');
+    Route::get('news/updateToggle/{news}', 'NewsController@toggle')->name('news.updateToggle');
     Route::resource('help', 'HelpController');
     Route::post('help/updateSequence', 'HelpController@updateSequence')->name('help.updateSequence');
     Route::resource('flashNotification', 'FlashNotificationController');

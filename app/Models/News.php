@@ -23,6 +23,11 @@ class News extends Outside
         'starts_at',
     ];
 
+    protected $appends = [
+        'editUrl',
+        'updateToggleUrl'
+    ];
+
     protected const image = '/assets/images/default-image.jpg';
 
     public function getStartsAtAttribute($value)
@@ -33,5 +38,9 @@ class News extends Outside
     protected function getEditUrlAttribute(): ?string
     {
         return route('news.edit', $this->getKey());
+    }
+
+    protected function getUpdateToggleUrlAttribute() {
+        return route('news.updateToggle', $this->getKey());
     }
 }

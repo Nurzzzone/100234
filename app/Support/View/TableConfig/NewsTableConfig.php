@@ -4,6 +4,8 @@ namespace App\Support\View\TableConfig;
 
 class NewsTableConfig extends TableConfig
 {
+    protected $searchEnabled = false;
+
     protected function columns(): array
     {
         return [
@@ -17,7 +19,8 @@ class NewsTableConfig extends TableConfig
             ],
             [
                 'label' => trans('fields.is_active'),
-                'columnName' => 'is_active'
+                'columnName' => 'is_active',
+                'type' => 'toggle'
             ],
             [
                 'label' => trans('fields.image'),

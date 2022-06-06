@@ -24,7 +24,7 @@ class ForteBankPaymentTableConfig extends TableConfig
             ['label' => 'Сумма', 'columnName' => 'payment.amount'],
             ['label' => 'Статус', 'columnName' => 'status_description'],
             ['label' => trans('fields.type'), 'columnName' => 'payment.type'],
-            ['label' => trans('fields.is_sent'), 'columnName' => 'payment.is_sent'],
+            ['label' => trans('fields.is_sent'), 'columnName' => 'payment.is_sent', 'type' => 'check'],
         ];
     }
 

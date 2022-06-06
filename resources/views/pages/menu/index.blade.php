@@ -13,7 +13,7 @@
                     <div class="card">
 
                         <div class="card-header d-flex justify-content-end">
-                            <x-modal-content-button class="btn-success" for="create-modal" value="{{ trans('buttons.create') }}"></x-modal-content-button>
+                            <x-modal-content-button class="btn-outline-dark" for="create-modal" value="{{ trans('buttons.create') }}"></x-modal-content-button>
                         </div>
 
                         <div class="card-body">

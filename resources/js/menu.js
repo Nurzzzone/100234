@@ -45,12 +45,12 @@ $(document).ready(function () {
             renderListItem: (element, { id }) => {
                 $(element).append(`
                             <div class="float-right align-middle">
-                                <button class="btn mr-2"
+                                <button class="btn mr-2 border-0"
                                     data-toggle="modal"
                                     data-name="editModalButton"
                                     data-target="${id}"
                                     type="button">${svg.pencil}</button>
-                                <button class="btn"
+                                <button class="btn border-0"
                                     data-toggle="modal"
                                     data-name="deleteModalButton"
                                     data-target="${id}"

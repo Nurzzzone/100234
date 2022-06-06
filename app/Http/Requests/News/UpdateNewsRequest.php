@@ -25,14 +25,14 @@ class UpdateNewsRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string', 'max:16000'],
-            'image' => ['nullable', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp'],
-            'previous_image' => ['nullable', 'string'],
-            'is_active' => ['required', 'boolean'],
-            'is_new' => ['required', 'boolean'],
-            'in_main_page' => ['required', 'boolean']
+            'title'             => ['nullable', 'string', 'max:255'],
+            'description'       => ['nullable', 'string', 'max:255'],
+            'content'           => ['nullable', 'string', 'max:16000'],
+            'image'             => ['nullable', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp'],
+            'previous_image'    => ['nullable', 'string'],
+            'is_active'         => ['nullable', 'boolean'],
+            'is_new'            => ['nullable', 'boolean'],
+            'in_main_page'      => ['nullable', 'boolean']
         ];
     }
 }

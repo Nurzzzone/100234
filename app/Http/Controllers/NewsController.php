@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Support\View\TableConfig\NewsTableConfig;
 use App\Traits\HasFile;
 use Illuminate\Http\Request;
 use App\Traits\HasFlashMessage;
@@ -15,7 +16,6 @@ class NewsController extends Controller
     use HasFlashMessage, HasFile;
 
     protected const MODEL = News::class;
-    protected const COLUMNS = ['title' => 'title', 'description' => 'description', 'is_active' => 'is_active', 'image' => 'image'];
     protected $route;
     protected $object;
 
@@ -25,12 +25,12 @@ class NewsController extends Controller
         View::share('page_title', 'Новости');
     }
 
-    public function index()
+    public function index(NewsTableConfig $tableConfig)
     {
-        return view("pages.$this->route.index",
+        return view("pages.index",
         [
             'objects' => (self::MODEL)::paginate(10),
-            'columns' => self::COLUMNS,
+            'tableConfig' => $tableConfig,
             'route' => $this->route,
         ]);
     }
@@ -73,11 +73,18 @@ class NewsController extends Controller
          ]);
     }
 
+    public function toggle(UpdateNewsRequest $request, News $news)
+    {
+        $news->update($request->validated());
+
+        return response()->json(['message' => 'success']);
+    }
+
     public function update(UpdateNewsRequest $request, News $news)
     {
         try {
             $data = $request->validated();
-            $data['image'] = $this->updateImage($data['image'] ?? null, $data['previous_image'], $news->image, $this->route);
+            $data['image'] = $this->updateImage($data['image'] ?? null, $data['previous_image'] ?? null, $news->image, $this->route);
             $news->update($data);
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
