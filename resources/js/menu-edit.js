@@ -1,54 +1,66 @@
-/* 11.12.2019 */
+$(document).ready(function() {
+    let buttons = $('button[data-name="editModalButton"]');
+    let form = $('#editForm')
+    let url = $(form).data('url');
+    let target;
 
-let self = this;
-
-this.buildSelectParent = function( data ){
-    let result = '<option value="none">Do not have parent</option>'
-    $parentId = document.getElementById('parentId').value
-    $menuElementId = document.getElementById('menuElementId').value
-    for(let i = 0; i<data.length; i++){
-        if(data[i].id != $menuElementId){
-            if(data[i].id == $parentId){
-                result += '<option value="' + data[i].id + '" selected>' + data[i].name + '</option>'
-            }else{
-                result += '<option value="' + data[i].id + '">' + data[i].name + '</option>'
-            }
+    $('#menu-input-parent').change(function() {
+        if ($(this).val() !== '_') {
+            $('#menu-input-slug').find('option[value="dropdown"]').attr('disabled', true)
+            $('#menu-input-slug').val('link');
+        } else {
+            $('#menu-input-slug').find('option[value="dropdown"]').attr('disabled', false)
         }
-    }
-    return result
-}
-
-this.updateSelectParent = function(){
-    axios.get( '/menu/element/get-parents?menu=' + document.getElementById("menu").value )
-    .then(function (response) {
-        document.getElementById("parent").innerHTML = self.buildSelectParent(response.data)
     })
-    .catch(function (error) {
-        // handle error
-        console.log(error)
-    })
-}
 
-this.toggleDivs = function(){
-    let value = document.getElementById("type").value
-    if(value === 'title'){
-        document.getElementById('div-href').classList.add('d-none')
-        document.getElementById('div-dropdown-parent').classList.add('d-none')
-        document.getElementById('div-icon').classList.add('d-none')
-    }else if(value === 'link'){
-        document.getElementById('div-href').classList.remove('d-none')
-        document.getElementById('div-dropdown-parent').classList.remove('d-none')
-        document.getElementById('div-icon').classList.remove('d-none')
-    }else{
-        document.getElementById('div-href').classList.add('d-none')
-        document.getElementById('div-dropdown-parent').classList.remove('d-none')
-        document.getElementById('div-icon').classList.remove('d-none')
-    }
-}
+    buttons.each((i, button) => {
+        $(button).on('click', (e) => {
+            e.stopPropagation();
 
-this.updateSelectParent()
-this.toggleDivs()
-document.getElementById("menu").onchange = function(){self.updateSelectParent()}
-document.getElementById("type").onchange = function(){self.toggleDivs()}
+            target = $(button).data('target');
+
+            $.ajax({
+                url: '/menu/' + target,
+                success: function(data) {
+                    $('#menu-input-name').val(data.name)
+                    $('#menu-input-link').val(data.href)
+                    $('#menu-input-icon').val(data.icon)
+                    $('#menu-input-sequence').val(data.sequence)
+
+                    if (data.slug === 'dropdown') {
+                        $('#menu-input-parent').find(`option[value="${data.parent_id}"]`).hide()
+                    }
+
+                    if (data.parent_id) {
+                        $('#menu-input-parent').val(data.parent_id)
+                    }
+                    $('#menu-input-slug').val(data.slug)
+                },
+                error: function() {
+                    alert('Произошла ошибка. Попробуйте еще раз!')
+                }
+            })
+
+            form.attr('action', url + target);
+            $('#update-modal').modal('show');
+        });
+    });
+
+    // form.submit(function(e) {
+    //     e.preventDefault();
+    //
+    //     $.ajax({
+    //         url: '/menu/element/updateElement/' + target,
+    //         method: 'PUT',
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         data: $(this).serialize(),
+    //         success: function() {
+    //             $('#update-modal').hide();
+    //         }
+    //     })
+    // })
+})
 
 

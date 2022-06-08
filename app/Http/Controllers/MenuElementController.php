@@ -3,223 +3,107 @@
 namespace App\Http\Controllers;
 
 use App\Http\Menus\GetSidebarMenu;
+use App\Models\Auth\Role;
 use App\Models\Menulist;
 use App\Models\Menurole;
 use App\Models\Menus;
-use App\Services\RolesService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-
-//use App\Services\EditMenuViewService;
+use Illuminate\Support\Facades\DB;
 
 class MenuElementController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->has('menu')) {
-            $menuId = $request->input('menu');
-        } else {
-            $menuId = Menulist::first();
-            if (empty($menuId)) {
-                $menuId = 1;
-            } else {
-                $menuId = $menuId->id;
-            }
-        }
+        $menuId = Menulist::first()->id;
         $getSidebarMenu = new GetSidebarMenu();
 
-        return view('pages.editmenu.index', array(
+        return view('pages.menu.index', array(
             'menulist' => Menulist::all(),
             'role' => 'Администратор',
-            'roles' => RolesService::get(),
+            'roles' => Role::query()->orderBy('name')->pluck('name', 'id')->prepend(null),
             'menuToEdit' => $getSidebarMenu->getAll($menuId),
+            'menuElements' => Menus::query()->where('menu_id', $menuId)->orderBy('sequence')->get(),
             'thisMenu' => $menuId,
+            'slugs' => collect(Menus::MENU_ELEMENT_TYPES),
+            'parents' => Menus::dropdown()->pluck('name', 'id')->prepend('-', '_'),
         ));
     }
 
-    public function moveUp(Request $request)
+    public function delete(Menus $menuElement)
     {
-        $element = Menus::where('id', '=', $request->input('id'))->first();
-        $switchElement = Menus::where('menu_id', '=', $element->menu_id)
-            ->where('sequence', '<', $element->sequence)
-            ->orderBy('sequence', 'desc')->first();
-        if (!empty($switchElement)) {
-            $temp = $element->sequence;
-            $element->sequence = $switchElement->sequence;
-            $switchElement->sequence = $temp;
-            $element->save();
-            $switchElement->save();
-        }
-        return redirect()->route('menu.index', ['menu' => $element->menu_id]);
-    }
+        $menuElement->delete();
 
-    public function moveDown(Request $request)
-    {
-        $element = Menus::where('id', '=', $request->input('id'))->first();
-        $switchElement = Menus::where('menu_id', '=', $element->menu_id)
-            ->where('sequence', '>', $element->sequence)
-            ->orderBy('sequence', 'asc')->first();
-        if (!empty($switchElement)) {
-            $temp = $element->sequence;
-            $element->sequence = $switchElement->sequence;
-            $switchElement->sequence = $temp;
-            $element->save();
-            $switchElement->save();
-        }
-        return redirect()->route('menu.index', ['menu' => $element->menu_id]);
-    }
+        Menurole::where('menus_id', $menuElement->getKey())->delete();
 
-    public function getParents(Request $request)
-    {
-        $menuId = $request->input('menu');
-        $result = Menus::where('menus.menu_id', '=', $menuId)
-            ->where('menus.slug', '=', 'dropdown')
-            ->orderBy('menus.sequence', 'asc')->get();
-        return response()->json(
-            $result
-        );
-    }
-
-    public function create()
-    {
-        return view('pages.editmenu.create', [
-            'roles' => RolesService::get(),
-            'parents' => Menus::query()->where('slug', 'dropdown')->get()
-        ]);
-    }
-
-    public function getValidateArray()
-    {
-        $result = [
-            'menu' => 'required|numeric',
-            'role' => 'required|array',
-            'type' => [
-                'required',
-                Rule::in(['link', 'title', 'dropdown']),
-            ],
-        ];
-        return $result;
-    }
-
-    public function getNextSequence($menuId)
-    {
-        $result = Menus::select('menus.sequence')
-            ->where('menus.menu_id', '=', $menuId)
-            ->orderBy('menus.sequence', 'desc')->first();
-        if (empty($result)) {
-            $result = 1;
-        } else {
-            $result = (integer)$result['sequence'] + 1;
-        }
-        return $result;
+        return redirect()->back();
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate($this->getValidateArray());
-        $menus = new Menus();
-        $menus->slug = $request->input('type');
-        $menus->menu_id = $request->input('menu');
-        $menus->name = $request->input('name');
-        if (strlen($request->input('icon')) > 0) {
-            $menus->icon = $request->input('icon');
-        }
-        if (strlen($request->input('href')) > 0) {
-            $menus->href = $request->input('href');
-        }
-        if ($request->input('type') !== 'title' && $request->input('parent') !== 'none') {
-            $menus->parent_id = $request->input('parent');
-        }
-        $menus->sequence = $this->getNextSequence($request->input('menu'));
-        $menus->save();
-        foreach ($request->input('role') as $role) {
-            $menuRole = new Menurole();
-            $menuRole->role_name = $role;
-            $menuRole->menus_id = $menus->id;
-            $menuRole->save();
-        }
-        $request->session()->flash('message', 'Successfully created menu element');
-        return redirect()->route('menu.create');
+        $data = $this->validationData($request);
+        $data['sequence'] = Menus::query()->latest('sequence')->first()->sequence + 1;
+        $data['parent_id'] = $data['parent_id'] !== '_' ? $data['parent_id'] : null;
+        $data['menu_id'] = 1;
+
+        $menuElement = Menus::query()->create($data);
+
+        Menurole::query()->create([
+            'role_name' => 'Администратор',
+            'menus_id' => $menuElement->id,
+        ]);
+
+        return redirect()->back();
     }
 
-    public function edit(Request $request)
+    public function show(Menus $menuElement)
     {
+        return $menuElement;
+    }
 
+    public function update(Menus $menuElement, Request $request)
+    {
+        $data = $this->validationData($request);
 
-        return view('pages.editmenu.edit', [
-            'roles' => RolesService::get(),
-            'parents' => Menus::query()->where('slug', 'dropdown')->get(),
-            'menulist' => Menulist::all(),
-            'menuElement' => Menus::where('id', '=', $request->input('id'))->first(),
-            'menuroles' => Menurole::where('menus_id', '=', $request->input('id'))->get()
+        $data['parent_id'] = $data['parent_id'] !== '_' ? $data['parent_id'] : null;
+        $data['sequence'] = $data['sequence'] ?? Menus::query()->latest('sequence')->first()->sequence + 1;
+        unset($data['sequence']);
+
+        $menuElement->update($data);
+
+        return redirect()->back();
+    }
+
+    public function sequence(Request $request)
+    {
+//        $current_sequence = Menus::query()->orderBy('sequence')->get(['id', 'parent_id', 'sequence']);
+//
+//        foreach($current_sequence as $sequence) {
+//            if (is_null($sequence->parent_id)){
+//                unset($sequence->parent_id);
+//            }
+//        }
+
+//        $sequence = array_udiff($current_sequence->toArray(), $request->input('sequence'), function($a, $b) {
+//            return $a['sequence'] <=> $b['sequence'];
+//        });
+
+        DB::transaction(function() use ($request) {
+            foreach($request->input('sequence') as $element) {
+                Menus::query()->where('id', $element['id'])->update($element);
+            }
+        });
+
+        return response()->json(['message' => 'success']);
+    }
+
+    protected function validationData($request)
+    {
+        return $request->validate([
+            'name' => ['required', 'string'],
+            'href' => ['required', 'string'],
+            'slug' => ['required', 'string'],
+            'parent_id' => ['nullable'],
+            'icon' => ['nullable', 'string']
         ]);
     }
-
-    public function update(Request $request)
-    {
-
-        //var_dump( $_POST );
-        //die();
-
-        $validatedData = $request->validate($this->getValidateArray());
-
-        //var_dump( $_POST );
-        //die();
-
-        $menus = Menus::where('id', '=', $request->input('id'))->first();
-        $menus->slug = $request->input('type');
-        $menus->menu_id = $request->input('menu');
-        $menus->icon = $request->input('icon');
-        $menus->href = $request->input('href');
-        $menus->name = $request->input('name');
-        if ($request->input('type') === 'title' || $request->input('parent') === 'none') {
-            $menus->parent_id = NULL;
-        } else {
-            if ($request->input('parent') === $request->input('id')) { //can't be self parent
-                $menus->parent_id = NULL;
-            } else {
-                $menus->parent_id = $request->input('parent');
-            }
-        }
-        $menus->save();
-        Menurole::where('menus_id', '=', $request->input('id'))->delete();
-        if ($request->has('role')) {
-            foreach ($request->input('role') as $role) {
-                $menuRole = new Menurole();
-                $menuRole->role_name = $role;
-                $menuRole->menus_id = $request->input('id');
-                $menuRole->save();
-            }
-        }
-        $request->session()->flash('message', 'Successfully update menu element');
-        return redirect()->route('menu.edit', ['id' => $request->input('id')]);
-    }
-
-    public function show(Request $request)
-    {
-        $menuElement = Menus::join('menus as mparent', 'menus.parent_id', '=', 'mparent.id')
-            ->select('menus.*', 'mparent.name as parent_name')
-            ->where('menus.id', '=', $request->input('id'))->first();
-        if (empty($menuElement)) {
-            $menuElement = Menus::where('id', '=', $request->input('id'))->first();
-        }
-        return view('pages.editmenu.show', [
-            'menulist' => Menulist::all(),
-            'menuElement' => $menuElement,
-            'menuroles' => Menurole::where('menus_id', '=', $request->input('id'))->get()
-        ]);
-    }
-
-    public function delete(Request $request)
-    {
-        $menus = Menus::where('id', '=', $request->input('id'))->first();
-        $menuId = $menus->menu_id;
-        $menus->delete();
-        Menurole::where('menus_id', '=', $request->input('id'))->delete();
-        $request->session()->flash('message', 'Successfully deleted menu element');
-        $request->session()->flash('back', 'menu.index');
-        $request->session()->flash('backParams', ['menu' => $menuId]);
-        return view('pages.shared.universal-info');
-    }
-
 }

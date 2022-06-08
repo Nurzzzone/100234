@@ -27,7 +27,7 @@ class {{class}} extends Controller
 
     public function index()
     {
-        return view("pages.{$this->route}.index",
+        return view("pages.$this->route.index",
         [
             'objects' => (self::MODEL)::paginate({{perPageItems}}),
             'columns' => self::COLUMNS,
@@ -39,7 +39,7 @@ class {{class}} extends Controller
     {
         $model = self::MODEL;
 
-        return view("pages.{$this->route}.create", [
+        return view("pages.$this->route.create", [
             'object' => new $model(),
             'route' => $this->route,
         ]);
@@ -52,12 +52,12 @@ class {{class}} extends Controller
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
-        return $this->flashSuccessMessage($request, "{$this->route}.index");
+        return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
     public function show({{model}} ${{object}})
     {
-        return view("pages.{$this->route}.show", [
+        return view("pages.$this->route.show", [
             'object' => ${{object}},
             'route' => $this->route
         ]);
@@ -65,7 +65,7 @@ class {{class}} extends Controller
 
     public function edit({{model}} ${{object}})
     {
-        return view("pages.{$this->route}.edit", [
+        return view("pages.$this->route.edit", [
             'object' => ${{object}},
             'route' => $this->route
          ]);
@@ -78,7 +78,7 @@ class {{class}} extends Controller
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
-        return $this->flashSuccessMessage($request, "{$this->route}.index");
+        return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
     public function destroy({{model}} ${{object}}, Request $request)
@@ -88,6 +88,6 @@ class {{class}} extends Controller
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
-        return $this->flashSuccessMessage($request, "{$this->route}.index");
+        return $this->flashSuccessMessage($request, "$this->route.index");
     }
 }

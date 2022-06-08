@@ -2,10 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -38,24 +37,19 @@ class Handler extends ExceptionHandler
     {
         $retval = parent::render($request, $exception);
 
-        if (! config('app.debug') && $exception instanceof NotFoundHttpException) {
-            $request->session()->flash('error', __('messages.404.body'));
-
-            return redirect()->back();
-        }
-
-        if (! config('app.debug') && auth()->check() && $exception->getCode() == 0) {
-            return redirect()->back();
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->redirectWithFlash($request, trans(('messages.404.body')));
+        } elseif($exception instanceof AuthorizationException) {
+            return $this->redirectWithFlash($request, trans(('messages.401.body')));
         }
 
         return $retval;
     }
 
-    protected function invalidJson($request, ValidationException $exception)
+    protected function redirectWithFlash($request, string $message)
     {
-        return response()->json([
-            'message' => trans('validation.header'),
-            'errors' => $exception->errors(),
-        ], $exception->status);
+        $request->session()->flash('error', $message);
+
+        return redirect()->back();
     }
 }

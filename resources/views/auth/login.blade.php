@@ -22,7 +22,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                {{ Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => trans('fields.email_address'), 'required' => '', 'autofocus' => '']) }}
+                                {{ Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => trans('fields.email'), 'required' => '', 'autofocus' => '']) }}
                             </div>
                             <div class="input-group mb-4">
                                 <div class="input-group-prepend">
@@ -35,7 +35,7 @@
                                 {{ Form::password('password', ['class' => 'form-control', 'placeholder' => trans('fields.password'), 'required' => '']) }}
                             </div>
                             <div class="d-flex align-items-center justify-content-end">
-                                {{ Form::button(trans('buttons.login'), ['class' => 'btn btn-dark px-4', 'type' => 'submit']) }}
+                                {{ Form::button(trans('buttons.login'), ['class' => 'btn btn-outline-dark px-4', 'type' => 'submit']) }}
                             </div>
                             {{ Form::close() }}
                         </div>

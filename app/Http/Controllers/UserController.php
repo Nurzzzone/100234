@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\View\TableConfig\UserTableConfig;
 use App\Traits\HasFlashMessage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
@@ -21,14 +23,27 @@ class UserController extends Controller
         View::share('page_title', 'Пользователи');
     }
 
-    public function index()
+    public function index(Request $request, UserTableConfig $tableConfig)
     {
-        return view("pages.{$this->route}.index",
-        [
-            'objects' => (self::MODEL)::paginate(10),
-            'columns' => self::COLUMNS,
-            'route' => $this->route,
-        ]);
+        if (! $request->ajax()) {
+            return view("pages.index",
+                [
+                    'objects' => (self::MODEL)::paginate(request('perPage', 10)),
+                    'tableConfig' => $tableConfig,
+                    'route' => $this->route,
+                ]);
+        }
+
+        return User::query()
+            ->when($request->searchKeyword, function($query) use($request) {
+                $query
+                    ->orWhere('GUID', 'LIKE', "%$request->searchKeyword%")
+                    ->orWhere('FIO', 'LIKE', "%$request->searchKeyword%")
+                    ->orWhere('phone', 'LIKE', "%$request->searchKeyword%")
+                    ->orWhere('email', 'LIKE', "%$request->searchKeyword%");
+            })
+            ->paginate(request('perPage', 10));
+
     }
 
     public function show(User $user)

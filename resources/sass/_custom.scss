@@ -2,11 +2,18 @@
 @import "./custom/radio-buttons.scss";
 @import "./custom/checkbox.scss";
 @import "./custom/image-upload.scss";
+@import "./custom/global-loader.scss";
+@import "./_menu.scss";
 
 // ======================================================
 
+button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 .c-header.c-header-fixed{
-    top:0px;
+    top:0;
 }
 
 .click-file{
@@ -46,6 +53,10 @@ textarea{
     resize: none;
 }
 
+.textarea-editor p {
+    margin: 0;
+}
+
 .form-control:focus {
     border-color: none;
     box-shadow: none;
@@ -75,4 +86,16 @@ textarea{
         -moz-appearance: none;
         appearance: none;
     }
+}
+
+table th, table td
+{
+    width: 100px;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.ui-sortable-helper {
+    display: table;
+    table-layout: fixed;
 }

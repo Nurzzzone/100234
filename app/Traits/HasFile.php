@@ -24,29 +24,22 @@ trait HasFile
 
     /**
      * Delete image
-     * @param string $file_name
+     * @param ?string $file_name
      */
-    protected function deleteFile(string $file_name): void
+    protected function deleteFile(?string $file_name = null): void
     {
         if ($file_name !== null && File::exists($file_name)) {
             File::delete($file_name);
         }
     }
 
-    /**
-     * Save new image and delete old image
-     * @param $image
-     * @param $previous_image
-     * @param $delete_image
-     * @param $file_path
-     */
     protected function updateImage($image, $previous_image, $delete_image , $file_path)
     {
         if ($image !== null && $previous_image === null) {
             if ($delete_image !== null) {
                 $this->deleteFile($delete_image);
             }
-            return $this->uploadFile($image, $file_path);
+            return $this->uploadFile($image, $file_path . '\\');
         } elseif ($delete_image !== null && $previous_image === null) {
             $this->deleteFile($delete_image);
             return null;

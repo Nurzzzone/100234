@@ -15,9 +15,9 @@
                         <div class="card-body">
                             <table class="table table-striped table-bordered datatable mb-4">
                                 <tbody>
-                                    @include('partials.tr-text', ['data' => $object->business_region, 'locale' => 'fields.business_region', 'tr' => 'text'])
-                                    @include('partials.tr-text', ['data' => $object->address, 'locale' => 'fields.address', 'tr' => 'text'])
-                                    @include('partials.tr-text', ['data' => $object->email, 'locale' => 'fields.email', 'tr' => 'text'])
+                                    @include('partials.tr-text', ['data' => $object->business_region, 'label' => trans('fields.business_region'), 'tr' => 'text'])
+                                    @include('partials.tr-text', ['data' => $object->address, 'label' => trans('fields.address'), 'tr' => 'text'])
+                                    @include('partials.tr-text', ['data' => $object->email, 'label' => trans('fields.email'), 'tr' => 'text'])
                                 </tbody>
                             </table>
 
@@ -56,5 +56,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/map-show.js') }}"></script>
+    <script src="{{ asset('js/src/map-show.js') }}"></script>
 @endsection
