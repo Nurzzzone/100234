@@ -48,7 +48,7 @@
     },
     "devDependencies": {
         "@babel/cli": "^7.17.10",
-        "@babel/core": "^7.18.2",
+        "@babel/core": "^7.18.5",
         "@babel/plugin-proposal-object-rest-spread": "^7.18.0",
         "@babel/preset-env": "^7.18.2",
         "@coreui/svg-injector": "^1.0.0",
@@ -81,7 +81,7 @@
         "pug": "^2.0.4",
         "resolve-url-loader": "^3.1.4",
         "rimraf": "^3.0.2",
-        "sass": "^1.32.11",
+        "sass": "^1.52.3",
         "sass-loader": "^8.0.2",
         "shelljs": "^0.8.5",
         "stylelint": "^13.13.1",

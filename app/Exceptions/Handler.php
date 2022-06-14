@@ -33,23 +33,10 @@ class Handler extends ExceptionHandler
         parent::report($exception);
     }
 
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $exception) //TODO переписать
     {
         $retval = parent::render($request, $exception);
 
-        if ($exception instanceof NotFoundHttpException) {
-            return $this->redirectWithFlash($request, trans(('messages.404.body')));
-        } elseif($exception instanceof AuthorizationException) {
-            return $this->redirectWithFlash($request, trans(('messages.401.body')));
-        }
-
         return $retval;
-    }
-
-    protected function redirectWithFlash($request, string $message)
-    {
-        $request->session()->flash('error', $message);
-
-        return redirect()->back();
     }
 }

@@ -15,7 +15,7 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::get('news/updateToggle/{news}', 'NewsController@toggle')->name('news.updateToggle');
     Route::resource('help', 'HelpController');
     Route::post('help/updateSequence', 'HelpController@updateSequence')->name('help.updateSequence');
-    Route::resource('flashNotification', 'FlashNotificationController');
+//    Route::resource('flashNotification', 'FlashNotificationController');
     Route::resource('forteBankPayment', 'ForteBankPaymentController');
 
     Route::resource('security', 'SecurityController');
@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
             ]);
         });
     });
+
+    Route::resource('partner', 'PartnerApplicationController');
 
     Route::resource('roles', 'RolesController');
 

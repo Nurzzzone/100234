@@ -64,7 +64,7 @@ return [
     'supervisor_discount_limit' => 'Лимит Супервайзера',
     'product_manager_discount_limit' => 'Лимит Продакт менеджера',
     'filial_director_discount_limit' => 'Лимит Директора филиала',
-    'sales_agent_discount_limit'    => 'Лимит Торгового представителя',
+    'sales_agent_discount_limit' => 'Лимит Торгового представителя',
 
     'in_main_page' => 'Отображение на главной странице',
     'is_new' => 'Отображение со значком "New"',
@@ -73,5 +73,10 @@ return [
     'in_footer' => 'Отображение в футере',
     'created_at' => 'Время создания',
     'updated_at' => 'Время обновления',
-    'is_sent' => 'Отправлен в 1С'
+    'is_sent' => 'Отправлен в 1С',
+    'contragent_name' => 'Имя контрагента',
+    'bin' => 'БИН',
+    'is_confirmed_1c' => 'Подтвержден в 1с',
+    'is_confirmed_site' => 'Подтвержден менеджером на сайте',
+    'approve' => 'Подтвердить'
 ];

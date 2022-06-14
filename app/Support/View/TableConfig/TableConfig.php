@@ -49,7 +49,7 @@ abstract class TableConfig implements Jsonable
             'searchEnabled'         => $this->searchEnabled,
             'perPageButtonEnabled'  => $this->perPageButtonEnabled,
             'searchUrl'             => $this->searchUrl,
-            'buttonsEnabled'        => $this->editEnabled && $this->deleteEnabled,
+            'buttonsEnabled'        => $this->editEnabled || $this->deleteEnabled,
         ];
     }
 
