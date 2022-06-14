@@ -2,10 +2,11 @@
 
 namespace App\Support\View\TableConfig;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 
-abstract class TableConfig implements Jsonable
+abstract class TableConfig implements Jsonable, Arrayable
 {
     protected $searchEnabled = true;
 
@@ -26,16 +27,15 @@ abstract class TableConfig implements Jsonable
         'radio',
     ];
 
+    /**
+     * Метод возвращает массив в котором перечислены столбцы таблицы в базе данных
+     * и надо отобразить в таблице в админ панели. В самом массиве label - это название
+     * для отображения столбца, типа: Электронная почта, Имя и т.д., а columnName -
+     * название столбца в таблице базе данных. Если необходимо отобразить связь, то можно
+     * использовать точку relationName.relationColumnName (relationName это метод определенный
+     * в классе Model)
+     */
     abstract protected function columns(): array;
-
-    public function toJson($options = 0): string
-    {
-        return collect([
-            'tools'     => $this->tools(),
-            'columns'   => $this->validateColumns(),
-            'filters'   => $this->validatedFilters(),
-        ])->toJson($options);
-    }
 
     final public function tools(): array
     {
@@ -58,6 +58,10 @@ abstract class TableConfig implements Jsonable
         return [];
     }
 
+    /**
+     * Метод проверяет правильность заполнения массива для столбцов.
+     * P.S. сюда лезть не надо.
+     */
     final protected function validateColumns() {
         if (empty($this->columns())) {
             return [];
@@ -84,6 +88,10 @@ abstract class TableConfig implements Jsonable
         return $this->columns();
     }
 
+    /**
+     * Метод проверяет правильность заполнения массива для фильтров.
+     * P.S. сюда лезть не надо.
+     */
     final protected function validatedFilters()
     {
         if (empty($this->filters())) {
@@ -115,5 +123,23 @@ abstract class TableConfig implements Jsonable
         }
 
         return $this->filters();
+    }
+
+    public function toJson($options = 0): string
+    {
+        return collect([
+            'tools'     => $this->tools(),
+            'columns'   => $this->validateColumns(),
+            'filters'   => $this->validatedFilters(),
+        ])->toJson($options);
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'tools'     => $this->tools(),
+            'columns'   => $this->validateColumns(),
+            'filters'   => $this->validatedFilters(),
+        ];
     }
 }

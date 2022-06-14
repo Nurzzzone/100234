@@ -3,36 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\OnlinePayment\ForteBankPayment;
+use App\Repositories\BaseRepository;
 use App\Repositories\OnlinePayment\FortePaymentRepository;
 use App\Support\View\TableConfig\OnlinePayment\ForteBankPaymentTableConfig;
-use App\Traits\HasFlashMessage;
-use Illuminate\Support\Facades\View;
+use App\Support\View\TableConfig\TableConfig;
 
-class ForteBankPaymentController extends Controller
+class ForteBankPaymentController extends TableController
 {
-    use HasFlashMessage;
+    protected $pageTitle = 'Forte Bank';
 
-    protected $route;
-    protected $object;
+    protected $route = 'forteBankPayment';
 
-    public function __construct()
+    protected function getRepository(): BaseRepository
     {
-        $this->route = 'forteBankPayment';
-        View::share('page_title', 'Forte Bank');
+        return new FortePaymentRepository();
     }
 
-    public function index(FortePaymentRepository $repository, ForteBankPaymentTableConfig $tableConfig)
+    protected function getTableConfig(): TableConfig
     {
-        if (request()->ajax()) {
-            return $repository->getPaginatedSearchResult();
-        }
-
-        return view("pages.index",
-        [
-            'objects' => $repository->getPaginatedResult(),
-            'tableConfig' => $tableConfig,
-            'route' => $this->route,
-        ]);
+        return new ForteBankPaymentTableConfig();
     }
 
     public function show(ForteBankPayment $forteBankPayment)

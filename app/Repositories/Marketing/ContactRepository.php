@@ -4,23 +4,12 @@ namespace App\Repositories\Marketing;
 
 use App\Models\Contact;
 use App\Repositories\BaseRepository;
+use Illuminate\Database\Eloquent\Builder;
 
 class ContactRepository extends BaseRepository
 {
-    public function getPaginatedResult(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    protected function beforePaginateQuery(): Builder
     {
-        return Contact::query()->paginate($this->perPageQuantity);
-    }
-
-    public function getPaginatedSearchResult()
-    {
-        return Contact::query()
-            ->when(request('searchKeyword'), function($query) {
-                $query
-                    ->orWhere('name', 'LIKE', "%$this->searchQuery%")
-                    ->orWhere('address', 'LIKE', "%$this->searchQuery%")
-                    ->orWhere('email', 'LIKE', "%$this->searchQuery%");
-            })
-            ->paginate($this->perPageQuantity);
+        return Contact::query()->with('parent');
     }
 }

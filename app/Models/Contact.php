@@ -53,9 +53,4 @@ class Contact extends Model
     /** ========================================== END: RELATIONS ================================================== */
 
     /** ============================================================================================================ */
-
-    public function getBusinessRegionAttribute($value)
-    {
-        return optional(BusinessRegion::find($value))->name;
-    }
 }

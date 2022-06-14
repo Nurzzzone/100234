@@ -3,47 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\BaseRepository;
+use App\Repositories\UserRepository;
+use App\Support\View\TableConfig\TableConfig;
 use App\Support\View\TableConfig\UserTableConfig;
 use App\Traits\HasFlashMessage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 
-class UserController extends Controller
+class UserController extends TableController
 {
     use HasFlashMessage;
 
-    protected const MODEL = User::class;
-    protected const COLUMNS = ['id' => 'GUID', 'fio' => 'FIO', 'email' => 'email', 'phone' => 'phone'];
-    protected $route;
-    protected $object;
+    protected $route = 'user';
 
-    public function __construct()
+    protected $pageTitle = 'Пользователи';
+
+    protected function getTableConfig(): TableConfig
     {
-        $this->route = 'user';
-        View::share('page_title', 'Пользователи');
+        return new UserTableConfig();
     }
 
-    public function index(Request $request, UserTableConfig $tableConfig)
+    protected function getRepository(): BaseRepository
     {
-        if (! $request->ajax()) {
-            return view("pages.index",
-                [
-                    'objects' => (self::MODEL)::paginate(request('perPage', 10)),
-                    'tableConfig' => $tableConfig,
-                    'route' => $this->route,
-                ]);
-        }
-
-        return User::query()
-            ->when($request->searchKeyword, function($query) use($request) {
-                $query
-                    ->orWhere('GUID', 'LIKE', "%$request->searchKeyword%")
-                    ->orWhere('FIO', 'LIKE', "%$request->searchKeyword%")
-                    ->orWhere('phone', 'LIKE', "%$request->searchKeyword%")
-                    ->orWhere('email', 'LIKE', "%$request->searchKeyword%");
-            })
-            ->paginate(request('perPage', 10));
-
+        return new UserRepository();
     }
 
     public function show(User $user)

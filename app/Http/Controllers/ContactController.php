@@ -2,39 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Contact\UpdateContactRequest;
 use App\Models\Contact;
+use App\Repositories\BaseRepository;
 use App\Repositories\Marketing\ContactRepository;
 use App\Support\View\TableConfig\Marketing\ContactTableConfig;
+use App\Support\View\TableConfig\TableConfig;
 use App\Traits\HasFlashMessage;
-use App\Http\Requests\Contact\UpdateContactRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
 
-class ContactController extends Controller
+class ContactController extends TableController
 {
     use HasFlashMessage;
 
-    protected const MODEL = Contact::class;
-    protected $route;
+    protected $route = 'route';
 
-    public function __construct()
+    protected $pageTitle = 'Контакты';
+
+    protected function getRepository(): BaseRepository
     {
-        $this->route = 'contact';
-        View::share('page_title', 'Контакты');
+        return new ContactRepository();
     }
 
-    public function index(ContactRepository $repository, ContactTableConfig $tableConfig)
+    protected function getTableConfig(): TableConfig
     {
-        if (request()->ajax()) {
-            return $repository->getPaginatedSearchResult();
-        }
-
-        return view("pages.index",
-            [
-                'objects' => $repository->getPaginatedResult(),
-                'tableConfig' => $tableConfig,
-                'route' => $this->route,
-            ]);
+        return new ContactTableConfig();
     }
 
     public function edit(Contact $contact)

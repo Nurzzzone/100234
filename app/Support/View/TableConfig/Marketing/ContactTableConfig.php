@@ -18,7 +18,7 @@ class ContactTableConfig extends TableConfig
         return [
             [
                 'label' => trans('fields.name'),
-                'columnName' => 'business_region',
+                'columnName' => 'parent.name',
             ],
             [
                 'label' => trans('fields.address'),
