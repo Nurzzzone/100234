@@ -35,11 +35,6 @@ export default {
             return state.tableConfig.filters;
         },
 
-        // Получение кол-во ссылок на страницы
-        getPaginationLinksCount(state) {
-            return state.pagination.links.slice(1, -1).length;
-        },
-
         getActivePerPageButton(state) {
             return state.perPageButtons.find((button) => button.active).value;
         },
@@ -49,8 +44,8 @@ export default {
         },
 
         // Отображение кнопки "кол-во элементов"
-        showPerPageButton(state, getters) {
-            return getters.getPaginationLinksCount > 10 && state.tableConfig.tools.perPageButtonEnabled;
+        showPerPageButton(state) {
+            return state.tableConfig.tools.perPageButtonEnabled;
         },
 
         // Отображение кнопки фильтров и модального окна

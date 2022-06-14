@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use App\Repositories\Marketing\ContactRepository;
+use App\Support\View\TableConfig\Marketing\ContactTableConfig;
 use App\Traits\HasFlashMessage;
 use App\Http\Requests\Contact\UpdateContactRequest;
 use Illuminate\Support\Facades\DB;
@@ -13,11 +15,6 @@ class ContactController extends Controller
     use HasFlashMessage;
 
     protected const MODEL = Contact::class;
-    protected const COLUMNS = [
-        'name' => 'business_region',
-        'address' => 'address',
-        'email' => 'email'
-    ];
     protected $route;
 
     public function __construct()
@@ -26,24 +23,18 @@ class ContactController extends Controller
         View::share('page_title', 'Контакты');
     }
 
-    public function index()
+    public function index(ContactRepository $repository, ContactTableConfig $tableConfig)
     {
-        return view("pages.{$this->route}.index",
-        [
-            'objects' => (self::MODEL)::paginate(10),
-            'columns' => self::COLUMNS,
-            'route' => $this->route,
-        ]);
-    }
+        if (request()->ajax()) {
+            return $repository->getPaginatedSearchResult();
+        }
 
-    public function show(Contact $contact)
-    {
-        $contact->load('phones', 'schedules');
-
-        return view("pages.{$this->route}.show", [
-            'object' => $contact,
-            'route' => $this->route,
-        ]);
+        return view("pages.index",
+            [
+                'objects' => $repository->getPaginatedResult(),
+                'tableConfig' => $tableConfig,
+                'route' => $this->route,
+            ]);
     }
 
     public function edit(Contact $contact)

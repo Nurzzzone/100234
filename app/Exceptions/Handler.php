@@ -35,8 +35,6 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception) //TODO переписать
     {
-        $retval = parent::render($request, $exception);
-
-        return $retval;
+        return parent::render($request, $exception);
     }
 }
