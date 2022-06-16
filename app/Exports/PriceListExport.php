@@ -41,16 +41,16 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
         return Product::query()
             ->with('productRemains', 'productRemains.productStore')
             ->leftJoin('1c_manufacturers', '1c_products.manufacturer', '1c_manufacturers.guid')
-            ->when(request('priceListType') == 0, function(Builder $query) {
+            ->when(request('priceListType') == 0, function (Builder $query) {
                 $query->whereIn('1c_manufacturers.guid', request('manufacturers'));
-            }, function(Builder $query) {
-                $priceGroup = request('priceGroup') == 0? '1c95a9b3-b933-11e1-8447-3c4a92fa410f': '60a63d65-eeeb-11e4-ab38-00155d648080';
+            }, function (Builder $query) {
+                $priceGroup = request('priceGroup') == 0 ? '1c95a9b3-b933-11e1-8447-3c4a92fa410f' : '60a63d65-eeeb-11e4-ab38-00155d648080';
                 $query->where('1c_products.price_group', $priceGroup);
             })
-            ->when(request('withRemains') == 1, function($query) {
+            ->when(request('withRemains') == 1, function ($query) {
                 $query->has('productRemains.productStore');
             })
-            ->when(request('withClientStores') == 1, function(Builder $query) {
+            ->when(request('withClientStores') == 1, function (Builder $query) {
                 $query
                     ->leftJoin('1c_products_remains', '1c_products_remains.product', '1c_products.guid')
                     ->leftJoin('1c_stores', '1c_stores.guid', '1c_products_remains.store')
@@ -81,12 +81,24 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
             ->get();
     }
 
+    protected function stores()
+    {
+        return static::$collection
+            ->pluck('productRemains')
+            ->flatten()
+            ->unique('store')
+            ->pluck('productStore')
+            ->flatten()
+            ->pluck('name', 'GUID')
+            ->sort();
+    }
+
     public function collection(): Collection
     {
         $result = [];
 
-        foreach(static::$collection->chunk(1000) as $chunk) {
-            foreach($chunk as $item) {
+        foreach (static::$collection->chunk(1000) as $chunk) {
+            foreach ($chunk as $item) {
                 $result[] = array_merge([
                     $item->manufacturerName,
                     $item->productBrand,
@@ -97,11 +109,20 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
                     $item->productApplicability,
                     $item->productPrice,
                     $item->minQuantity,
-                ], request('withRemains') == 0? []: $this->getProductRemainQuantity($item));
+                ], request('withRemains') == 0 ? [] : $this->getProductRemainQuantity($item));
             }
         }
 
         return collect($result);
+    }
+
+    protected function getProductRemainQuantity($item)
+    {
+        $quantity = $item->productRemains->flatten()->pluck('quantity', 'store');
+
+        return static::$stores->map(function() {
+            return '';
+        })->replace($quantity)->toArray();
     }
 
     public function headings(): array
@@ -116,18 +137,7 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
             'Применяемость',
             'Цена, KZT',
             'Мин. партия'
-        ], request('withRemains') == 0? []: static::$stores->toArray());
-    }
-
-    protected function stores()
-    {
-        return static::$collection
-            ->pluck('productRemains')
-            ->flatten()
-            ->unique('store')
-            ->pluck('productStore')
-            ->flatten()
-            ->pluck('name', 'GUID');
+        ], request('withRemains') == 0 ? [] : static::$stores->toArray());
     }
 
     public function registerEvents(): array
@@ -169,8 +179,8 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
         $sheet->getColumnDimension('H')->setWidth(20);
         $sheet->getColumnDimension('I')->setWidth(20);
 
-        foreach($sheet->getRowIterator()->current()->getCellIterator() as $cell) {
-            if (! in_array($cell->getColumn(), ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])) {
+        foreach ($sheet->getRowIterator()->current()->getCellIterator() as $cell) {
+            if (!in_array($cell->getColumn(), ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])) {
                 $sheet->getColumnDimension($cell->getColumn())->setAutoSize(true);
             }
         }
@@ -216,18 +226,6 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
         $sheet->getStyle('B1')->getFont()->setSize(12);
     }
 
-    protected function logo($sheet)
-    {
-        $drawing = new Drawing();
-        $drawing->setName('Adkulan logo');
-        $drawing->setDescription('Adkulan logo');
-        $drawing->setPath(app_path('Exports/assets/logo.png'));
-        $drawing->setHeight(90);
-        $drawing->setOffsetX(50);
-        $drawing->setOffsetY(50);
-        $drawing->setWorksheet($sheet->getDelegate());
-    }
-
     protected function businessRegion(Sheet $sheet)
     {
         if (request('withClientStores') == 1) {
@@ -242,12 +240,15 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
         }
     }
 
-    protected function getProductRemainQuantity($item)
+    protected function logo($sheet)
     {
-        return static::$stores->reduce(function ($carry, $_, $id) use ($item) {
-            $carry[] = optional($item->productRemains->firstWhere('store', $id))->quantity ?? '';
-
-            return $carry;
-        });
+        $drawing = new Drawing();
+        $drawing->setName('Adkulan logo');
+        $drawing->setDescription('Adkulan logo');
+        $drawing->setPath(app_path('Exports/assets/logo.png'));
+        $drawing->setHeight(90);
+        $drawing->setOffsetX(50);
+        $drawing->setOffsetY(50);
+        $drawing->setWorksheet($sheet->getDelegate());
     }
 }
