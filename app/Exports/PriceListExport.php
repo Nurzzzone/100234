@@ -100,25 +100,19 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
 
     public function collection(): Collection
     {
-        $result = [];
-
-        foreach (static::$collection->chunk(1000) as $chunk) {
-            foreach ($chunk as $item) {
-                $result[] = array_merge([
-                    $item->manufacturerName,
-                    $item->productBrand,
-                    $item->productCode,
-                    $item->productArticle,
-                    $item->productName,
-                    $item->productBarcode,
-                    $item->productApplicability,
-                    $item->productPrice,
-                    $item->minQuantity,
-                ], request('withRemains') == 0 ? [] : $this->getProductRemainQuantity($item));
-            }
-        }
-
-        return collect($result);
+        return static::$collection->map(function($item) {
+            return array_merge([
+                $item->manufacturerName,
+                $item->productBrand,
+                $item->productCode,
+                $item->productArticle,
+                $item->productName,
+                $item->productBarcode,
+                $item->productApplicability,
+                $item->productPrice,
+                $item->minQuantity,
+            ], request('withRemains') == 0 ? [] : $this->getProductRemainQuantity($item));
+        });
     }
 
     protected function getProductRemainQuantity($item)
