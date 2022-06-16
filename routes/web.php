@@ -25,19 +25,16 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     Route::prefix('discount')->group(function () {
         Route::prefix('limit')->group(function () {
-            Route::resource('periodic', 'Discounts\DiscountLimitOnPeriodController',
-                array('names' => array(
-                    'create' => 'discount.limit.periodic.create',
-                    'index' => 'discount.limit.periodic.index',
-                    'store' => 'discount.limit.periodic.store',
-                    'show' => 'discount.limit.periodic.show',
-                    'update' => 'discount.limit.periodic.update',
-                    'destroy' => 'discount.limit.periodic.destroy',
-                    'edit' => 'discount.limit.periodic.edit')))
+            Route::resource('periodic', 'Discounts\DiscountLimitOnPeriodController', ['as' => 'discount.limit'])
                 ->parameters([
-                'periodic' => 'discountLimit',
-            ]);
+                    'periodic' => 'discountLimit',
+                ]);
         });
+
+        Route::resource('document', 'Discounts\DiscountDocumentController',
+            ['as' => 'discount']
+        );
+
     });
 
     Route::resource('partner', 'PartnerApplicationController');
