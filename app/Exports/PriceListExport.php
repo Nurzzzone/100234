@@ -30,10 +30,15 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
      */
     private static $stores;
 
+    private static $defaultStoreCells;
+
     public function __construct()
     {
         static::$collection = $this->collectionData();
         static::$stores = $this->stores();
+        static::$defaultStoreCells = static::$stores->map(function() {
+            return '';
+        });
     }
 
     protected function collectionData()
@@ -120,9 +125,9 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
     {
         $quantity = $item->productRemains->flatten()->pluck('quantity', 'store');
 
-        return static::$stores->map(function() {
-            return '';
-        })->replace($quantity)->toArray();
+        $default = clone static::$defaultStoreCells;
+
+        return $default->replace($quantity)->toArray();
     }
 
     public function headings(): array
