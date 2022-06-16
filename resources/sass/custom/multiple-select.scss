@@ -1,0 +1,27 @@
+.bootstrap-select>.dropdown-toggle.bs-placeholder, .bootstrap-select>.dropdown-toggle.bs-placeholder:active, .bootstrap-select>.dropdown-toggle.bs-placeholder:focus, .bootstrap-select>.dropdown-toggle.bs-placeholder:hover {
+  color: #999;
+  background-color: #ffffff !important;
+}
+
+ul[role="presentation"].dropdown-menu.inner.show .dropdown-item.active, .dropdown-item:active {
+  text-decoration: none;
+  color: #fff;
+  background-color: #ebedef !important;
+}
+
+button[role="combobox"].btn-light.dropdown-toggle {
+  color: #4f5d73;
+  background-color: #fff !important;
+  border-color: #c8cdd3;
+}
+
+div.dropdown.bootstrap-select.show-tick.form-control.show div.dropdown-menu.show {
+  max-height: 436.597px !important;
+  overflow: hidden;
+  min-height: 204px;
+  position: absolute;
+  transform: translate3d(0px, 35px, 0px) !important;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
