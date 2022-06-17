@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use App\Jobs\PriceList\EmailPriceListExport;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use PharIo\Manifest\Email;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,6 +28,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        $schedule->command('price-list-export:queue')->everyMinute();
     }
 
     /**

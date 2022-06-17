@@ -3,8 +3,10 @@
 namespace App\Exports;
 
 use App\Models\BusinessRegion;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
