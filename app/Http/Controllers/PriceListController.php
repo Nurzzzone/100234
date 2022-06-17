@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\PriceListExport;
 use App\Models\User;
+use App\Repositories\Finance\PriceListRepository;
 use App\Traits\HasFlashMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,14 +39,18 @@ class PriceListController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, PriceListRepository $repository)
     {
         $request->validate([
             'user_id' => ['required'],
             'manufacturers' => ['sometimes', 'array', 'required', 'min:1', 'max:50'],
-            'priceGroup' => ['sometimes', 'required']
+            'priceGroup' => ['sometimes', 'required'],
+            'withRemains' => ['required' => 'boolean'],
+            'withClientStores' => ['required' => 'boolean'],
         ]);
 
-        return Excel::download(new PriceListExport(), sprintf('ПРАЙС_ЛИСТ_%s.xlsx', now()->format('dmY')));
+        $export = new PriceListExport($repository->getProducts(), $repository->stores(), $repository->getBusinessRegion());
+
+        return Excel::download($export, sprintf('ПРАЙС_ЛИСТ_%s.xlsx', now()->format('dmY')));
     }
 }

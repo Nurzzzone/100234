@@ -6,7 +6,7 @@ use App\Http\Requests\Partner\UpdatePartnerRequest;
 use App\Jobs\SendPartnershipApplicationTo1cJob;
 use App\Models\B2bClients;
 use App\Models\PartnershipApplication;
-use App\Repositories\PartnerApplicationsRepository;
+use App\Repositories\PartnerApplicationsTableRepository;
 use App\Support\View\TableConfig\PartnershipApplicationTableConfig;
 use App\Traits\HasFlashMessage;
 use Exception;
@@ -29,7 +29,7 @@ class PartnerApplicationController extends Controller
         View::share('page_title', 'Подтверждение партнеров');
     }
 
-    public function index(PartnerApplicationsRepository $repository, PartnershipApplicationTableConfig $tableConfig)
+    public function index(PartnerApplicationsTableRepository $repository, PartnershipApplicationTableConfig $tableConfig)
     {
         if (request()->ajax()) {
             return $repository->getPaginatedSearchResult();

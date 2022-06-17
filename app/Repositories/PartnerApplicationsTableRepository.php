@@ -4,11 +4,11 @@ namespace App\Repositories;
 
 use App\Models\OnlinePayment\ForteBankPayment;
 use App\Models\PartnershipApplication;
-use App\Repositories\BaseRepository;
+use App\Repositories\BaseTableRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
-class PartnerApplicationsRepository extends BaseRepository
+class PartnerApplicationsTableRepository extends BaseTableRepository
 {
     public function getPaginatedResult()
     {

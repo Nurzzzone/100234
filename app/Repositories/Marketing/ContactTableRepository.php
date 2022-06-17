@@ -3,10 +3,10 @@
 namespace App\Repositories\Marketing;
 
 use App\Models\Contact;
-use App\Repositories\BaseRepository;
+use App\Repositories\BaseTableRepository;
 use Illuminate\Database\Eloquent\Builder;
 
-class ContactRepository extends BaseRepository
+class ContactTableRepository extends BaseTableRepository
 {
     protected function beforePaginateQuery(): Builder
     {

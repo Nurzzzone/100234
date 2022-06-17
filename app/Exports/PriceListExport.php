@@ -2,105 +2,58 @@
 
 namespace App\Exports;
 
-use App\Models\Product;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
+use App\Models\BusinessRegion;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithDefaultStyles;
+use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class PriceListExport implements FromCollection, WithHeadings, WithEvents
+class PriceListExport implements FromCollection, WithHeadings, WithEvents, WithDefaultStyles, WithStyles, WithColumnWidths, ShouldAutoSize, WithDrawings
 {
-    /**
-     * @var Collection
-     */
+    private const CELL_URL = 'B1';
+    private const CELL_DATE = 'B2';
+    private const CELL_REGION = 'B4';
+    private const ROW_HEADINGS = 1;
+
+    /** @var Collection */
     private static $collection;
 
-    /**
-     * @var Collection
-     */
+    /** @var Collection */
     private static $stores;
 
+    /** @var Collection */
     private static $defaultStoreCells;
 
-    public function __construct()
+    /** @var BusinessRegion */
+    private static $region;
+
+    public function __construct(Collection $products, Collection $stores, Model $region)
     {
-        static::$collection = $this->collectionData();
-        static::$stores = $this->stores();
-        static::$defaultStoreCells = static::$stores->map(function() {
+        static::$collection = $products;
+        static::$stores = $stores;
+        static::$region = $region;
+        static::$defaultStoreCells = static::$stores->map(function () {
             return '';
         });
     }
 
-    protected function collectionData()
-    {
-        return Product::query()
-            ->with('productRemains', 'productRemains.productStore')
-            ->leftJoin('1c_manufacturers', '1c_products.manufacturer', '1c_manufacturers.guid')
-            ->when(request('priceListType') == 0, function (Builder $query) {
-                $query->whereIn('1c_manufacturers.guid', request('manufacturers'));
-            }, function (Builder $query) {
-                $priceGroup = request('priceGroup') == 0 ? '1c95a9b3-b933-11e1-8447-3c4a92fa410f' : '60a63d65-eeeb-11e4-ab38-00155d648080';
-                $query->where('1c_products.price_group', $priceGroup);
-            })
-            ->when(request('withRemains') == 1, function ($query) {
-                $query->has('productRemains.productStore');
-            })
-            ->when(request('withClientStores') == 1, function (Builder $query) {
-                $query
-                    ->leftJoin('1c_products_remains', '1c_products_remains.product', '1c_products.guid')
-                    ->leftJoin('1c_stores', '1c_stores.guid', '1c_products_remains.store')
-                    ->leftJoin('b2b_clients', 'b2b_clients.business_region', '1c_stores.business_region')
-                    ->leftJoin('1c_users', '1c_users.owner', 'b2b_clients.guid')
-                    ->where('1c_users.guid', request('user_id'));
-            })
-            ->leftJoin('1c_marks', '1c_marks.guid', '1c_products.brand')
-            ->leftJoin('1c_prices', function (JoinClause $join) {
-                $join->on('1c_prices.product', '1c_products.guid')
-                    // TODO переписать стоит оптовая
-                    ->where('1c_prices.price_type', '62211de3-0e78-11e9-b693-00155d648092');
-            })
-            ->select([
-                '1c_products.GUID',
-                '1c_manufacturers.name as manufacturerName',
-                '1c_marks.name as productBrand',
-                '1c_products.code as productCode',
-                '1c_products.article as productArticle',
-                '1c_products.name as productName',
-                '1c_products.barcode as productBarcode',
-                '1c_products.applicability as productApplicability',
-                '1c_prices.price as productPrice',
-                '1c_products.minorderquantity as minQuantity',
-            ])
-            ->distinct()
-            ->orderBy('1c_products.article')
-            ->get();
-    }
-
-    protected function stores()
-    {
-        return static::$collection
-            ->pluck('productRemains')
-            ->flatten()
-            ->unique('store')
-            ->pluck('productStore')
-            ->flatten()
-            ->pluck('name', 'GUID')
-            ->sort();
-    }
-
     public function collection(): Collection
     {
-        return static::$collection->map(function($item) {
+        return static::$collection->map(function ($item) {
             return array_merge([
                 $item->manufacturerName,
                 $item->productBrand,
@@ -111,17 +64,40 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
                 $item->productApplicability,
                 $item->productPrice,
                 $item->minQuantity,
-            ], request('withRemains') == 0 ? [] : $this->getProductRemainQuantity($item));
+            ], $this->getProductRemainQuantity($item));
         });
     }
 
-    protected function getProductRemainQuantity($item)
+    protected function getProductRemainQuantity($item): array
     {
+        if (!request('withRemains')) {
+            return [];
+        }
+
         $quantity = $item->productRemains->flatten()->pluck('quantity', 'store');
 
         $default = clone static::$defaultStoreCells;
 
         return $default->replace($quantity)->toArray();
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                $sheet = $event->sheet;
+
+                $sheet->setAutoFilter($sheet->calculateWorksheetDataDimension());
+                $sheet->insertNewRowBefore(1, 9);
+
+                $sheet->setCellValue(self::CELL_DATE, sprintf('Цены от: %s', now()->format('d-m-Y')));
+                $sheet->setCellValue(self::CELL_URL, config('app.url'));
+
+                if (request('withClientStores')) {
+                    $sheet->setCellValue(self::CELL_REGION, static::$region->address);
+                }
+            },
+        ];
     }
 
     public function headings(): array
@@ -136,118 +112,76 @@ class PriceListExport implements FromCollection, WithHeadings, WithEvents
             'Применяемость',
             'Цена, KZT',
             'Мин. партия'
-        ], request('withRemains') == 0 ? [] : static::$stores->toArray());
+        ], static::$stores->toArray());
     }
 
-    public function registerEvents(): array
+    public function defaultStyles(Style $defaultStyle): array
     {
         return [
-            AfterSheet::class => function (AfterSheet $event) {
-                $sheet = $event->sheet;
-
-                $this->font($sheet);
-                $this->cellWidth($sheet);
-                $this->modifyHeadings($sheet);
-                $this->addFilters($sheet);
-
-                /* !important do this after */
-                $this->prependRows($sheet);
-                $this->date($sheet);
-                $this->url($sheet);
-                $this->businessRegion($sheet);
-                $this->logo($sheet);
-            },
+            'font' => [
+                'name' => 'Arial',
+                'size' => 11,
+            ]
         ];
     }
 
-    protected function font($sheet)
+    public function styles(Worksheet $sheet): array
     {
-        $sheet->getParent()->getDefaultStyle()->getFont()->setName('Arial');
-        $sheet->getParent()->getDefaultStyle()->getFont()->setSize(11);
+        return [
+            self::ROW_HEADINGS => [
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['argb' => Color::COLOR_RED],
+                ],
+                'font' => [
+                    'color' => ['argb' => Color::COLOR_WHITE],
+                    'bold' => true,
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'borders' => [
+                    'outline' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ]
+                ],
+            ],
+            self::CELL_URL => [
+                'font' => [
+                    'size' => 12
+                ]
+            ],
+            self::CELL_DATE => [
+                'font' => [
+                    'size' => 12
+                ]
+            ],
+        ];
     }
 
-    protected function cellWidth(Sheet $sheet)
+    public function columnWidths(): array
     {
-        $sheet->getColumnDimension('A')->setWidth(25);
-        $sheet->getColumnDimension('B')->setWidth(20);
-        $sheet->getColumnDimension('C')->setWidth(20);
-        $sheet->getColumnDimension('D')->setWidth(20);
-        $sheet->getColumnDimension('E')->setWidth(40);
-        $sheet->getColumnDimension('F')->setWidth(40);
-        $sheet->getColumnDimension('G')->setWidth(40);
-        $sheet->getColumnDimension('H')->setWidth(20);
-        $sheet->getColumnDimension('I')->setWidth(20);
-
-        foreach ($sheet->getRowIterator()->current()->getCellIterator() as $cell) {
-            if (!in_array($cell->getColumn(), ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])) {
-                $sheet->getColumnDimension($cell->getColumn())->setAutoSize(true);
-            }
-        }
+        return [
+            'A' => 25,
+            'B' => 20,
+            'C' => 20,
+            'D' => 20,
+            'E' => 40,
+            'F' => 40,
+            'G' => 40,
+            'H' => 20,
+            'I' => 20
+        ];
     }
 
-    protected function modifyHeadings($sheet)
+    public function drawings()
     {
-        $headingCells = $sheet->getRowIterator()->current()->getCellIterator();
-
-        foreach ($headingCells as $headingCell) {
-            $headingCell->getStyle()->getFill()->setFillType(Fill::FILL_SOLID);
-            $headingCell->getStyle()->getFill()->getStartColor()->setARGB('FFFF0000');
-            $headingCell->getStyle()->getFont()->getColor()->setARGB(Color::COLOR_WHITE);
-            $headingCell->getStyle()->getFont()->setBold(true);
-            $headingCell->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            $headingCell->getStyle()->getBorders()->getTop()->setBorderStyle(Border::BORDER_THIN);
-            $headingCell->getStyle()->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
-            $headingCell->getStyle()->getBorders()->getLeft()->setBorderStyle(Border::BORDER_THIN);
-            $headingCell->getStyle()->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN);
-        }
-    }
-
-    protected function addFilters($sheet)
-    {
-        $sheet->setAutoFilter($sheet->calculateWorksheetDataDimension());
-    }
-
-    protected function prependRows($sheet)
-    {
-        $sheet->insertNewRowBefore(1, 9);
-    }
-
-    protected function date($sheet)
-    {
-        $sheet->setCellValue('B2', sprintf('Цены от: %s', now()->format('d-m-Y')));
-        $sheet->getStyle('B2')->getFont()->setSize(12);
-    }
-
-    protected function url($sheet)
-    {
-        $sheet->setCellValue('B1', config('app.url'));
-        $sheet->getCell('B1')->getHyperlink()->setUrl(config('app.url'));
-        $sheet->getStyle('B1')->getFont()->setSize(12);
-    }
-
-    protected function businessRegion(Sheet $sheet)
-    {
-        if (request('withClientStores') == 1) {
-            $business_region = DB::connection('adkulan_dev')
-                ->table('1c_business_regions')
-                ->leftJoin('b2b_clients', 'b2b_clients.business_region', '1c_business_regions.guid')
-                ->leftJoin('1c_users', '1c_users.owner', 'b2b_clients.guid')
-                ->where('1c_users.guid', request('user_id'))
-                ->first(['1c_business_regions.address']);
-
-            $sheet->setCellValue('B4', $business_region->address);
-        }
-    }
-
-    protected function logo($sheet)
-    {
-        $drawing = new Drawing();
-        $drawing->setName('Adkulan logo');
-        $drawing->setDescription('Adkulan logo');
-        $drawing->setPath(app_path('Exports/assets/logo.png'));
-        $drawing->setHeight(90);
-        $drawing->setOffsetX(50);
-        $drawing->setOffsetY(50);
-        $drawing->setWorksheet($sheet->getDelegate());
+        return (new Drawing())
+            ->setName('Adkulan logo')
+            ->setDescription('Adkulan logo')
+            ->setPath(app_path('Exports/assets/logo.png'))
+            ->setHeight(90)
+            ->setOffsetX(50)
+            ->setOffsetY(-147);
     }
 }

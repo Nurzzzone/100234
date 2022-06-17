@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-abstract class BaseRepository
+abstract class BaseTableRepository
 {
     protected $searchParam = 'searchKeyword';
 
@@ -36,7 +36,7 @@ abstract class BaseRepository
         return $this->tableConfig;
     }
 
-    public function setTableConfig(TableConfig $value): BaseRepository
+    public function setTableConfig(TableConfig $value): BaseTableRepository
     {
         $this->tableConfig = $value;
 

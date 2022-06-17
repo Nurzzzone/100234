@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Repositories\BaseRepository;
-use App\Repositories\UserRepository;
+use App\Repositories\BaseTableRepository;
+use App\Repositories\UserTableRepository;
 use App\Support\View\TableConfig\TableConfig;
 use App\Support\View\TableConfig\UserTableConfig;
 use App\Traits\HasFlashMessage;
@@ -22,9 +22,9 @@ class UserController extends TableController
         return new UserTableConfig();
     }
 
-    protected function getRepository(): BaseRepository
+    protected function getRepository(): BaseTableRepository
     {
-        return new UserRepository();
+        return new UserTableRepository();
     }
 
     public function show(User $user)

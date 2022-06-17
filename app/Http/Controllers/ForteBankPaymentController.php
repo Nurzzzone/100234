@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\OnlinePayment\ForteBankPayment;
-use App\Repositories\BaseRepository;
-use App\Repositories\OnlinePayment\FortePaymentRepository;
+use App\Repositories\BaseTableRepository;
+use App\Repositories\OnlinePayment\FortePaymentTableRepository;
 use App\Support\View\TableConfig\OnlinePayment\ForteBankPaymentTableConfig;
 use App\Support\View\TableConfig\TableConfig;
 
@@ -14,9 +14,9 @@ class ForteBankPaymentController extends TableController
 
     protected $route = 'forteBankPayment';
 
-    protected function getRepository(): BaseRepository
+    protected function getRepository(): BaseTableRepository
     {
-        return new FortePaymentRepository();
+        return new FortePaymentTableRepository();
     }
 
     protected function getTableConfig(): TableConfig

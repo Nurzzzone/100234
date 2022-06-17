@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Contact\UpdateContactRequest;
 use App\Models\Contact;
-use App\Repositories\BaseRepository;
-use App\Repositories\Marketing\ContactRepository;
+use App\Repositories\BaseTableRepository;
+use App\Repositories\Marketing\ContactTableRepository;
 use App\Support\View\TableConfig\Marketing\ContactTableConfig;
 use App\Support\View\TableConfig\TableConfig;
 use App\Traits\HasFlashMessage;
@@ -19,9 +19,9 @@ class ContactController extends TableController
 
     protected $pageTitle = 'Контакты';
 
-    protected function getRepository(): BaseRepository
+    protected function getRepository(): BaseTableRepository
     {
-        return new ContactRepository();
+        return new ContactTableRepository();
     }
 
     protected function getTableConfig(): TableConfig

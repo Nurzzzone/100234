@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\BaseRepository;
+use App\Repositories\BaseTableRepository;
 use App\Support\View\TableConfig\TableConfig;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -20,7 +20,7 @@ abstract class TableController extends BaseController
 
     protected $pageTitle;
 
-    abstract protected function getRepository(): BaseRepository;
+    abstract protected function getRepository(): BaseTableRepository;
 
     abstract protected function getTableConfig(): TableConfig;
 
