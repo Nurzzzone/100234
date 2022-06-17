@@ -31,30 +31,30 @@ class PriceListExport extends StringValueBinder implements FromCollection, WithH
     private const ROW_HEADINGS = 1;
 
     /** @var Collection */
-    private static $collection;
+    private $collection;
 
     /** @var Collection */
-    private static $stores;
+    private $stores;
 
     /** @var Collection */
-    private static $defaultStoreCells;
+    private $defaultStoreCells;
 
     /** @var BusinessRegion */
-    private static $region;
+    private $region;
 
     public function __construct(Collection $products, Collection $stores, Model $region)
     {
-        static::$collection = $products;
-        static::$stores = $stores;
-        static::$region = $region;
-        static::$defaultStoreCells = static::$stores->map(function () {
+        $this->collection = $products;
+        $this->stores = $stores;
+        $this->region = $region;
+        $this->defaultStoreCells = $this->stores->map(function () {
             return '';
         });
     }
 
     public function collection(): Collection
     {
-        return static::$collection->map(function ($item) {
+        return $this->collection->map(function ($item) {
             return array_merge([
                 $item->manufacturerName,
                 $item->productBrand,
@@ -77,7 +77,7 @@ class PriceListExport extends StringValueBinder implements FromCollection, WithH
 
         $quantity = $item->productRemains->flatten()->pluck('quantity', 'store');
 
-        $default = clone static::$defaultStoreCells;
+        $default = clone $this->defaultStoreCells;
 
         return $default->replace($quantity)->toArray();
     }
@@ -95,7 +95,7 @@ class PriceListExport extends StringValueBinder implements FromCollection, WithH
                 $sheet->setCellValue(self::CELL_URL, config('app.url'));
 
                 if (request('withClientStores')) {
-                    $sheet->setCellValue(self::CELL_REGION, static::$region->address);
+                    $sheet->setCellValue(self::CELL_REGION, $this->region->address);
                 }
             },
         ];
@@ -113,7 +113,7 @@ class PriceListExport extends StringValueBinder implements FromCollection, WithH
             'Применяемость',
             'Цена, KZT',
             'Мин. партия'
-        ], static::$stores->toArray());
+        ], $this->stores->toArray());
     }
 
     public function defaultStyles(Style $defaultStyle): array
