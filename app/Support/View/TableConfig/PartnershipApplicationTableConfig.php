@@ -22,10 +22,4 @@ class PartnershipApplicationTableConfig extends TableConfig
             ['label' => trans('fields.is_sent'), 'columnName' => 'is_sent', 'type' => 'check'],
         ];
     }
-
-    protected function filters(): array
-    {
-        return [
-        ];
-    }
 }
