@@ -20,7 +20,7 @@
             </select>
         </td>
     </tr>
-    @include('partials.select', ['field' => "interval", 'select_options' => $intervals, 'default' => $object->interval ?? array_key_first($intervals), 'locale' => 'Периодичность'])
+    @include('partials.select', ['field' => "interval", 'select_options' => $intervals, 'default' => $object->getRawOriginal('interval') ?? array_key_first($intervals), 'locale' => 'Периодичность'])
     @include('partials.select', ['field' => "withDiscount", 'select_options' => ['0' => 'Без Скидки', '1' => 'Со Скидкой'], 'default' => ($object->config['withDiscount'] ?? 'Без Скидки') == 'Со скидкой'? '1': '0', 'locale' => 'Тип цены'])
     @include('partials.select', ['field' => "withRemains", 'select_options' => ['0' => 'Без остатков', '1' => 'С остатками'], 'default' => ($object->config['withRemains'] ?? 'Без остатков') == 'С остатками'? '1': '0', 'locale' => 'Остатки'])
     @include('partials.select', ['field' => "withClientStores", 'select_options' => ['0' => 'По всем', '1' => 'Склады доступные для выбранного пользователя'], 'default' => ($object->config['withClientStores'] ?? 'По всем') == 'По всем'? '0': '1', 'locale' => 'Склады'])
