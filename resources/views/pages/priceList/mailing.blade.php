@@ -20,7 +20,7 @@
                             {{ Form::model(null, $options) }}
                             @include("pages.$route.__mailing-form")
                             <div class="d-flex justify-content-end align-items-center">
-                                <a class="btn btn-outline-dark mr-1" href="{{ route("$route.index") }}">@lang('buttons.back')</a>
+                                <a class="btn btn-outline-dark mr-1" href="{{ route("priceList.mailingList") }}">@lang('buttons.back')</a>
                                 {{ Form::submit(trans('buttons.save'), ['class' => 'btn btn-outline-dark']) }}
                             </div>
                             {{ Form::close() }}

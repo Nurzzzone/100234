@@ -14,7 +14,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Прайс листы / <a href="{{ route('priceList.mailingForm') }}" class="text-decoration-none text-dark">Рассылки</a></h4>
+                            <h4>Прайс листы / <a href="{{ route('priceList.mailingList') }}" class="text-decoration-none text-dark">Рассылки</a></h4>
                             <span class="text-danger d-block">Фильтр Тип цены не работает! На данный момент только по оптовым ценам!</span>
                         </div>
                         <div class="card-body">

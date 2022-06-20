@@ -7,6 +7,8 @@ use App\Support\View\TableConfig\TableConfig;
 
 class ForteBankPaymentTableConfig extends TableConfig
 {
+    protected $createEnabled = false;
+
     protected $deleteEnabled = false;
 
     protected $editEnabled = false;

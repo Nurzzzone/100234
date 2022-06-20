@@ -4,6 +4,8 @@ namespace App\Support\View\TableConfig;
 
 class PartnershipApplicationTableConfig extends TableConfig
 {
+    protected $createEnabled = false;
+
     protected $deleteEnabled = false;
 
     public function __construct()

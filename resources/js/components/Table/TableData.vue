@@ -39,7 +39,7 @@ export default {
         }
     },
     props: {
-        label: [String, Number],
+        label: [String, Number, Array],
         object: Object,
         column: Object,
         type: {

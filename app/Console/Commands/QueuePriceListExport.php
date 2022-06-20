@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\PriceList\EmailPriceListExport;
+use App\Models\Finance\PriceListMailing;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -35,9 +36,7 @@ class QueuePriceListExport extends Command
 
     public function handle()
     {
-        $mailings = DB::table('price_list_mailing')
-            ->where('mail_at', now())
-            ->get();
+        $mailings = PriceListMailing::query()->where('mail_at', now())->get();
 
         foreach($mailings as $mailing) {
             if (! $user = User::query()->find($mailing->user_id)) {

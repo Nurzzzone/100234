@@ -4,6 +4,8 @@ namespace App\Support\View\TableConfig;
 
 class UserTableConfig extends TableConfig
 {
+    protected $createEnabled = false;
+
     protected $deleteEnabled = false;
 
     protected $editEnabled = false;

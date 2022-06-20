@@ -2,6 +2,7 @@
 
 namespace App\Jobs\PriceList;
 
+use App\Models\Finance\PriceListMailing;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -36,7 +37,7 @@ class EmailPriceListExport implements ShouldQueue
             $message->attachData($this->loadExcelBinary(), "ПРАЙС_ЛИСТ_$this->date.xlsx");
         });
 
-        DB::table('price_list_mailing')->where('id', $this->mailing->id)->update([
+        PriceListMailing::query()->where('id', $this->mailing->id)->update([
             'mail_at' => now()->addMinutes($this->mailing->interval)->setTime(9, 0),
             'mailed_at' => now()
         ]);
