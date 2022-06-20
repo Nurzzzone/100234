@@ -33,23 +33,18 @@ class QueuePriceListExport extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
     public function handle()
     {
-        $mailings = DB::table('price_list_mailing')->where('mail_at', now())->get();
+        $mailings = DB::table('price_list_mailing')
+            ->where('mail_at', now())
+            ->get();
 
         foreach($mailings as $mailing) {
-            $user = User::query()->find($mailing->user_id);
-
-            if (! $user) {
+            if (! $user = User::query()->find($mailing->user_id)) {
                 continue;
             }
 
-            dispatch(new EmailPriceListExport($user->email, unserialize($mailing->payload)));
+            dispatch(new EmailPriceListExport($user->email, $mailing));
         }
 
         $this->info('ОПЕРАЦИЯ ВЫПОЛНЕНО УСПЕШНО: ОТПРАВКА ПРАЙС ЛИСТОВ');
