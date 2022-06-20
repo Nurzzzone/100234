@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\PriceListExport;
 use App\Models\Finance\PriceListMailing;
+use App\Models\News;
 use App\Models\User;
 use App\Repositories\BaseTableRepository;
 use App\Repositories\Finance\PriceListMailingRepository;
@@ -161,5 +162,16 @@ class PriceListController extends TableController
     protected function getTableConfig(): TableConfig
     {
         return new PriceListMailingTableConfig();
+    }
+
+    public function destroy(PriceListMailing $priceList, Request $request)
+    {
+        try {
+            $priceList->delete();
+        } catch (\Exception $exception) {
+            return $this->flashErrorMessage($request, $exception);
+        }
+
+        return $this->flashSuccessMessage($request, "priceList.mailingList");
     }
 }
