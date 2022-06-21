@@ -19,6 +19,10 @@ class PriceListMailing extends Outside
         'config' => 'array'
     ];
 
+    protected $hidden = [
+        'payload'
+    ];
+
     protected $appends = [
         'editUrl'
     ];
