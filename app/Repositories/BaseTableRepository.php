@@ -65,7 +65,6 @@ abstract class BaseTableRepository
             ->when(request()->filled('filters'), function($query) {
                 $this->filterSearch($query);
             })
-            ->select(Arr::pluck($this->getTableColumns(), 'columnName'))
             ->paginate($this->perPageQuantity);
     }
 
