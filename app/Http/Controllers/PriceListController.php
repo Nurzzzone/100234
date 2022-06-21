@@ -61,10 +61,14 @@ class PriceListController extends TableController
             ->orderBy('name')
             ->pluck('name', 'GUID');
 
+        $users = User::query()
+            ->rightJoin('b2b_clients', '1c_users.owner', 'b2b_clients.guid')
+            ->pluck('email', '1c_users.GUID');
+
         return view("pages.$this->route.mailing", [
             'object' => $priceList,
             'route' => $this->route,
-            'users' => User::query()->pluck('email', 'GUID'),
+            'users' => $users,
             'manufacturers' => $manufacturers,
             'intervals' => PriceListMailing::getIntervals(),
             'url' => route('priceList.update', $priceList->id),
@@ -112,10 +116,14 @@ class PriceListController extends TableController
             ->orderBy('name')
             ->pluck('name', 'GUID');
 
+        $users = User::query()
+            ->rightJoin('b2b_clients', '1c_users.owner', 'b2b_clients.guid')
+            ->pluck('email', '1c_users.GUID');
+
         return view("pages.$this->route.mailing", [
             'object' => new PriceListMailing(),
             'route' => $this->route,
-            'users' => User::query()->pluck('email', 'GUID'),
+            'users' => $users,
             'manufacturers' => $manufacturers,
             'intervals' => PriceListMailing::getIntervals(),
             'url' => route('priceList.mailingForm'),

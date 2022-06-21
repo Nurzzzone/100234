@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Support\View\TableConfig\TableConfig;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 abstract class BaseTableRepository
@@ -64,6 +65,7 @@ abstract class BaseTableRepository
             ->when(request()->filled('filters'), function($query) {
                 $this->filterSearch($query);
             })
+            ->select(Arr::pluck($this->getTableColumns(), 'columnName'))
             ->paginate($this->perPageQuantity);
     }
 
