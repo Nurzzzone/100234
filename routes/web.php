@@ -41,6 +41,8 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     Route::resource('partner', 'PartnerApplicationController');
 
+    Route::resource('managers', 'ManagerController');
+
     Route::resource('roles', 'RolesController');
 
     Route::resource('popularCategory', 'PopularCategoryController');

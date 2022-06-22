@@ -7,7 +7,7 @@ use App\Http\Requests\DiscountDocument\UpdateDiscountDocumentRequest;
 use App\Models\Discount\Discount;
 use App\Models\Discount\DiscountDocument;
 use App\Models\Product\ProductManufacturer;
-use App\Models\SalesAgent;
+use App\Models\Users\SalesAgent;
 use App\Traits\HasFlashMessage;
 use Exception;
 use Illuminate\Http\Request;

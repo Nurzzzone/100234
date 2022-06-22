@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
@@ -14,7 +15,7 @@ class User extends Authenticatable
     use HasFactory;
 
     protected $connection = 'adkulan_dev';
-    
+
     protected $table = '1c_users';
 
     protected $primaryKey = 'GUID';
@@ -30,6 +31,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password',
+    ];
+
+    protected $appends = [
+        'editUrl',
     ];
 
     /**
@@ -54,7 +59,7 @@ class User extends Authenticatable
         'deleted_at'
     ];
 
-    protected $attributes = [ 
+    protected $attributes = [
         'menuroles' => 'user',
     ];
 
@@ -78,4 +83,16 @@ class User extends Authenticatable
             ->first()
             ->getAttribute('password');
     }
+
+    protected function getEditUrlAttribute(): ?string
+    {
+        return route('user.edit', $this->getKey());
+    }
+
+    public function b2bInfo(): HasOne
+    {
+        return $this->hasOne(B2bClients::class, 'GUID', 'owner');
+    }
+
+
 }
