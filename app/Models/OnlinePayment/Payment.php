@@ -15,6 +15,7 @@ class Payment extends Outside
 
     public $incrementing = false;
 
+    /** @var string[]  */
     public static $types = [
         'PURCHASE'  => 'Покупка на сайте',
         'DEPOSIT'   => 'Пополнение счета',

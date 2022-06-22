@@ -30,7 +30,7 @@ class News extends Outside
 
     protected const image = '/assets/images/default-image.jpg';
 
-    public function getStartsAtAttribute($value): Carbon
+    public function getStartsAtAttribute(string $value): Carbon
     {
         return Carbon::parse($value);
     }

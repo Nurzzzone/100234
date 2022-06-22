@@ -29,7 +29,7 @@ class Menus extends Model
         'title' => 'Заголовок'
     ];
 
-    public function scopeDropdown($query)
+    public function scopeDropdown(Builder $query): Builder
     {
         return $query->where('slug', 'dropdown')->orderBy('name');
     }

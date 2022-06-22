@@ -28,7 +28,7 @@ class PopularCategory extends Outside
         'sequence',
     ];
 
-    public function hierarchy()
+    public function hierarchy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Hierarchy::class, 'hierarchy_id', 'GUID');
     }

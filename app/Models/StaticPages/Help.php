@@ -25,7 +25,7 @@ class Help extends Model
 
     public $timestamps = false;
 
-    public function dropdown()
+    public function dropdown(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(DropDown::class, 'parent_id', 'GUID');
     }

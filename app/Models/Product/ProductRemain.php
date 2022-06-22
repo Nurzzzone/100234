@@ -17,7 +17,7 @@ class ProductRemain extends Outside
 
     public $incrementing = false;
 
-    public function productStore()
+    public function productStore(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Store::class, 'store', 'GUID');
     }
