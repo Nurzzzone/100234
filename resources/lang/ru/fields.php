@@ -29,6 +29,7 @@ return [
     'not_active' => 'Не активно',
     'discount' => 'Скидка',
     'is_active' => 'Отображение',
+    'is_partner' => 'Партнер',
     'in_stock' => 'Товар в наличии',
     'is_popular' => 'Популярный',
     'category' => 'Категория|Категорий',
@@ -41,6 +42,7 @@ return [
     'payment_title' => 'Заголовок оплаты',
     'description_title' => 'Заголовок описания',
     'payment' => 'Оплата',
+    'payment_type' => 'Тип оплаты',
     'time' => 'Время',
     'delivery' => 'Доставка',
     'date' => 'Дата',
@@ -51,6 +53,7 @@ return [
     'code' => 'Номер заказа',
     'city' => 'Город',
     'count' => 'Кол-во',
+    'product_count' => 'Кол-во товара',
     'product.link' => 'Перейти к продукту',
     'link' => 'Ссылка',
     'url' => 'URL',
@@ -65,6 +68,9 @@ return [
     'product_manager_discount_limit' => 'Лимит Продакт менеджера',
     'filial_director_discount_limit' => 'Лимит Директора филиала',
     'sales_agent_discount_limit' => 'Лимит Торгового представителя',
+    'client_id' => 'ID клиента',
+    'store' => 'Магазин',
+    'delivery_sum' => 'Стоимость доставки',
 
     'in_main_page' => 'Отображение на главной странице',
     'is_new' => 'Отображение со значком "New"',
@@ -79,4 +85,5 @@ return [
     'is_confirmed_1c' => 'Подтвержден в 1с',
     'is_confirmed_site' => 'Подтвержден менеджером на сайте',
     'approve' => 'Подтвердить'
+
 ];

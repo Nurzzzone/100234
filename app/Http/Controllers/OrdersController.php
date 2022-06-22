@@ -2,37 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Users\Manager;
+use App\Models\Orders\Order;
 use App\Repositories\BaseTableRepository;
-use App\Repositories\ManagersTableRepository;
-use App\Support\View\TableConfig\ManagerTableConfig;
+use App\Repositories\OrderTableRepository;
+use App\Repositories\UserTableRepository;
+use App\Support\Services\OrderReportService;
+use App\Support\View\TableConfig\OrdersTableConfig;
 use App\Support\View\TableConfig\TableConfig;
+use App\Support\View\TableConfig\UserTableConfig;
 use Illuminate\Http\Request;
 use App\Traits\HasFlashMessage;
-use App\Http\Requests\Manager\CreateManagerRequest;
-use App\Http\Requests\Manager\UpdateManagerRequest;
+use App\Http\Requests\Order\CreateOrderRequest;
+use App\Http\Requests\Order\UpdateOrderRequest;
 
-class ManagerController extends TableController
+class OrdersController extends TableController
 {
     use HasFlashMessage;
 
-    protected const MODEL = Manager::class;
-    protected const COLUMNS = [];
-    protected $object;
-    protected $route = 'managers';
-    protected $pageTitle = 'Пользователи';
+    protected $route = 'orders';
+    protected const MODEL = Order::class;
 
+    protected $pageTitle = 'Пользователи';
 
     protected function getTableConfig(): TableConfig
     {
-        return new ManagerTableConfig();
+        return new OrdersTableConfig();
     }
 
     protected function getRepository(): BaseTableRepository
     {
-        return new ManagersTableRepository();
+        return new OrderTableRepository();
     }
-
 
 
     public function create()
@@ -45,7 +45,7 @@ class ManagerController extends TableController
         ]);
     }
 
-    public function store(CreateManagerRequest $request)
+    public function store(CreateOrderRequest $request)
     {
         try {
             (self::MODEL)::create($request->validated());
@@ -55,36 +55,40 @@ class ManagerController extends TableController
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function show(Manager $manager)
+    public function show(Order $order)
     {
         return view("pages.$this->route.show", [
-            'object' => $manager,
+            'object' => $order,
             'route' => $this->route
         ]);
     }
 
-    public function edit(Manager $manager)
+    public function edit(Order $order)
     {
+        $orderInfo = (new OrderReportService())
+            ->one($order->GUID);
+//        dd($orderInfo);
         return view("pages.$this->route.edit", [
-            'object' => $manager,
+            'object' => $order,
+            'orderInfo' => $orderInfo,
             'route' => $this->route
          ]);
     }
 
-    public function update(UpdateManagerRequest $request, Manager $manager)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
         try {
-            $manager->update($request->validated());
+            $order->update($request->validated());
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function destroy(Manager $manager, Request $request)
+    public function destroy(Order $order, Request $request)
     {
         try {
-            $manager->delete();
+            $order->delete();
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }

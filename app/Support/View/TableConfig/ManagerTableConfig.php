@@ -6,6 +6,7 @@ class ManagerTableConfig  extends TableConfig
 {
 
     protected $deleteEnabled = false;
+    protected $createEnabled = false;
 
     public function __construct()
     {
