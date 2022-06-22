@@ -21,12 +21,12 @@ class Payment extends Outside
         'DEPT'      => 'Погашение долга'
     ];
 
-    public function getAmountAttribute($value)
+    public function getAmountAttribute(float $value): string
     {
         return number_format($value, 0, '.', ' ');
     }
 
-    protected function getTypeAttribute($value): ?string
+    protected function getTypeAttribute(string $value): ?string
     {
         return static::$types[$value] ?? null;
     }

@@ -48,7 +48,7 @@ class PriceListMailing extends Outside
 
     public static function getIntervals()
     {
-        return static::intervals();
+        return (new PriceListMailing)->intervals();
     }
 
     protected function intervals()

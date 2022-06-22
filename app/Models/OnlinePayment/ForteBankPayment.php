@@ -26,7 +26,7 @@ class ForteBankPayment extends Outside
      */
     public $incrementing = false;
 
-    public function payment()
+    public function payment(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Payment::class, 'payment_id');
     }
