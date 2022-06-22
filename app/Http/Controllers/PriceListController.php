@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\PriceListExport;
 use App\Models\Finance\PriceListMailing;
-use App\Models\News;
 use App\Models\User;
 use App\Repositories\BaseTableRepository;
 use App\Repositories\Finance\PriceListMailingRepository;
@@ -12,7 +11,6 @@ use App\Repositories\Finance\PriceListRepository;
 use App\Support\View\TableConfig\Finance\PriceListMailingTableConfig;
 use App\Support\View\TableConfig\TableConfig;
 use App\Traits\HasFlashMessage;
-use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -94,9 +92,9 @@ class PriceListController extends TableController
             'payload' => serialize($export),
             'config' => json_encode([
                 'manufacturers' => DB::connection('adkulan_dev')->table('1c_manufacturers')->whereIn('GUID', $data['manufacturers'])->pluck('name'),
-                'withRemains' => $data['withRemains']? 'С остатками': 'Без остатков',
-                'withClientStores' => $data['withClientStores']? 'Со складами клиента': 'По всем',
-                'withDiscount' => $data['withDiscount']? 'Со скидкой': 'Без скидки',
+                'withRemains' => $data['withRemains'] ? 'С остатками' : 'Без остатков',
+                'withClientStores' => $data['withClientStores'] ? 'Со складами клиента' : 'По всем',
+                'withDiscount' => $data['withDiscount'] ? 'Со скидкой' : 'Без скидки',
             ], JSON_UNESCAPED_UNICODE),
             'interval' => $request->interval,
         ]);
@@ -149,9 +147,9 @@ class PriceListController extends TableController
             'payload' => serialize($export),
             'config' => json_encode([
                 'manufacturers' => DB::connection('adkulan_dev')->table('1c_manufacturers')->whereIn('GUID', $data['manufacturers'])->pluck('name'),
-                'withRemains' => $data['withRemains']? 'С остатками': 'Без остатков',
-                'withClientStores' => $data['withClientStores']? 'Со складами клиента': 'По всем',
-                'withDiscount' => $data['withDiscount']? 'Со скидкой': 'Без скидки',
+                'withRemains' => $data['withRemains'] ? 'С остатками' : 'Без остатков',
+                'withClientStores' => $data['withClientStores'] ? 'Со складами клиента' : 'По всем',
+                'withDiscount' => $data['withDiscount'] ? 'Со скидкой' : 'Без скидки',
             ], JSON_UNESCAPED_UNICODE),
             'interval' => $request->interval,
             'mailed_at' => null,
@@ -160,16 +158,6 @@ class PriceListController extends TableController
         ]);
 
         return $this->flashSuccessMessage($request, "priceList.mailingForm");
-    }
-
-    protected function getRepository(): BaseTableRepository
-    {
-        return new PriceListMailingRepository();
-    }
-
-    protected function getTableConfig(): TableConfig
-    {
-        return new PriceListMailingTableConfig();
     }
 
     public function destroy(PriceListMailing $priceList, Request $request)
@@ -181,5 +169,15 @@ class PriceListController extends TableController
         }
 
         return $this->flashSuccessMessage($request, "priceList.mailingList");
+    }
+
+    protected function getRepository(): BaseTableRepository
+    {
+        return new PriceListMailingRepository();
+    }
+
+    protected function getTableConfig(): TableConfig
+    {
+        return new PriceListMailingTableConfig();
     }
 }
