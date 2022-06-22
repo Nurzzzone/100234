@@ -1,6 +1,11 @@
 <template>
     <div>
         <div class="card">
+            <div class="card-header" v-if="this.getTableTools.createEnabled">
+                <div class="d-flex justify-content-end align-content-center">
+                    <a class="btn btn-outline-dark" :href="getTableTools.createUrl">Создать</a>
+                </div>
+            </div>
             <!-- TableComponent -->
             <div class="card-body">
                 <table-tools class="mb-4"></table-tools>
@@ -26,6 +31,7 @@
 
 <script>
 import TableTools from "./TableTools";
+import { mapGetters } from 'vuex';
 
 export default {
     name: "Table",
@@ -36,6 +42,11 @@ export default {
         paginationInstance: Object,
         hover: String,
         tableConfig: Object
+    },
+    computed: {
+        ...mapGetters([
+            'getTableTools'
+        ])
     },
     created() {
         this.$store.commit('setPaginationInstance', this.paginationInstance);

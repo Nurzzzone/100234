@@ -18,6 +18,7 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 //    Route::resource('flashNotification', 'FlashNotificationController');
     Route::resource('forteBankPayment', 'ForteBankPaymentController');
 
+    Route::get('priceList/mailing/list', 'PriceListController@mailingList')->name('priceList.mailingList');
     Route::get('priceList/mailing', 'PriceListController@mailingForm')->name('priceList.mailingForm');
     Route::post('priceList/mailing', 'PriceListController@mailing')->name('priceList.mailing');
     Route::resource('priceList', 'PriceListController');

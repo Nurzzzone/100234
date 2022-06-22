@@ -4,6 +4,8 @@ namespace App\Support\View\TableConfig;
 
 class NewsTableConfig extends TableConfig
 {
+    protected $createEnabled = false;
+
     protected $searchEnabled = false;
 
     protected function columns(): array

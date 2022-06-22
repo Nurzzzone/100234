@@ -45,9 +45,7 @@ abstract class BaseTableRepository
 
     protected function getTableColumns(): array
     {
-        $tableConfig = $this->getTableConfig()->toArray();
-
-        return Arr::pluck($tableConfig['columns'], 'columnName');
+        return $this->getTableConfig()->toArray()['columns'];
     }
 
     final public function getPaginatedSearchResult(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -55,7 +53,13 @@ abstract class BaseTableRepository
         return $this->beforePaginateQuery()
             ->when(request('searchKeyword'), function($query) {
                 foreach($this->getTableColumns() as $column) {
-                    $query->orWhere($column, 'LIKE', "%$this->searchQuery%");
+                    if (Str::contains($column['columnName'], '.')) {
+                        [$relation, $column] = explode('.', $column['columnName']);
+
+                        $this->queryRelationOrJsonColumn($query, $relation, $column);
+                    } else {
+                        $query->orWhere($column['columnName'], 'LIKE', "%$this->searchQuery%");
+                    }
                 }
             })
             ->when(request()->filled('filters'), function($query) {
@@ -81,6 +85,17 @@ abstract class BaseTableRepository
             } else {
                 $query->where($column, 'LIKE', "%$value%");
             }
+        }
+    }
+
+    protected function queryRelationOrJsonColumn(Builder $query, $relation, $column)
+    {
+        if (method_exists($this->beforePaginateQuery()->getModel(), $relation)) {
+            $query->orWhereRelation($relation, $column, 'LIKE', "%$this->searchQuery%");
+        }
+
+        else {
+            $query->orWhereRaw("LOWER(JSON_EXTRACT($relation, '$.\"$column\"')) LIKE LOWER('%$this->searchQuery%')");
         }
     }
 }

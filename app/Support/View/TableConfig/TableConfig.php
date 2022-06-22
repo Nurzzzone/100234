@@ -10,6 +10,8 @@ abstract class TableConfig implements Jsonable, Arrayable
 {
     protected $searchEnabled = true;
 
+    protected $createEnabled = true;
+
     protected $editEnabled = true;
 
     protected $deleteEnabled = true;
@@ -17,6 +19,8 @@ abstract class TableConfig implements Jsonable, Arrayable
     protected $perPageButtonEnabled = true;
 
     protected $searchUrl;
+
+    protected $createUrl;
 
     private const filterStructure = ['label', 'type', 'options', 'paramName'];
 
@@ -43,11 +47,17 @@ abstract class TableConfig implements Jsonable, Arrayable
             throw new \Exception('searchUrl is not defined!');
         }
 
+        if ($this->createEnabled && !$this->createUrl) {
+            throw new \Exception('createUrl is not defined!');
+        }
+
         return [
+            'createEnabled'         => $this->createEnabled,
             'editEnabled'           => $this->editEnabled,
             'deleteEnabled'         => $this->deleteEnabled,
             'searchEnabled'         => $this->searchEnabled,
             'perPageButtonEnabled'  => $this->perPageButtonEnabled,
+            'createUrl'             => $this->createUrl,
             'searchUrl'             => $this->searchUrl,
             'buttonsEnabled'        => $this->editEnabled || $this->deleteEnabled,
         ];
@@ -127,11 +137,7 @@ abstract class TableConfig implements Jsonable, Arrayable
 
     public function toJson($options = 0): string
     {
-        return collect([
-            'tools'     => $this->tools(),
-            'columns'   => $this->validateColumns(),
-            'filters'   => $this->validatedFilters(),
-        ])->toJson($options);
+        return collect($this->toArray())->toJson($options);
     }
 
     public function toArray(): array

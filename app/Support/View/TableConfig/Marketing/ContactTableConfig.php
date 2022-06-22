@@ -6,6 +6,8 @@ use App\Support\View\TableConfig\TableConfig;
 
 class ContactTableConfig extends TableConfig
 {
+    protected $createEnabled = false;
+
     protected $deleteEnabled = false;
 
     public function __construct()

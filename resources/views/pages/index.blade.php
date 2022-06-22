@@ -6,6 +6,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
+                @php($url = str_contains($route, '.')? str_replace('.', '/', $route): $route)
+                @include('partials.modal', ['url' => "/$url/"])
                 <v-table :pagination-instance='{!! $objects->toJson(JSON_UNESCAPED_UNICODE) !!}'
                          :table-config='{!! $tableConfig->toJson() !!}'
                          hover="{{ $objects->isNotEmpty() }}">

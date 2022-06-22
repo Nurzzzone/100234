@@ -1,11 +1,6 @@
 @extends('layouts.base')
 @section('title', 'Рассылки')
 
-@php($options = [
-    'method'  => 'POST',
-    'url'     => route("$route.mailing"),
-])
-
 @section('content')
     <div class="container-fluid">
         <div class="fade-in">
@@ -17,10 +12,10 @@
                             <span class="text-danger d-block">Фильтр Тип цены не работает! На данный момент только по оптовым ценам!</span>
                         </div>
                         <div class="card-body">
-                            {{ Form::model(null, $options) }}
+                            {{ Form::model($object ?? null, compact('method', 'url')) }}
                             @include("pages.$route.__mailing-form")
                             <div class="d-flex justify-content-end align-items-center">
-                                <a class="btn btn-outline-dark mr-1" href="{{ route("$route.index") }}">@lang('buttons.back')</a>
+                                <a class="btn btn-outline-dark mr-1" href="{{ route("priceList.mailingList") }}">@lang('buttons.back')</a>
                                 {{ Form::submit(trans('buttons.save'), ['class' => 'btn btn-outline-dark']) }}
                             </div>
                             {{ Form::close() }}
