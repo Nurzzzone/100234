@@ -6,7 +6,6 @@ use App\Jobs\PriceList\EmailPriceListExport;
 use App\Models\Finance\PriceListMailing;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class QueuePriceListExport extends Command
 {
@@ -38,8 +37,8 @@ class QueuePriceListExport extends Command
     {
         $mailings = PriceListMailing::query()->where('mail_at', now())->get();
 
-        foreach($mailings as $mailing) {
-            if (! $user = User::query()->find($mailing->user_id)) {
+        foreach ($mailings as $mailing) {
+            if (!$user = User::query()->find($mailing->user_id)) {
                 continue;
             }
 

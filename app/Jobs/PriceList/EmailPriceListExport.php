@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Mail\Message;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,7 +21,7 @@ class EmailPriceListExport implements ShouldQueue
     private $email;
     private $date;
 
-    public function __construct(string $email, $mailing)
+    public function __construct(string $email, PriceListMailing $mailing)
     {
         $this->mailing = $mailing;
         $this->email = $email;
@@ -31,14 +30,14 @@ class EmailPriceListExport implements ShouldQueue
 
     public function handle()
     {
-        Mail::raw("Цены от $this->date", function(Message $message) {
+        Mail::raw("Цены от $this->date", function (Message $message) {
             $message->to($this->email);
             $message->subject('Прайс лист');
             $message->attachData($this->loadExcelBinary(), "ПРАЙС_ЛИСТ_$this->date.xlsx");
         });
 
         PriceListMailing::query()->where('id', $this->mailing->id)->update([
-            'mail_at' => now()->addMinutes($this->mailing->interval)->setTime(9, 0),
+            'mail_at' => now()->addMinutes($this->mailing->getRawOriginal('interval'))->setTime(9, 0),
             'mailed_at' => now()
         ]);
     }
