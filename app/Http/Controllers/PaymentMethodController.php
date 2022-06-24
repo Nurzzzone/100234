@@ -8,6 +8,7 @@ use App\Support\View\TableConfig\Finance\PaymentMethodTableConfig;
 use App\Support\View\TableConfig\TableConfig;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentMethodController extends TableController
 {
@@ -33,9 +34,17 @@ class PaymentMethodController extends TableController
 
     public function toggle(PaymentMethod $paymentMethod, Request $request): \Illuminate\Http\JsonResponse
     {
-        $paymentMethod->update($request->validate([
-            'is_active' => ['required', 'boolean']
-        ]));
+        if ($paymentMethod->isHalykBank() || $paymentMethod->isForteBank()) {
+            $sql = 'UPDATE `payment_methods` SET `is_active` = NOT `is_active` WHERE `id` IN (\'%s\', \'%s\')';
+
+            DB::connection('adkulan_dev')->statement(sprintf($sql, $paymentMethod::HALYK, $paymentMethod::FORTE));
+        }
+
+        else {
+            $paymentMethod->update($request->validate([
+                'is_active' => ['required', 'boolean']
+            ]));
+        }
 
         return response()->json(['message' => 'success']);
     }

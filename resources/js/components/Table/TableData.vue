@@ -14,6 +14,18 @@
         </div>
     </td>
 
+    <td v-else-if="type === 'syncToggle'">
+        <div class="custom-control custom-switch" >
+            <input data-name="toggle"
+                   @input="syncUpdateToggleState($event)"
+                   type="checkbox"
+                   class="custom-control-input"
+                   :id="id"
+                   :checked="Boolean(this.label)">
+            <label class="custom-control-label" :for="id"></label>
+        </div>
+    </td>
+
     <td v-else-if="type === 'buttons' && this.getTableTools.buttonsEnabled">
         <div class="btn-group d-flex">
             <a v-if="this.getTableTools.editEnabled" :href="object.editUrl" class="btn btn-outline-dark">Редактировать</a>
@@ -29,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: "TableData",
@@ -65,6 +77,11 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'updateToggle',
+            'updatePaginationInstance'
+        ]),
+
         uuid4() {
             return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
                 (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -77,12 +94,36 @@ export default {
                 throw 'Please add "getUpdateToggleUrlAttribute" method and "updateToggleUrl" into "$appends" property on your model!'
             }
 
-            axios.get(this.object.updateToggleUrl, {
-                params: {
-                    [this.column.columnName]: Number(e.target.checked)
-                }
+            this.updateToggle({
+                url: this.object.updateToggleUrl,
+                columnName: this.column.columnName,
+                toggleValue: Number(e.target.checked)
             }).finally(() => e.target.removeAttribute('disabled'));
         },
+
+        syncUpdateToggleState(e) {
+            if (e.target.disabled) {
+                return
+            }
+
+            const toggles = Array.from(document.querySelectorAll('input[data-name="toggle"]'));
+
+            toggles.forEach((el) => {
+                el.setAttribute('disabled', true);
+            });
+
+            this.updateToggle({
+                url: this.object.updateToggleUrl,
+                columnName: this.column.columnName,
+                toggleValue: Number(e.target.checked)
+            }).then(() => {
+                this.updatePaginationInstance()
+            }).finally(() => {
+                toggles.forEach((el) => {
+                    el.removeAttribute('disabled');
+                });
+            });
+        }
     }
 }
 </script>

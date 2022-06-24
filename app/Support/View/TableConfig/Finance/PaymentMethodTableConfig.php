@@ -21,7 +21,7 @@ class PaymentMethodTableConfig extends TableConfig
             [
                 'label' => __('fields.is_enabled'),
                 'columnName' => 'is_active',
-                'type' => 'toggle'
+                'type' => 'syncToggle'
             ]
         ];
     }

@@ -24,7 +24,7 @@ abstract class TableConfig implements Jsonable, Arrayable
 
     private const filterStructure = ['label', 'type', 'options', 'paramName'];
 
-    private const allowedColumnTypes = ['text', 'check', 'toggle', 'image'];
+    private const allowedColumnTypes = ['text', 'check', 'toggle', 'image', 'syncToggle'];
 
     protected static $filterTypes = [
         'dropdown',
