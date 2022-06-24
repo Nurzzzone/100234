@@ -2,15 +2,15 @@
 
 namespace App\Support\View\TableConfig;
 
-class UserTableConfig extends TableConfig
+class ManagerTableConfig  extends TableConfig
 {
-    protected $createEnabled = false;
 
     protected $deleteEnabled = false;
+    protected $createEnabled = false;
 
     public function __construct()
     {
-        $this->searchUrl = route('user.index');
+        $this->searchUrl = route('managers.index');
     }
 
     protected function columns(): array

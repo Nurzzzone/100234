@@ -2,7 +2,7 @@
 
 namespace App\Models\Discount;
 
-use App\Models\B2bClients;
+use App\Models\Users\B2bClients;
 use App\Models\Product\ProductManufacturer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -36,4 +36,15 @@ class UserController extends TableController
             'route' => $this->route
         ]);
     }
+
+
+    public function edit(User $user)
+    {
+        $user->load('roles', 'permissions', 'b2bInfo');
+
+        return view("pages.{$this->route}.edit", [
+            'object' => $user,
+            'route' => $this->route
+        ]);
+    }
 }

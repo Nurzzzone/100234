@@ -45,7 +45,11 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     Route::resource('partner', 'PartnerApplicationController');
 
+    Route::resource('managers', 'Users\ManagerController');
+
     Route::resource('roles', 'RolesController');
+
+    Route::resource('orders', 'OrdersController');
 
     Route::resource('popularCategory', 'PopularCategoryController');
     Route::post('popularCategory/updateSequence', 'PopularCategoryController@updateSequence')->name('popularCategory.updateSequence');

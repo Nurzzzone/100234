@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Partner\UpdatePartnerRequest;
 use App\Jobs\SendPartnershipApplicationTo1cJob;
-use App\Models\B2bClients;
+use App\Models\Users\B2bClients;
 use App\Models\PartnershipApplication;
 use App\Repositories\PartnerApplicationsTableRepository;
 use App\Support\View\TableConfig\PartnershipApplicationTableConfig;
