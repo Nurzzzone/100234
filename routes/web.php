@@ -56,8 +56,8 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('popularCategory', 'Marketing\PopularCategoryController');
     Route::post('popularCategory/updateSequence', 'Marketing\PopularCategoryController@updateSequence')->name('popularCategory.updateSequence');
 
-    Route::resource('menu', 'MenuElementController', ['except' => ['create', 'edit'], 'parameters' => ['menu' => 'menuElement']]);
-    Route::post('/menu/sequence', 'MenuElementController@sequence');
+    Route::resource('menu', 'Menu\MenuElementController', ['except' => ['create', 'edit'], 'parameters' => ['menu' => 'menuElement']]);
+    Route::post('/menu/sequence', 'Menu\MenuElementController@sequence');
 
     Route::get('/roles/move/move-up',      'RolesController@moveUp')->name('roles.up');
     Route::get('/roles/move/move-down',    'RolesController@moveDown')->name('roles.down');
