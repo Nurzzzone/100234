@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Menu;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Menulist;
 use App\Models\Menus;
-use Illuminate\Validation\Rule;
 
 class MenuController extends Controller
 {
@@ -27,7 +27,7 @@ class MenuController extends Controller
         $menulist->name = $request->input('name');
         $menulist->save();
         $request->session()->flash('message', 'Successfully created menu');
-        return redirect()->route('menu.menu.create'); 
+        return redirect()->route('menu.menu.create');
     }
 
     public function edit(Request $request){
@@ -45,7 +45,7 @@ class MenuController extends Controller
         $menulist->name = $request->input('name');
         $menulist->save();
         $request->session()->flash('message', 'Successfully update menu');
-        return redirect()->route('menu.menu.edit', ['id'=>$request->input('id')]); 
+        return redirect()->route('menu.menu.edit', ['id'=>$request->input('id')]);
     }
 
     /*

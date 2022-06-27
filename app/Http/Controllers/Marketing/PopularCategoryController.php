@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Marketing;
 
+use App\Http\Controllers\Controller;
 use App\Models\Outside\PopularCategory;
 use App\Repositories\PopularCategoryRepository;
 use Illuminate\Http\Request;

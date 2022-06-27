@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Partner\UpdatePartnerRequest;
 use App\Jobs\SendPartnershipApplicationTo1cJob;
 use App\Models\Users\B2bClients;
 use App\Models\PartnershipApplication;
-use App\Repositories\PartnerApplicationsTableRepository;
-use App\Support\View\TableConfig\PartnershipApplicationTableConfig;
+use App\Repositories\Users\PartnerApplicationsTableRepository;
+use App\Support\View\TableConfig\Users\PartnershipApplicationTableConfig;
 use App\Traits\HasFlashMessage;
 use Exception;
 use Illuminate\Http\Request;

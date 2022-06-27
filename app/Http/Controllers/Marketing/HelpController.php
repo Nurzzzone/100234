@@ -1,37 +1,38 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Marketing;
 
-use App\Http\Requests\Security\CreateSecurityRequest;
-use App\Http\Requests\Security\UpdateSecurityRequest;
-use App\Models\StaticPages\Security;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Help\CreateHelpRequest;
+use App\Http\Requests\Help\UpdateHelpRequest;
+use App\Models\StaticPages\Help;
 use App\Traits\HasFlashMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
-class SecurityController extends Controller
+class HelpController extends Controller
 {
     use HasFlashMessage;
 
-    protected const MODEL = Security::class;
-    protected const COLUMNS = ['title' => 'title', 'is_active' => 'is_active'];
+    protected const MODEL = Help::class;
+    protected const COLUMNS = ['title' => 'title'];
     protected $route;
     protected $object;
 
     public function __construct()
     {
-        $this->route = 'security';
-        View::share('page_title', 'Безопасность');
+        $this->route = 'help';
+        View::share('page_title', 'Помощь');
     }
 
     public function index()
     {
         return view("pages.$this->route.index",
-            [
-                'objects' => (self::MODEL)::query()->orderBy('order')->paginate(10),
-                'columns' => self::COLUMNS,
-                'route' => $this->route,
-            ]);
+        [
+            'objects' => (self::MODEL)::query()->orderBy('order')->paginate(10),
+            'columns' => self::COLUMNS,
+            'route' => $this->route,
+        ]);
     }
 
     public function create()
@@ -44,7 +45,7 @@ class SecurityController extends Controller
         ]);
     }
 
-    public function store(CreateSecurityRequest $request)
+    public function store(CreateHelpRequest $request)
     {
         try {
             (self::MODEL)::create($request->validated());
@@ -54,36 +55,36 @@ class SecurityController extends Controller
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function show(Security $security)
+    public function show(Help $help)
     {
         return view("pages.$this->route.show", [
-            'object' => $security,
+            'object' => $help,
             'route' => $this->route
         ]);
     }
 
-    public function edit(Security $security)
+    public function edit(Help $help)
     {
         return view("pages.$this->route.edit", [
-            'object' => $security,
+            'object' => $help,
             'route' => $this->route
-        ]);
+         ]);
     }
 
-    public function update(UpdateSecurityRequest $request, Security $security)
+    public function update(UpdateHelpRequest $request, Help $help)
     {
         try {
-            $security->update($request->validated());
+            $help->update($request->validated());
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function destroy(Security $security, Request $request)
+    public function destroy(Help $help, Request $request)
     {
         try {
-            $security->delete();
+            $help->delete();
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
@@ -92,8 +93,8 @@ class SecurityController extends Controller
 
     public function updateSequence(Request $request)
     {
-        foreach ($request->sequence as $sequence) {
-            Security::query()->whereKey($sequence['id'])->update([
+        foreach($request->sequence as $sequence) {
+            Help::query()->whereKey($sequence['id'])->update([
                 'order' => $sequence['sequence'],
             ]);
         }

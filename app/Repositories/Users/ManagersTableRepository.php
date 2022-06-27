@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Users;
 
 use App\Models\Users\Manager;
+use App\Repositories\BaseTableRepository;
 use Illuminate\Database\Eloquent\Builder;
 
 

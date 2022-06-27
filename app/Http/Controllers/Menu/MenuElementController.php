@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Menu;
 
+use App\Http\Controllers\Controller;
 use App\Http\Menus\GetSidebarMenu;
 use App\Models\Auth\Role;
 use App\Models\Menulist;

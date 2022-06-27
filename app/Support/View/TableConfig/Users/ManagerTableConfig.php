@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Support\View\TableConfig;
+namespace App\Support\View\TableConfig\Users;
+
+use App\Support\View\TableConfig\TableConfig;
 
 class ManagerTableConfig  extends TableConfig
 {

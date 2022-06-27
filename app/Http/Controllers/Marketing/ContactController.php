@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Marketing;
 
+use App\Http\Controllers\TableController;
 use App\Http\Requests\Contact\UpdateContactRequest;
 use App\Models\Contact;
 use App\Repositories\BaseTableRepository;
