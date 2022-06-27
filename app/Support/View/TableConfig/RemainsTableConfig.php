@@ -24,7 +24,6 @@ class RemainsTableConfig extends TableConfig
             ['label' => trans('fields.name'), 'columnName' => 'productName', 'joinColumnName' => '1c_products.name'],
             ['label' => trans('fields.article'), 'columnName' => 'article'],
             ['label' => trans('fields.manufacturer'), 'columnName' => 'manufacturerName', 'joinColumnName' => '1c_manufacturers.name'],
-            ['label' => trans('fields.article'), 'columnName' => 'productName', 'joinColumnName' => '1c_products.name'],
             ['label' => trans('fields.store'), 'columnName' => 'stores.name'],
             ['label' => trans('fields.count'), 'columnName' => 'quantity'],
             ['label' => trans('fields.price'), 'columnName' => 'price', 'joinColumnName' => '1c_prices.price'],
