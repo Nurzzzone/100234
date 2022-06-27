@@ -6,19 +6,12 @@ use Closure;
 
 class Admin
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
-        $roles = explode(',', $request->user()->menuroles);
-        if ( ! in_array('Администратор', $roles) ) {
-            return abort( 401 );
+        if (! in_array('Администратор', explode(',', $request->user()->menuroles))) {
+            abort(401);
         }
+
         return $next($request);
     }
 }

@@ -26,6 +26,9 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::resource('security', 'Marketing\SecurityController');
     Route::post('security/updateSequence', 'Marketing\SecurityController@updateSequence')->name('security.updateSequence');
 
+    Route::resource('paymentMethod', 'PaymentMethodController');
+    Route::get('paymentMethod/updateToggle/{paymentMethod}', 'PaymentMethodController@toggle')->name('paymentMethod.updateToggle');
+
     Route::prefix('discount')->group(function () {
         Route::prefix('limit')->group(function () {
             Route::resource('periodic', 'Discounts\DiscountLimitOnPeriodController', ['as' => 'discount.limit'])

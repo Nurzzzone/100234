@@ -30,7 +30,7 @@ class News extends Outside
 
     protected const image = '/assets/images/default-image.jpg';
 
-    public function getStartsAtAttribute($value)
+    public function getStartsAtAttribute(string $value): Carbon
     {
         return Carbon::parse($value);
     }
@@ -40,7 +40,8 @@ class News extends Outside
         return route('news.edit', $this->getKey());
     }
 
-    protected function getUpdateToggleUrlAttribute() {
+    protected function getUpdateToggleUrlAttribute(): string
+    {
         return route('news.updateToggle', $this->getKey());
     }
 }

@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class MenusTableSeeder extends Seeder
 {
@@ -18,32 +18,65 @@ class MenusTableSeeder extends Seeder
     private $userRole = null;
     private $subFolder = '';
 
-    public function join($roles, $menusId){
-        $roles = explode(',', $roles);
-        foreach($roles as $role){
-            array_push($this->joinData, array('role_name' => $role, 'menus_id' => $menusId));
-        }
+    public function insertTitle($roles, $name)
+    {
+        $lastId = DB::table('menus')->insertGetId([
+            'slug' => 'title',
+            'name' => $name,
+            'menu_id' => $this->menuId,
+            'sequence' => $this->sequence
+        ]);
+        $this->sequence++;
+        $this->join($roles, $lastId);
+        return $lastId;
     }
 
     /*
         Function assigns menu elements to roles
         Must by use on end of this seeder
     */
-    public function joinAllByTransaction(){
-        DB::beginTransaction();
-        foreach($this->joinData as $data){
-            DB::table('menu_role')->insert([
-                'role_name' => $data['role_name'],
-                'menus_id' => $data['menus_id'],
-            ]);
+
+    public function join($roles, $menusId)
+    {
+        $roles = explode(',', $roles);
+        foreach ($roles as $role) {
+            array_push($this->joinData, array('role_name' => $role, 'menus_id' => $menusId));
         }
-        DB::commit();
     }
 
-    public function insertLink($roles, $name, $href, $icon = null){
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        /* Get roles */
+        $this->adminRole = Role::where('name', '=', 'admin')->first();
+        $this->userRole = Role::where('name', '=', 'user')->first();
+        /* Create Sidebar menu */
+
+        $lastId = DB::table('menulist')->insertGetId([
+            'name' => 'sidebar menu'
+        ]);
+
+        $this->menuId = $lastId;  //set menuId
+        $this->insertLink('guest,user,admin', 'dashboard', '/', 'cil-speedometer');
+
+        $this->beginDropdown('admin', 'settings', 'cil-calculator');
+        $this->insertLink('admin', 'users', '/users');
+        $this->insertLink('admin', 'Edit menu elements', '/menu/element');
+        $this->insertLink('admin', 'Edit roles', '/roles');
+        $this->endDropdown();
+
+        $this->joinAllByTransaction(); ///   <===== Must by use on end of this seeder
+    }
+
+    public function insertLink($roles, $name, $href, $icon = null)
+    {
         $href = $this->subFolder . $href;
-        if($this->dropdown === false){
-            DB::table('menus')->insert([
+        if ($this->dropdown === false) {
+            $lastId = DB::table('menus')->insertGetId([
                 'slug' => 'link',
                 'name' => $name,
                 'icon' => $icon,
@@ -51,8 +84,8 @@ class MenusTableSeeder extends Seeder
                 'menu_id' => $this->menuId,
                 'sequence' => $this->sequence
             ]);
-        }else{
-            DB::table('menus')->insert([
+        } else {
+            $lastId = DB::table('menus')->insertGetId([
                 'slug' => 'link',
                 'name' => $name,
                 'icon' => $icon,
@@ -63,42 +96,31 @@ class MenusTableSeeder extends Seeder
             ]);
         }
         $this->sequence++;
-        $lastId = DB::getPdo()->lastInsertId();
         $this->join($roles, $lastId);
         $permission = Permission::where('name', '=', $name)->get();
-        if(empty($permission)){
+
+        if (empty($permission)) {
             $permission = Permission::create(['name' => 'visit ' . $name]);
         }
         $roles = explode(',', $roles);
-        if(in_array('user', $roles)){
+        if (in_array('user', $roles)) {
             $this->userRole->givePermissionTo($permission);
         }
-        if(in_array('admin', $roles)){
+        if (in_array('admin', $roles)) {
             $this->adminRole->givePermissionTo($permission);
         }
         return $lastId;
     }
 
-    public function insertTitle($roles, $name){
-        DB::table('menus')->insert([
-            'slug' => 'title',
-            'name' => $name,
-            'menu_id' => $this->menuId,
-            'sequence' => $this->sequence
-        ]);
-        $this->sequence++;
-        $lastId = DB::getPdo()->lastInsertId();
-        $this->join($roles, $lastId);
-        return $lastId;
-    }
-
-    public function beginDropdown($roles, $name, $icon = ''){
-        if(count($this->dropdownId)){
+    public function beginDropdown($roles, $name, $icon = '')
+    {
+        if (count($this->dropdownId)) {
             $parentId = $this->dropdownId[count($this->dropdownId) - 1];
-        }else{
+        } else {
             $parentId = null;
         }
-        DB::table('menus')->insert([
+
+        $lastId = DB::table('menus')->insertGetId([
             'slug' => 'dropdown',
             'name' => $name,
             'icon' => $icon,
@@ -106,7 +128,7 @@ class MenusTableSeeder extends Seeder
             'sequence' => $this->sequence,
             'parent_id' => $parentId
         ]);
-        $lastId = DB::getPdo()->lastInsertId();
+
         array_push($this->dropdownId, $lastId);
         $this->dropdown = true;
         $this->sequence++;
@@ -114,36 +136,21 @@ class MenusTableSeeder extends Seeder
         return $lastId;
     }
 
-    public function endDropdown(){
+    public function endDropdown()
+    {
         $this->dropdown = false;
-        array_pop( $this->dropdownId );
+        array_pop($this->dropdownId);
     }
 
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    { 
-        /* Get roles */
-        $this->adminRole = Role::where('name' , '=' , 'admin' )->first();
-        $this->userRole = Role::where('name', '=', 'user' )->first();
-        /* Create Sidebar menu */
-
-        DB::table('menulist')->insert([
-            'name' => 'sidebar menu'
-        ]);
-
-        $this->menuId = DB::getPdo()->lastInsertId();  //set menuId
-        $this->insertLink('guest,user,admin', 'dashboard', '/', 'cil-speedometer');
-
-        $this->beginDropdown('admin', 'settings', 'cil-calculator');
-            $this->insertLink('admin', 'users',                   '/users');
-            $this->insertLink('admin', 'Edit menu elements',      '/menu/element');
-            $this->insertLink('admin', 'Edit roles',              '/roles');
-        $this->endDropdown();
-
-        $this->joinAllByTransaction(); ///   <===== Must by use on end of this seeder
+    public function joinAllByTransaction()
+    {
+        DB::beginTransaction();
+        foreach ($this->joinData as $data) {
+            DB::table('menu_role')->insert([
+                'role_name' => $data['role_name'],
+                'menus_id' => $data['menus_id'],
+            ]);
+        }
+        DB::commit();
     }
 }

@@ -45,7 +45,7 @@ export default {
 
         // Отображение кнопки "кол-во элементов"
         showPerPageButton(state) {
-            return state.tableConfig.tools.perPageButtonEnabled;
+            return state.pagination.total > 10;
         },
 
         // Отображение кнопки фильтров и модального окна
@@ -89,13 +89,27 @@ export default {
     actions: {
         // Получение экземпляра класса LengthAwarePaginator
         updatePaginationInstance({ commit, state, getters }, url = undefined) {
-            return axios.get(url ?? getters.getTableTools.searchUrl, {
+            url = url ?? getters.getTableTools.searchUrl ?? location.href;
+
+            return axios.get(url, {
                 params: {
                     filters: state.filtersQueryParams,
                     searchKeyword: state.searchKeyword,
                     perPage: getters.getActivePerPageButton,
                 }
             }).then((response) => commit('setPaginationInstance', response.data));
+        },
+
+        updateToggle(commit, {url, columnName, toggleValue}) {
+            if (! url) {
+                throw 'Please add "getUpdateToggleUrlAttribute" method and "updateToggleUrl" into "$appends" property on your model!'
+            }
+
+            return axios.get(url, {
+                params: {
+                    [columnName]: toggleValue
+                }
+            });
         }
     }
 }

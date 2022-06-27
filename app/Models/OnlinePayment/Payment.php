@@ -15,18 +15,19 @@ class Payment extends Outside
 
     public $incrementing = false;
 
+    /** @var string[]  */
     public static $types = [
         'PURCHASE'  => 'Покупка на сайте',
         'DEPOSIT'   => 'Пополнение счета',
         'DEPT'      => 'Погашение долга'
     ];
 
-    public function getAmountAttribute($value)
+    public function getAmountAttribute(float $value): string
     {
         return number_format($value, 0, '.', ' ');
     }
 
-    protected function getTypeAttribute($value): ?string
+    protected function getTypeAttribute(string $value): ?string
     {
         return static::$types[$value] ?? null;
     }
