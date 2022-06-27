@@ -3,7 +3,9 @@
 namespace App\Models\Product;
 
 use App\Models\Outside\Outside;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductRemain extends Outside
 {
@@ -17,8 +19,14 @@ class ProductRemain extends Outside
 
     public $incrementing = false;
 
-    public function productStore(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function stores(): BelongsTo
     {
         return $this->belongsTo(Store::class, 'store', 'GUID');
     }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product');
+    }
+
 }

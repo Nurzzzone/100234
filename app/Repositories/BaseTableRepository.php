@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Support\View\TableConfig\TableConfig;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 abstract class BaseTableRepository
@@ -53,13 +52,16 @@ abstract class BaseTableRepository
         return $this->beforePaginateQuery()
             ->when(request('searchKeyword'), function($query) {
                 foreach($this->getTableColumns() as $column) {
-                    if (Str::contains($column['columnName'], '.')) {
+                    if (array_key_exists('joinColumnName', $column)) {
+                        $this->queryJoinColumn($query, $column['joinColumnName']);
+                    } else if (Str::contains($column['columnName'], '.')) {
                         [$relation, $column] = explode('.', $column['columnName']);
 
                         $this->queryRelationOrJsonColumn($query, $relation, $column);
                     } else {
                         $query->orWhere($column['columnName'], 'LIKE', "%$this->searchQuery%");
                     }
+
                 }
             })
             ->when(request()->filled('filters'), function($query) {
@@ -78,7 +80,7 @@ abstract class BaseTableRepository
         foreach(json_decode(request('filters'), true) as $column => $value) {
             if (is_null($value)) {
                 continue;
-            } elseif (Str::contains($column, '.')) {
+            } else if (Str::contains($column, '.')) {
                 [$relation, $column] = explode('.', $column);
 
                 $query->whereRelation($relation, $column, 'LIKE', "%$value%");
@@ -92,10 +94,13 @@ abstract class BaseTableRepository
     {
         if (method_exists($this->beforePaginateQuery()->getModel(), $relation)) {
             $query->orWhereRelation($relation, $column, 'LIKE', "%$this->searchQuery%");
-        }
-
-        else {
+        } else {
             $query->orWhereRaw("LOWER(JSON_EXTRACT($relation, '$.\"$column\"')) LIKE LOWER('%$this->searchQuery%')");
         }
+    }
+
+    protected function queryJoinColumn(Builder $query, string $columnName)
+    {
+        $query->orWhere($columnName, 'LIKE', "%$this->searchQuery%");
     }
 }

@@ -38,6 +38,8 @@ abstract class TableConfig implements Jsonable, Arrayable
      * название столбца в таблице базе данных. Если необходимо отобразить связь, то можно
      * использовать точку relationName.relationColumnName (relationName это метод определенный
      * в классе Model)
+     *
+     * - Для добавления фильтра через JOIN надо указать ключ 'as'
      */
     abstract protected function columns(): array;
 
