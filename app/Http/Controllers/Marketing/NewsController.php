@@ -1,36 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Marketing;
 
-use App\Models\AboutUs;
+use App\Http\Controllers\Controller;
+use App\Models\News;
+use App\Support\View\TableConfig\NewsTableConfig;
 use App\Traits\HasFile;
 use Illuminate\Http\Request;
 use App\Traits\HasFlashMessage;
-use App\Http\Requests\AboutUs\CreateAboutUsRequest;
-use App\Http\Requests\AboutUs\UpdateAboutUsRequest;
+use App\Http\Requests\News\CreateNewsRequest;
+use App\Http\Requests\News\UpdateNewsRequest;
 use Illuminate\Support\Facades\View;
 
-class AboutUsController extends Controller
+class NewsController extends Controller
 {
     use HasFlashMessage, HasFile;
 
-    protected const MODEL = AboutUs::class;
-    protected const COLUMNS = ['title' => 'title', 'is_active' => 'is_active', 'image' => 'image'];
+    protected const MODEL = News::class;
     protected $route;
     protected $object;
 
     public function __construct()
     {
-        $this->route = 'aboutUs';
-        View::share('page_title', 'О Нас');
+        $this->route = 'news';
+        View::share('page_title', 'Новости');
     }
 
-    public function index()
+    public function index(NewsTableConfig $tableConfig)
     {
-        return view("pages.$this->route.index",
+        return view("pages.index",
         [
             'objects' => (self::MODEL)::paginate(10),
-            'columns' => self::COLUMNS,
+            'tableConfig' => $tableConfig,
             'route' => $this->route,
         ]);
     }
@@ -45,7 +46,7 @@ class AboutUsController extends Controller
         ]);
     }
 
-    public function store(CreateAboutUsRequest $request)
+    public function store(CreateNewsRequest $request)
     {
         try {
             $data = $request->validated();
@@ -57,40 +58,47 @@ class AboutUsController extends Controller
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function show(AboutUs $aboutUs)
+    public function show(News $news)
     {
         return view("pages.$this->route.show", [
-            'object' => $aboutUs,
+            'object' => $news,
             'route' => $this->route
         ]);
     }
 
-    public function edit(AboutUs $aboutUs)
+    public function edit(News $news)
     {
         return view("pages.$this->route.edit", [
-            'object' => $aboutUs,
+            'object' => $news,
             'route' => $this->route
          ]);
     }
 
-    public function update(UpdateAboutUsRequest $request, AboutUs $aboutUs)
+    public function toggle(UpdateNewsRequest $request, News $news)
+    {
+        $news->update($request->validated());
+
+        return response()->json(['message' => 'success']);
+    }
+
+    public function update(UpdateNewsRequest $request, News $news)
     {
         try {
             $data = $request->validated();
-            $data['image'] = $this->updateImage($data['image'] ?? null, $data['previous_image'], $aboutUs->image, $this->route);
-            $aboutUs->update($data);
+            $data['image'] = $this->updateImage($data['image'] ?? null, $data['previous_image'] ?? null, $news->image, $this->route);
+            $news->update($data);
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function destroy(AboutUs $aboutUs, Request $request)
+    public function destroy(News $news, Request $request)
     {
         try {
-            $this->deleteFile($aboutUs->image);
+            $this->deleteFile($news->image);
 
-            $aboutUs->delete();
+            $news->delete();
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }

@@ -1,35 +1,36 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Marketing;
 
-use App\Http\Requests\Help\CreateHelpRequest;
-use App\Http\Requests\Help\UpdateHelpRequest;
-use App\Models\Outside\PopularCategory;
-use App\Models\StaticPages\Help;
-use App\Traits\HasFlashMessage;
+use App\Http\Controllers\Controller;
+use App\Models\AboutUs;
+use App\Traits\HasFile;
 use Illuminate\Http\Request;
+use App\Traits\HasFlashMessage;
+use App\Http\Requests\AboutUs\CreateAboutUsRequest;
+use App\Http\Requests\AboutUs\UpdateAboutUsRequest;
 use Illuminate\Support\Facades\View;
 
-class HelpController extends Controller
+class AboutUsController extends Controller
 {
-    use HasFlashMessage;
+    use HasFlashMessage, HasFile;
 
-    protected const MODEL = Help::class;
-    protected const COLUMNS = ['title' => 'title'];
+    protected const MODEL = AboutUs::class;
+    protected const COLUMNS = ['title' => 'title', 'is_active' => 'is_active', 'image' => 'image'];
     protected $route;
     protected $object;
 
     public function __construct()
     {
-        $this->route = 'help';
-        View::share('page_title', 'Помощь');
+        $this->route = 'aboutUs';
+        View::share('page_title', 'О Нас');
     }
 
     public function index()
     {
         return view("pages.$this->route.index",
         [
-            'objects' => (self::MODEL)::query()->orderBy('order')->paginate(10),
+            'objects' => (self::MODEL)::paginate(10),
             'columns' => self::COLUMNS,
             'route' => $this->route,
         ]);
@@ -45,60 +46,55 @@ class HelpController extends Controller
         ]);
     }
 
-    public function store(CreateHelpRequest $request)
+    public function store(CreateAboutUsRequest $request)
     {
         try {
-            (self::MODEL)::create($request->validated());
+            $data = $request->validated();
+            $data['image'] = $this->uploadFile($request['image'], $this->route . '\\');
+            (self::MODEL)::query()->create($data);
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function show(Help $help)
+    public function show(AboutUs $aboutUs)
     {
         return view("pages.$this->route.show", [
-            'object' => $help,
+            'object' => $aboutUs,
             'route' => $this->route
         ]);
     }
 
-    public function edit(Help $help)
+    public function edit(AboutUs $aboutUs)
     {
         return view("pages.$this->route.edit", [
-            'object' => $help,
+            'object' => $aboutUs,
             'route' => $this->route
          ]);
     }
 
-    public function update(UpdateHelpRequest $request, Help $help)
+    public function update(UpdateAboutUsRequest $request, AboutUs $aboutUs)
     {
         try {
-            $help->update($request->validated());
+            $data = $request->validated();
+            $data['image'] = $this->updateImage($data['image'] ?? null, $data['previous_image'], $aboutUs->image, $this->route);
+            $aboutUs->update($data);
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
     }
 
-    public function destroy(Help $help, Request $request)
+    public function destroy(AboutUs $aboutUs, Request $request)
     {
         try {
-            $help->delete();
+            $this->deleteFile($aboutUs->image);
+
+            $aboutUs->delete();
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
         return $this->flashSuccessMessage($request, "$this->route.index");
-    }
-
-    public function updateSequence(Request $request)
-    {
-        foreach($request->sequence as $sequence) {
-            Help::query()->whereKey($sequence['id'])->update([
-                'order' => $sequence['sequence'],
-            ]);
-        }
-
-        return response()->json(['message' => 'success']);
     }
 }

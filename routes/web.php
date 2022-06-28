@@ -7,14 +7,14 @@ Auth::routes();
 Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     Route::get('/', function () { return view('pages.homepage'); });
-    Route::resource('contact', 'ContactController');
-    Route::resource('user', 'UserController');
+    Route::resource('contact', 'Marketing\ContactController');
+    Route::resource('user', 'Users\UserController');
     Route::resource('role', 'RoleController');
-    Route::resource('aboutUs', 'AboutUsController', ['parameters' => ['aboutUs' => 'aboutUs']]);
-    Route::resource('news', 'NewsController');
-    Route::get('news/updateToggle/{news}', 'NewsController@toggle')->name('news.updateToggle');
-    Route::resource('help', 'HelpController');
-    Route::post('help/updateSequence', 'HelpController@updateSequence')->name('help.updateSequence');
+    Route::resource('aboutUs', 'Marketing\AboutUsController', ['parameters' => ['aboutUs' => 'aboutUs']]);
+    Route::resource('news', 'Marketing\NewsController');
+    Route::get('news/updateToggle/{news}', 'Marketing\NewsController@toggle')->name('news.updateToggle');
+    Route::resource('help', 'Marketing\HelpController');
+    Route::post('help/updateSequence', 'Marketing\HelpController@updateSequence')->name('help.updateSequence');
 //    Route::resource('flashNotification', 'FlashNotificationController');
     Route::resource('forteBankPayment', 'ForteBankPaymentController');
     Route::resource('kaspiQrPayment', 'KaspiQrPaymentController');
@@ -24,8 +24,8 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::post('priceList/mailing', 'PriceListController@mailing')->name('priceList.mailing');
     Route::resource('priceList', 'PriceListController');
 
-    Route::resource('security', 'SecurityController');
-    Route::post('security/updateSequence', 'SecurityController@updateSequence')->name('security.updateSequence');
+    Route::resource('security', 'Marketing\SecurityController');
+    Route::post('security/updateSequence', 'Marketing\SecurityController@updateSequence')->name('security.updateSequence');
 
     Route::resource('paymentMethod', 'PaymentMethodController');
     Route::get('paymentMethod/updateToggle/{paymentMethod}', 'PaymentMethodController@toggle')->name('paymentMethod.updateToggle');
@@ -44,7 +44,9 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     });
 
-    Route::resource('partner', 'PartnerApplicationController');
+    Route::resource('remains', 'RemainsController');
+
+    Route::resource('partner', 'Users\PartnerApplicationController');
 
     Route::resource('managers', 'Users\ManagerController');
 
@@ -52,11 +54,11 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     Route::resource('orders', 'OrdersController');
 
-    Route::resource('popularCategory', 'PopularCategoryController');
-    Route::post('popularCategory/updateSequence', 'PopularCategoryController@updateSequence')->name('popularCategory.updateSequence');
+    Route::resource('popularCategory', 'Marketing\PopularCategoryController');
+    Route::post('popularCategory/updateSequence', 'Marketing\PopularCategoryController@updateSequence')->name('popularCategory.updateSequence');
 
-    Route::resource('menu', 'MenuElementController', ['except' => ['create', 'edit'], 'parameters' => ['menu' => 'menuElement']]);
-    Route::post('/menu/sequence', 'MenuElementController@sequence');
+    Route::resource('menu', 'Menu\MenuElementController', ['except' => ['create', 'edit'], 'parameters' => ['menu' => 'menuElement']]);
+    Route::post('/menu/sequence', 'Menu\MenuElementController@sequence');
 
     Route::get('/roles/move/move-up',      'RolesController@moveUp')->name('roles.up');
     Route::get('/roles/move/move-down',    'RolesController@moveDown')->name('roles.down');

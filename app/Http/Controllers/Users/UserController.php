@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
+use App\Http\Controllers\TableController;
 use App\Models\User;
 use App\Repositories\BaseTableRepository;
-use App\Repositories\UserTableRepository;
+use App\Repositories\Users\UserTableRepository;
 use App\Support\View\TableConfig\TableConfig;
-use App\Support\View\TableConfig\UserTableConfig;
+use App\Support\View\TableConfig\Users\UserTableConfig;
 use App\Traits\HasFlashMessage;
 
 class UserController extends TableController

@@ -85,6 +85,7 @@ return [
     'is_confirmed_1c' => 'Подтвержден в 1с',
     'is_confirmed_site' => 'Подтвержден менеджером на сайте',
     'is_enabled' => 'Включен',
-    'approve' => 'Подтвердить'
+    'approve' => 'Подтвердить',
+    'article' => 'Артикул',
 
 ];
