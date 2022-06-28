@@ -10,6 +10,6 @@ class KaspiQrPaymentTableRepository extends BaseTableRepository
 {
     protected function beforePaginateQuery(): Builder
     {
-        return KaspiQrPayment::query()->with('payment');
+        return KaspiQrPayment::query()->with('payment')->orderBy('created_at', 'DESC');
     }
 }
