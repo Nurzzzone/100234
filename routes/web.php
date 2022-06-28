@@ -17,6 +17,7 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
     Route::post('help/updateSequence', 'HelpController@updateSequence')->name('help.updateSequence');
 //    Route::resource('flashNotification', 'FlashNotificationController');
     Route::resource('forteBankPayment', 'ForteBankPaymentController');
+    Route::resource('kaspiQrPayment', 'KaspiQrPaymentController');
 
     Route::get('priceList/mailing/list', 'PriceListController@mailingList')->name('priceList.mailingList');
     Route::get('priceList/mailing', 'PriceListController@mailingForm')->name('priceList.mailingForm');
