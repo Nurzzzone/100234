@@ -5,7 +5,7 @@ namespace App\Support\View\TableConfig\OnlinePayment;
 use App\Models\OnlinePayment\Payment;
 use App\Support\View\TableConfig\TableConfig;
 
-class ForteBankPaymentTableConfig extends TableConfig
+class KaspiQrPaymentTableConfig extends TableConfig
 {
     protected $createEnabled = false;
 
@@ -15,14 +15,13 @@ class ForteBankPaymentTableConfig extends TableConfig
 
     public function __construct()
     {
-        $this->searchUrl = route('forteBankPayment.index');
+        $this->searchUrl = route('kaspiQrPayment.index');
     }
 
     protected function columns(): array
     {
         return [
-            ['label' => 'Идентификатор сессии', 'columnName' => 'session_id'],
-            ['label' => 'Идентификатор заказа', 'columnName' => 'order_id'],
+            ['label' => 'Идентификатор платежа в ПС', 'columnName' => 'bank_payment_id'],
             ['label' => 'Сумма', 'columnName' => 'payment.amount'],
             ['label' => 'Статус', 'columnName' => 'status_description'],
             ['label' => trans('fields.type'), 'columnName' => 'payment.type'],
@@ -38,12 +37,10 @@ class ForteBankPaymentTableConfig extends TableConfig
                 'type' => 'dropdown',
                 'paramName' => 'status',
                 'options' => [
-                    'APPROVED' => 'Оплачен',
-                    'CREATED' => 'Заказ создан',
-                    'DECLINED' => 'Отказ в оплате',
-                    'EXPIRED' => 'Время оплаты истекло',
-                    'CANCELED' => 'Заказ отменен',
-                    'ERROR' => 'Ошибка',
+                    'Processed' => 'Оплата прошла успешно',
+                    'QrTokenCreated' => 'Ссылка на оплату успешно создана',
+                    'Wait' => 'Ссылка успешно активирована пользователем и ожидает оплаты',
+                    'Error' => 'Произошла ошибка при проведении оплаты со стороны банка',
                     'CONNECTION_ERROR' => 'Ошибка подключения к серверу',
                 ]
             ],
