@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
 use App\Models\Outside\PopularCategory;
-use App\Repositories\PopularCategoryRepository;
+use App\Repositories\Marketing\PopularCategoryRepository;
 use Illuminate\Http\Request;
 use App\Traits\HasFlashMessage;
 use App\Http\Requests\PopularCategory\CreatePopularCategoryRequest;

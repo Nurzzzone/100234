@@ -87,5 +87,11 @@ return [
     'is_enabled' => 'Включен',
     'approve' => 'Подтвердить',
     'article' => 'Артикул',
+    'cross_quality' => 'Качество кросса',
+    'main_manufacturer' => 'Основной производитель',
+    'main_article' => 'Основной артикул',
+    'substitute_article' => 'Артикул заменителя',
+    'substitute_manufacturer' => 'Производитель заменителя',
+
 
 ];

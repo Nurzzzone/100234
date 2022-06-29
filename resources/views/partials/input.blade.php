@@ -12,7 +12,8 @@
             'disabled'    => isset($disabled)? 'disabled': null,
             'required'    => $required ?? false,
             'placeholder' => $label ?? 'placeholder',
-            'id'          => $id ?? ''
+            'min'         => $min ?? '',
+            'max'     => $max ?? ''
         ];
     @endphp
     <td>{{ Form::$input($field, $current_value ?? old($field), $options) }}</td>

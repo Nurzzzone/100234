@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Marketing;
 
 use App\Models\Outside\Hierarchy;
 use App\Models\Outside\PopularCategory;

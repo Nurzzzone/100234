@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Support\View\TableConfig;
+namespace App\Support\View\TableConfig\Marketing;
+
+use App\Support\View\TableConfig\TableConfig;
 
 class NewsTableConfig extends TableConfig
 {

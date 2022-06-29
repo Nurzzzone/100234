@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
-use App\Support\View\TableConfig\NewsTableConfig;
+use App\Support\View\TableConfig\Marketing\NewsTableConfig;
 use App\Traits\HasFile;
 use Illuminate\Http\Request;
 use App\Traits\HasFlashMessage;

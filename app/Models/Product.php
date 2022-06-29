@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Outside\Outside;
 use App\Models\Product\ProductManufacturer;
 use App\Models\Product\ProductRemain;
+use App\Support\Stringy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;

@@ -53,6 +53,15 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     Route::resource('orders', 'OrdersController');
 
+    Route::get('cross', 'CrossController@index')->name('cross.index'); //TODO удалить
+    Route::post('cross', 'CrossController@store')->name('cross.store');
+    Route::get('cross/create', 'CrossController@create')->name('cross.create');
+    Route::get('cross/destroy', 'CrossController@destroy')->name('cross.destroy');
+    Route::post('cross/delete', 'CrossController@delete')->name('cross.delete');
+    Route::post('cross/import', 'CrossImportController@store')->name('cross.import');
+    Route::post('cross/import/delete', 'CrossImportController@delete')->name('cross.import.delete');
+
+
     Route::resource('popularCategory', 'Marketing\PopularCategoryController');
     Route::post('popularCategory/updateSequence', 'Marketing\PopularCategoryController@updateSequence')->name('popularCategory.updateSequence');
 
