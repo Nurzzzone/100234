@@ -52,16 +52,30 @@ abstract class BaseTableRepository
         return $this->beforePaginateQuery()
             ->when(request('searchKeyword'), function($query) {
                 foreach($this->getTableColumns() as $column) {
+                    /**
+                     * Если используется столбец из Join Clause-а, то нужно использовать значение указанное
+                     * в этом ключе
+                     */
                     if (array_key_exists('joinColumnName', $column)) {
-                        $this->queryJoinColumn($query, $column['joinColumnName']);
-                    } else if (Str::contains($column['columnName'], '.')) {
+                        $query->orWhere($column['joinColumnName'], 'LIKE', "%$this->searchQuery%");
+                    }
+
+                    /**
+                     * Если в названии столбца есть точка, то нужно разделить их на связь и название столбца для
+                     * фильтрации по связи/json столбцу (тип в бд)
+                     */
+                    else if (Str::contains($column['columnName'], '.')) {
                         [$relation, $column] = explode('.', $column['columnName']);
 
                         $this->queryRelationOrJsonColumn($query, $relation, $column);
-                    } else {
-                        $query->orWhere($column['columnName'], 'LIKE', "%$this->searchQuery%");
                     }
 
+                    /**
+                     * Иначе нужно использовать обычный фильтр
+                     */
+                    else {
+                        $query->orWhere($column['columnName'], 'LIKE', "%$this->searchQuery%");
+                    }
                 }
             })
             ->when(request()->filled('filters'), function($query) {
@@ -78,13 +92,26 @@ abstract class BaseTableRepository
     protected function filterSearch(Builder $query)
     {
         foreach(json_decode(request('filters'), true) as $column => $value) {
+            /**
+             * Если значение пустое, то нужно перейти к следующей итерации
+             */
             if (is_null($value)) {
                 continue;
-            } else if (Str::contains($column, '.')) {
+            }
+
+            /**
+             * Если в столбце есть точка, то нужно фильтровать по связи (фильтрация по json столбцу не реализована)
+             */
+            else if (Str::contains($column, '.')) {
                 [$relation, $column] = explode('.', $column);
 
                 $query->whereRelation($relation, $column, 'LIKE', "%$value%");
-            } else {
+            }
+
+            /**
+             * Иначе нужно использовать обычный фильтр
+             */
+            else {
                 $query->where($column, 'LIKE', "%$value%");
             }
         }
@@ -92,15 +119,19 @@ abstract class BaseTableRepository
 
     protected function queryRelationOrJsonColumn(Builder $query, $relation, $column)
     {
+        /**
+         * Для фильтрации по связи сущности, необходимо реализовать метод с названием $relation ($relation - это
+         * название столбца до первой точки, который указан в TableConfig)
+         */
         if (method_exists($this->beforePaginateQuery()->getModel(), $relation)) {
             $query->orWhereRelation($relation, $column, 'LIKE', "%$this->searchQuery%");
-        } else {
+        }
+
+        /**
+         * Иначе фильтрация идет по json (тип в бд) столбцу
+         */
+        else {
             $query->orWhereRaw("LOWER(JSON_EXTRACT($relation, '$.\"$column\"')) LIKE LOWER('%$this->searchQuery%')");
         }
-    }
-
-    protected function queryJoinColumn(Builder $query, string $columnName)
-    {
-        $query->orWhere($columnName, 'LIKE', "%$this->searchQuery%");
     }
 }
