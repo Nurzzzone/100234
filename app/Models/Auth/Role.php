@@ -4,7 +4,7 @@ namespace App\Models\Auth;
 
 class Role extends \Spatie\Permission\Models\Role
 {
-    protected $connection = 'mysql';
+    protected $connection = 'adkulan_dev';
 
     public const TRADE_REPRESENTATIVE_ID = 10;
 

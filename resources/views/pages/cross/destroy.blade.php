@@ -27,7 +27,7 @@
                             @include("pages.{$route}.__formDelete")
                             <div class="d-flex justify-content-end align-items-center">
                                 <a class="btn btn-success mr-1"
-                                   href="{{ route("{$route}.index") }}">@lang('buttons.back')</a>
+                                   href="{{ route("{$route}.destroy") }}">@lang('buttons.back')</a>
                                 {{ Form::submit(trans('buttons.save'), ['class' => 'btn btn-success']) }}
                             </div>
                             {{ Form::close() }}

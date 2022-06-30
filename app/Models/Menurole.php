@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Outside\Outside;
 
-class Menurole extends Model
+class Menurole extends Outside
 {
     protected $table = 'menu_role';
     public $timestamps = false;

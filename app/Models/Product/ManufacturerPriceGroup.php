@@ -2,10 +2,10 @@
 
 namespace App\Models\Product;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ManufacturerPriceGroup extends Model
+class ManufacturerPriceGroup extends Outside
 {
     use HasFactory;
 

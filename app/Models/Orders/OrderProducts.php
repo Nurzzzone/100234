@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Models\Outside\Outside;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property float $price_without_discount Цена без скидки
  * @property float $price_with_discount Цена со скидкой
  */
-class OrderProducts extends Model
+class OrderProducts extends Outside
 {
     use HasFactory;
 

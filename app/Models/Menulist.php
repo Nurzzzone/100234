@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Outside\Outside;
 
-class Menulist extends Model
+class Menulist extends Outside
 {
     protected $table = 'menulist';
-    public $timestamps = false; 
+    public $timestamps = false;
 }

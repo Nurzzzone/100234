@@ -2,10 +2,10 @@
 
 namespace App\Models\Delivery;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Address extends Model
+class Address extends Outside
 {
     use HasFactory;
 

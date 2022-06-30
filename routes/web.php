@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Discounts\DiscountLimitController;
 
 Auth::routes();
 
@@ -37,11 +36,9 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
                     'periodic' => 'discountLimit',
                 ]);
         });
-
         Route::resource('document', 'Discounts\DiscountDocumentController',
             ['as' => 'discount']
         );
-
     });
 
     Route::resource('remains', 'RemainsController');
@@ -54,13 +51,18 @@ Route::group(['middleware' => ['auth', 'get.menu']], function () {
 
     Route::resource('orders', 'OrdersController');
 
-    Route::get('cross', 'CrossController@index')->name('cross.index'); //TODO удалить
-    Route::post('cross', 'CrossController@store')->name('cross.store');
-    Route::get('cross/create', 'CrossController@create')->name('cross.create');
-    Route::get('cross/destroy', 'CrossController@destroy')->name('cross.destroy');
-    Route::post('cross/delete', 'CrossController@delete')->name('cross.delete');
-    Route::post('cross/import', 'CrossImportController@store')->name('cross.import');
-    Route::post('cross/import/delete', 'CrossImportController@delete')->name('cross.import.delete');
+    Route::prefix('cross')->group(function () {
+        Route::get('create', 'Cross\CrossController@create')->name('cross.create');
+        Route::post('/', 'Cross\CrossController@store')->name('cross.store');
+        Route::get('destroy', 'Cross\CrossController@destroy')->name('cross.destroy');
+        Route::post('delete', 'Cross\CrossController@delete')->name('cross.delete');
+        Route::post('import', 'Cross\CrossImportController@store')->name('cross.import');
+        Route::post('import/delete', 'Cross\CrossImportController@delete')->name('cross.import.delete');
+        Route::get('check', 'Cross\CrossCheckController@index')->name('cross.check');
+    });
+
+
+    Route::resource('permission', 'PermissionController');
 
 
     Route::resource('popularCategory', 'Marketing\PopularCategoryController');

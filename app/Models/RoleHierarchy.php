@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Outside\Outside;
 
-class RoleHierarchy extends Model
+class RoleHierarchy extends Outside
 {
     protected $table = 'role_hierarchy';
     public $timestamps = false;
-    
+
 }

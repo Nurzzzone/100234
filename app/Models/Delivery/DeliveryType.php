@@ -2,6 +2,7 @@
 
 namespace App\Models\Delivery;
 
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 /**
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class DeliveryType extends Model
+class DeliveryType extends Outside
 {
     use HasFactory;
 
