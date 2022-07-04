@@ -13,7 +13,7 @@ class KaspiQrPaymentController extends TableController
     use HasFlashMessage;
 
     protected $route = 'kaspiQrPayment';
-    protected $object = 'Kaspi QR';
+    protected $pageTitle = 'Kaspi QR';
 
     protected function getRepository(): BaseTableRepository
     {

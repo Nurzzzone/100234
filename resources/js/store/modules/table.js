@@ -72,7 +72,6 @@ export default {
         // Сохранение параметров для запроса нового отфильтрованного списка
         setFiltersQueryParam(state, { key, value }) {
             state.filtersQueryParams[key] = value;
-            console.log(state.filtersQueryParams);
         },
 
         resetFiltersQueryParam(state) {
