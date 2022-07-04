@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -14,10 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class OrdersHasStatuses extends Model
+class OrdersHasStatuses extends Outside
 {
-
-    protected $connection = 'adkulan_dev';
 
     protected $table = 'order_status_1c';
 

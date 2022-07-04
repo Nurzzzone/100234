@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PartnershipApplication extends Model
+class PartnershipApplication extends Outside
 {
     use HasFactory;
-
-    protected $connection = 'adkulan_dev';
 
     protected $primaryKey = 'GUID';
 

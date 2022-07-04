@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Password extends Model
+class Password extends Outside
 {
     use HasFactory;
 

@@ -2,14 +2,13 @@
 
 namespace App\Models\Discount;
 
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class DiscountLimit extends Model
+class DiscountLimit extends Outside
 {
     use HasFactory;
 
-    protected $connection = 'adkulan_dev';
     protected $primaryKey = 'id';
     protected $fillable = [
         'discountable_id',

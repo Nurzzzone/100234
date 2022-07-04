@@ -2,10 +2,10 @@
 
 namespace App\Models\Discount;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class DiscountInCart extends Model
+class DiscountInCart extends Outside
 {
     use HasFactory;
 

@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 /**
@@ -14,11 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $group_id
  * @property \Illuminate\Support\Carbon $created_at
  */
-class OrderStatus extends Model
+class OrderStatus extends Outside
 {
     use HasFactory;
 
-    protected $connection = 'adkulan_dev';
 
     protected $table = 'order_status';
 

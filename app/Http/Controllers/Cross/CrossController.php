@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cross;
 
 use App\Models\Cross;
 use Illuminate\Http\Request;
 use App\Traits\HasFlashMessage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Cross\CreateCrossRequest;
-use App\Http\Requests\Cross\UpdateCrossRequest;
 use Illuminate\Support\Facades\View;
 
 class CrossController extends Controller
@@ -23,16 +22,6 @@ class CrossController extends Controller
     {
         $this->route = 'cross';
         View::share('page_title', 'Кроссы');
-    }
-
-    public function index()
-    {
-        return view("pages.$this->route.create",
-        [
-            'object' => (self::MODEL),
-            'columns' => self::COLUMNS,
-            'route' => $this->route,
-        ]);
     }
 
     public function create()
@@ -52,7 +41,7 @@ class CrossController extends Controller
         } catch (\Exception $exception) {
             return $this->flashErrorMessage($request, $exception);
         }
-        return $this->flashSuccessMessage($request, "$this->route.index");
+        return $this->flashSuccessMessage($request);
     }
 
     public function destroy()

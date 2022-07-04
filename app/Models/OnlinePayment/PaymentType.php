@@ -2,10 +2,10 @@
 
 namespace App\Models\OnlinePayment;
 
+use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class PaymentType extends Model
+class PaymentType extends Outside
 {
     use HasFactory;
 

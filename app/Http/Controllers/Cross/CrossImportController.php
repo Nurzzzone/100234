@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cross;
 
+use App\Http\Controllers\Controller;
 use App\Imports\CrossesImport;
 use App\Imports\DeleteCrossImport;
 use App\Traits\HasFlashMessage;
