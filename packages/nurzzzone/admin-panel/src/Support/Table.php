@@ -2,24 +2,25 @@
 
 namespace Nurzzzone\AdminPanel\Support;
 
-use Exception;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Nurzzzone\AdminPanel\Controllers\Contracts\Collectable;
+use Nurzzzone\AdminPanel\Controllers\Contracts\Paginatable;
+use Nurzzzone\AdminPanel\Support\Table\Column\Column;
+use Nurzzzone\AdminPanel\Support\Table\Filter\Filter;
 
 /**
  * Class Table
  * @package Nurzzzone\AdminPanel\Support
  */
-class Table extends Component
+class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
 {
-    public const COLUMN_TYPE_TEXT = 'text';
-    public const COLUMN_TYPE_CHECK = 'check';
-    public const COLUMN_TYPE_IMAGE = 'image';
-    public const COLUMN_TYPE_TOGGLE = 'toggle';
-    public const COLUMN_TYPE_SYNC_TOGGLE = 'syncToggle';
-    public const FILTER_TYPE_DROPDOWN = 'dropdown';
-    public const FILTER_TYPE_RADIO = 'radio';
+    use WithQueryBuilder;
 
     /**
      * @var bool
@@ -59,11 +60,12 @@ class Table extends Component
     /**
      * @var string
      */
-    protected $searchParam = 'searchKeyword';
-
     protected $searchQuery;
 
-    protected $perPageQuantity;
+    /**
+     * @var int
+     */
+    protected $perPageParam = 10;
 
     /**
      * @var array
@@ -75,9 +77,14 @@ class Table extends Component
      */
     private $columns = [];
 
-    public function getViewFilePath()
+    /**
+     * @var Builder
+     */
+    private $sqlQuery;
+
+    public function isPaginationEnabled(): bool
     {
-        return view('admin-panel::index', $this->toArray());
+        return $this->paginationEnabled;
     }
 
     public function enableSearch(string $searchUrl): self
@@ -119,9 +126,18 @@ class Table extends Component
         return $this;
     }
 
+    protected function setSearchQuery(): self
+    {
+        $this->searchQuery = request('searchKeyword');
+
+        return $this;
+    }
+
     public function handleAjaxRequest()
     {
-        $query = $this->model->query()
+        $this->setSearchQuery();
+
+        $this->sqlQuery = $this->queryBuilder
             ->when(request('searchKeyword'), function($query) {
                 foreach($this->columns as $column) {
                     /**
@@ -153,12 +169,6 @@ class Table extends Component
             ->when(request()->filled('filters'), function($query) {
                 $this->filterSearch($query);
             });
-
-        if ($this->paginationEnabled) {
-            return $query->paginate();
-        }
-
-        return $query->get();
     }
 
     protected function filterSearch(Builder $query)
@@ -195,7 +205,7 @@ class Table extends Component
          * Для фильтрации по связи сущности, необходимо реализовать метод с названием $relation ($relation - это
          * название столбца до первой точки, который указан в TableConfig)
          */
-        if (method_exists($this->model, $relation)) {
+        if (method_exists($this->queryBuilder, $relation)) {
             $query->orWhereRelation($relation, $column, 'LIKE', "%$this->searchQuery%");
         }
 
@@ -219,55 +229,33 @@ class Table extends Component
         ];
     }
 
-    /**
-     * @throws Exception
-     */
-    public function addColumn(string $label, string $columnName, string $type = 'text', ?string $joinColumnName = null): self
+    public function addColumn(Column $column): self
     {
-        if (! in_array($type, $this->allowedColumnTypes())) {
-            throw new Exception("Unknown column type: $type!");
-        }
-
-        $this->columns[] = compact('label', 'columnName', 'type', 'joinColumnName');
+        $this->columns[] = $column->toArray();
 
         return $this;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function addFilter(string $label, string $paramName, string $type, array $options): self
+    public function addFilter(Filter $filter): self
     {
-        if (!in_array($type, $this->allowedFilterTypes())) {
-            throw new Exception("Unknown filter type: $type!");
-        }
-
-        if (!Arr::isAssoc($options)) {
-            throw new Exception('Argument $options must be an associative array!');
-        }
-
-        $this->filters[] = compact('label', 'paramName', 'type', 'options');
+        $this->filters[] = $filter->toArray();
 
         return $this;
     }
 
-    protected function allowedColumnTypes(): array
+    public function pagination(): AbstractPaginator
     {
-        return [
-            self::COLUMN_TYPE_TEXT,
-            self::COLUMN_TYPE_CHECK,
-            self::COLUMN_TYPE_IMAGE,
-            self::COLUMN_TYPE_TOGGLE,
-            self::COLUMN_TYPE_SYNC_TOGGLE,
-        ];
+        return $this->sqlQuery->paginate($this->perPageParam);
     }
 
-    protected function allowedFilterTypes(): array
+    public function collection(): Collection
     {
-        return [
-            self::FILTER_TYPE_RADIO,
-            self::FILTER_TYPE_DROPDOWN,
-        ];
+        return $this->sqlQuery->get();
+    }
+
+    public function render()
+    {
+        return view('admin-panel::index', $this->toArray());
     }
 
     public function toArray(): array
