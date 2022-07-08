@@ -1,0 +1,25 @@
+{
+    "name": "nurzzzone/admin-panel",
+    "description": "Admin panel",
+    "authors": [
+        {
+            "name": "nurzzzone",
+            "email": "nurzzzone@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/support": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nurzzzone\\AdminPanel\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nurzzzone\\AdminPanel\\AdminPanelServiceProvider"
+            ]
+        }
+    }
+}
