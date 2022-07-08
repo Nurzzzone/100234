@@ -5,7 +5,7 @@ namespace Nurzzzone\AdminPanel\Support;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ use Nurzzzone\AdminPanel\Support\Table\Filter\Filter;
  */
 class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
 {
-    use WithQueryBuilder;
+    use WithBuilder;
 
     /**
      * @var bool
@@ -77,16 +77,29 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
      */
     private $columns = [];
 
-    /**
-     * @var Builder
-     */
-    private $sqlQuery;
+    public function __construct(array $options = [])
+    {
+        if (array_key_exists('builder', $options)) {
+            $this->builder = $options['builder'];
+        }
+    }
 
+    /**
+     * Check if objects pagination in table enabled
+     *
+     * @return bool
+     */
     public function isPaginationEnabled(): bool
     {
         return $this->paginationEnabled;
     }
 
+    /**
+     * Enable ajax searching in table
+     *
+     * @param string $searchUrl
+     * @return $this
+     */
     public function enableSearch(string $searchUrl): self
     {
         $this->searchEnabled = true;
@@ -96,6 +109,12 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    /**
+     * Enable create button
+     *
+     * @param string $createUrl
+     * @return $this
+     */
     public function enableCreate(string $createUrl): self
     {
         $this->createEnabled = true;
@@ -105,6 +124,11 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    /**
+     * Enable delete object button
+     *
+     * @return $this
+     */
     public function enableDelete(): self
     {
         $this->deleteEnabled = true;
@@ -112,6 +136,11 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    /**
+     * Enable edit object button
+     *
+     * @return $this
+     */
     public function enableEdit(): self
     {
         $this->editEnabled = true;
@@ -119,6 +148,11 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    /**
+     * Show table with pagination
+     *
+     * @return $this
+     */
     public function enablePagination(): self
     {
         $this->paginationEnabled = true;
@@ -126,6 +160,11 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    /**
+     * Set search input value from request
+     *
+     * @return $this
+     */
     protected function setSearchQuery(): self
     {
         $this->searchQuery = request('searchKeyword');
@@ -133,12 +172,12 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
-    public function handleAjaxRequest()
+    public function handle()
     {
         $this->setSearchQuery();
 
-        $this->sqlQuery = $this->queryBuilder
-            ->when(request('searchKeyword'), function($query) {
+        return $this->builder
+            ->when(request()->filled('searchKeyword'), function($query) {
                 foreach($this->columns as $column) {
                     /**
                      * Если используется столбец из Join Clause-а, то нужно использовать значение указанное
@@ -171,7 +210,10 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
             });
     }
 
-    protected function filterSearch(Builder $query)
+    /**
+     * @param mixed $query
+     */
+    protected function filterSearch($query)
     {
         foreach(json_decode(request('filters'), true) as $column => $value) {
             /**
@@ -184,7 +226,7 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
             /**
              * Если в столбце есть точка, то нужно фильтровать по связи (фильтрация по json столбцу не реализована)
              */
-            else if (Str::contains($column, '.')) {
+            else if ($this->builder instanceof EloquentBuilder && Str::contains($column, '.')) {
                 [$relation, $column] = explode('.', $column);
 
                 $query->whereRelation($relation, $column, 'LIKE', "%$value%");
@@ -199,13 +241,18 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         }
     }
 
-    protected function queryRelationOrJsonColumn(Builder $query, $relation, $column)
+    /**
+     * @param mixed $query
+     * @param string $relation
+     * @param string $column
+     */
+    protected function queryRelationOrJsonColumn($query, string $relation, string $column)
     {
         /**
          * Для фильтрации по связи сущности, необходимо реализовать метод с названием $relation ($relation - это
          * название столбца до первой точки, который указан в TableConfig)
          */
-        if (method_exists($this->queryBuilder, $relation)) {
+        if ($this->builder instanceof EloquentBuilder && method_exists($this->builder, $relation)) {
             $query->orWhereRelation($relation, $column, 'LIKE', "%$this->searchQuery%");
         }
 
@@ -220,15 +267,31 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
     protected function tools(): array
     {
         return [
-            'searchEnabled' => $this->searchEnabled,
-            'searchUrl'     => $this->searchUrl,
-            'createEnabled' => $this->createEnabled,
-            'createUrl'     => $this->createUrl,
-            'editEnabled'   => $this->editEnabled,
-            'deleteEnabled' => $this->deleteEnabled
+            'searchEnabled'     => $this->searchEnabled,
+            'searchUrl'         => $this->searchUrl,
+            'createEnabled'     => $this->createEnabled,
+            'createUrl'         => $this->createUrl,
+            'editEnabled'       => $this->editEnabled,
+            'deleteEnabled'     => $this->deleteEnabled,
+            'paginationEnabled' => $this->paginationEnabled
         ];
     }
 
+    public function objects()
+    {
+        if ($this->isPaginationEnabled()) {
+            return $this->pagination();
+        }
+
+        return $this->collection();
+    }
+
+    /**
+     * Add column into table
+     *
+     * @param Column $column
+     * @return $this
+     */
     public function addColumn(Column $column): self
     {
         $this->columns[] = $column->toArray();
@@ -236,6 +299,12 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    /**
+     * Add filter into table
+     *
+     * @param Filter $filter
+     * @return $this
+     */
     public function addFilter(Filter $filter): self
     {
         $this->filters[] = $filter->toArray();
@@ -243,30 +312,57 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    /**
+     * Get Pagination instance
+     *
+     * @return AbstractPaginator
+     */
     public function pagination(): AbstractPaginator
     {
-        return $this->sqlQuery->paginate($this->perPageParam);
+        return $this->handle()->paginate($this->perPageParam);
     }
 
+    /**
+     * Get Collection instance
+     *
+     * @return Collection
+     */
     public function collection(): Collection
     {
-        return $this->sqlQuery->get();
+        return $this->handle()->get();
     }
 
-    public function render()
+    /**
+     * Render table
+     *
+     * @return string
+     */
+    public function render(): string
     {
         return view('admin-panel::index', $this->toArray());
     }
 
+    /**
+     * Convert instance to array
+     *
+     * @return array
+     */
     public function toArray(): array
     {
         return [
             'tools'     => $this->tools(),
             'columns'   => $this->columns,
             'filters'   => $this->filters,
+            'objects'   => $this->objects(),
         ];
     }
 
+    /**
+     * Convert instance to json
+     *
+     * @param int $options
+     * @return string
+     */
     public function toJson($options = 0): string
     {
         return collect($this->toArray())->toJson($options);

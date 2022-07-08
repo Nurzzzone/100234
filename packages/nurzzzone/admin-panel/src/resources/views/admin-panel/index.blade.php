@@ -1,6 +1,6 @@
-@extends('layouts.base')
+@extends('admin-panel::layouts.base')
 
-@section('title', $page_title)
+@section('title', $pageTitle)
 
 @section('content')
     <div class="container-fluid">
@@ -8,8 +8,10 @@
             <div class="col-md-12">
                 @php($url = str_contains($route, '.')? str_replace('.', '/', $route): $route)
                 @include('partials.modal', ['url' => "/$url/"])
-                <v-table :pagination-instance='{!! $objects->toJson(JSON_UNESCAPED_UNICODE) !!}'
-                         :table-config='{!! $tableConfig->toJson() !!}'
+                <v-table :objects='{!! $objects->toJson(JSON_UNESCAPED_UNICODE) !!}'
+                         :column='{!! json_encode($columns, JSON_UNESCAPED_UNICODE) !!}'
+                         :tools='{!! json_encode($tools, JSON_UNESCAPED_UNICODE) !!}'
+                         :filters='{!! json_encode($tools, JSON_UNESCAPED_UNICODE) !!}'
                          hover="{{ $objects->isNotEmpty() }}">
                     <template v-slot="props">
                         <v-table-head></v-table-head>
