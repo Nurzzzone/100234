@@ -1,16 +1,16 @@
 <template>
     <div>
         <div class="card">
-            <div class="card-header" v-if="this.getTableTools.createEnabled">
+            <div class="card-header" v-if="this.getTools.createEnabled">
                 <div class="d-flex justify-content-end align-content-center">
-                    <a class="btn btn-outline-dark" :href="getTableTools.createUrl">Создать</a>
+                    <a class="btn btn-outline-dark" :href="this.getTools.createUrl">Создать</a>
                 </div>
             </div>
             <!-- TableComponent -->
             <div class="card-body">
                 <table-tools class="mb-4"></table-tools>
                 <table :id="tableId"
-                       :class="{ 'table-hover': hover }"
+                       :class="{ 'table-hover': this.getObjects.length > 0 }"
                        :data-update-sequence-url="updateSequenceUrl"
                        class="table table-responsive-sm table-bordered border-top-0 mb-0">
                     <slot>
@@ -31,26 +31,34 @@
 
 <script>
 import TableTools from "./TableTools";
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
     name: "Table",
     components: {TableTools},
     props: {
         tableId: String,
-        updateSequenceUrl: String,
-        paginationInstance: Object,
-        hover: String,
-        tableConfig: Object
+        collection: Array,
+        pagination: Object,
+        columns: Array,
+        tools: Object,
+        filters: Array,
     },
     computed: {
         ...mapGetters([
-            'getTableTools'
-        ])
+            'getTools',
+            'getObjects'
+        ]),
+    },
+    methods: {
+        ...mapMutations([
+            'setPagination',
+            'setCollection'
+        ]),
     },
     created() {
-        this.$store.commit('setPaginationInstance', this.paginationInstance);
-        this.$store.commit('setTableConfig', this.tableConfig);
+        this.setPagination(this.pagination)
+        this.setCollection(this.collection)
     }
 }
 </script>

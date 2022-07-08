@@ -1,9 +1,9 @@
 <template>
-    <td v-if="type === 'text'" v-bind:class="{ 'text-muted': !label}" v-text="getTextLabel"></td>
+    <td v-if="column.type === 'text'" v-bind:class="{ 'text-muted': !label}" v-text="getTextLabel"></td>
 
-    <td v-else-if="type === 'check'"><i :class="getCheckLabel"></i></td>
+    <td v-else-if="column.type === 'check'"><i :class="getCheckLabel"></i></td>
 
-    <td v-else-if="type === 'toggle'">
+    <td v-else-if="column.type === 'toggle'">
         <div class="custom-control custom-switch">
             <input @input="updateToggleState($event)"
                    type="checkbox"
@@ -14,7 +14,7 @@
         </div>
     </td>
 
-    <td v-else-if="type === 'syncToggle'">
+    <td v-else-if="column.type === 'syncToggle'">
         <div class="custom-control custom-switch" >
             <input data-name="toggle"
                    @input="syncUpdateToggleState($event)"
@@ -26,10 +26,10 @@
         </div>
     </td>
 
-    <td v-else-if="type === 'buttons' && this.getTableTools.buttonsEnabled">
+    <td v-else-if="column.type === 'buttons' && this.isButtonsEnabled">
         <div class="btn-group d-flex">
-            <a v-if="this.getTableTools.editEnabled" :href="object.editUrl" class="btn btn-outline-dark">Редактировать</a>
-            <button v-if="this.getTableTools.deleteEnabled"
+            <a v-if="this.isEditEnabled" :href="this.getEditUrl" class="btn btn-outline-dark">Редактировать</a>
+            <button v-if="this.isDeleteEnabled"
                     type="button"
                     data-toggle="modal"
                     :data-target="object.id"
@@ -54,17 +54,17 @@ export default {
         label: [String, Number, Array],
         object: Object,
         column: Object,
-        type: {
-            type: String,
-            default: 'text',
-        }
     },
     created() {
         this.id = this.uuid4();
     },
     computed: {
         ...mapGetters([
-            'getTableTools'
+            'getTools',
+            'getEditUrl',
+            'isEditEnabled',
+            'isDeleteEnabled',
+            'isButtonsEnabled',
         ]),
         getTextLabel() {
             return this.label? this.label: 'Отсутствует';

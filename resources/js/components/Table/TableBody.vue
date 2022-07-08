@@ -1,7 +1,7 @@
 <template>
     <tbody>
-        <tr v-for="object in getTableObjects" :key="object.id" data-name="tableRow">
-            <v-table-data v-for="(column, index) in  getTableColumns"
+        <tr v-for="object in this.getObjects" :key="object.id" data-name="tableRow">
+            <v-table-data v-for="(column, index) in this.getColumns"
                           :key="index"
                           :type="column.type"
                           :column="column"
@@ -21,8 +21,8 @@ export default {
     name: "TableBody",
     computed: {
         ...mapGetters([
-            'getTableColumns',
-            'getTableObjects',
+            'getColumns',
+            'getObjects',
         ])
     },
     methods: {

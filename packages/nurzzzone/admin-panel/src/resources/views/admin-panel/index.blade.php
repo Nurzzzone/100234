@@ -11,8 +11,7 @@
                 <v-table :objects='{!! $objects->toJson(JSON_UNESCAPED_UNICODE) !!}'
                          :column='{!! json_encode($columns, JSON_UNESCAPED_UNICODE) !!}'
                          :tools='{!! json_encode($tools, JSON_UNESCAPED_UNICODE) !!}'
-                         :filters='{!! json_encode($tools, JSON_UNESCAPED_UNICODE) !!}'
-                         hover="{{ $objects->isNotEmpty() }}">
+                         :filters='{!! json_encode($tools, JSON_UNESCAPED_UNICODE) !!}'>
                     <template v-slot="props">
                         <v-table-head></v-table-head>
                         <v-table-body :objects="props.objects"></v-table-body>
