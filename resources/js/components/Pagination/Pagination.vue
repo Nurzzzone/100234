@@ -10,14 +10,14 @@
                         <!-- Previous Page Link  -->
                         <li v-if="currentPage() != 1" class="page-item">
                             <button class="page-link text-dark"
-                                    @click="changeCurrentPage(previousPageUrl())"
+                                    @click="updatePaginationInstance(previousPageUrl())"
                                     aria-label="Предыдущая страница">&lsaquo;
                             </button>
                         </li>
 
                         <!-- Pagination Elements -->
                         <!-- "Three Dots" Separator-->
-                        <li v-for="(link, index) in pagination.links.slice(1, -1)" :key="index"
+                        <li v-for="(link, index) in getPaginationInstance.links.slice(1, -1)" :key="index"
                             v-if="link.label === '...'"
                             class="page-item disabled"
                             aria-disabled="true">
@@ -32,7 +32,7 @@
                         </li>
 
                         <li v-else class="page-item">
-                            <button class="page-link text-dark" @click="changeCurrentPage(link.url)">
+                            <button class="page-link text-dark" @click="updatePaginationInstance(link.url)">
                                 {{ link.label }}
                             </button>
                         </li>
@@ -40,7 +40,7 @@
                         <!-- Next Page Link -->
                         <li v-if="hasMorePages()" class="page-item">
                             <button class="page-link text-dark"
-                                    @click="changeCurrentPage(nextPageUrl())"
+                                    @click="updatePaginationInstance(nextPageUrl())"
                                     aria-label="Следующая страница">&rsaquo;
                             </button>
                         </li>
@@ -52,37 +52,38 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: "Pagination",
     computed: {
-        ...mapState({
-            pagination: state => state.table.pagination
-        })
+        ...mapGetters(
+            ['getPaginationInstance']
+        )
     },
     methods: {
+        ...mapActions([
+            'updatePaginationInstance'
+        ]),
+
         hasPages() {
-            return this.pagination.links.slice(1, -1).length > 1;
+            return this.getPaginationInstance.links.slice(1, -1).length > 1;
         },
         hasMorePages() {
             return this.nextPageUrl() !== 'null';
         },
         currentPage() {
-            return String(this.pagination.current_page);
+            return String(this.getPaginationInstance.current_page);
         },
         total() {
-            return String(this.pagination.total);
+            return String(this.getPaginationInstance.total);
         },
         previousPageUrl() {
-            return String(this.pagination.previous_page_url);
+            return String(this.getPaginationInstance.previous_page_url);
         },
         nextPageUrl() {
-            return String(this.pagination.next_page_url);
+            return String(this.getPaginationInstance.next_page_url);
         },
-        changeCurrentPage(url) {
-            this.$store.dispatch('updatePaginationInstance', url);
-        }
     }
 }
 </script>

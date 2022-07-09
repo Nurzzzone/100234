@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex">
-            <div v-if="getTableTools.searchEnabled" class="input-group mb-2 w-100">
+            <div v-if="this.getTools.searchEnabled" class="input-group mb-2 w-100">
                 <input type="text"
                        class="form-control"
                        placeholder="Поиск..."
@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <button v-if="showTableFilters"
+            <button v-if="this.showFilters"
                     id="filtersButton"
                     type="button"
                     class="btn btn-outline-dark h-100 ml-2"
@@ -63,10 +63,10 @@ export default {
             perPageButtons: state => state.table.perPageButtons
         }),
         ...mapGetters([
-            'getTableTools',
+            'getTools',
             'getActivePerPageButton',
             'showPerPageButton',
-            'showTableFilters',
+            'showFilters',
         ]),
     },
     methods: {

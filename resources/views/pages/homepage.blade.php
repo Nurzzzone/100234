@@ -1,4 +1,4 @@
-@extends('layouts.base')
+@extends('admin-panel::layouts.base')
 
 @section('content')
 

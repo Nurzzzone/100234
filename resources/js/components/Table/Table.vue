@@ -9,9 +9,7 @@
             <!-- TableComponent -->
             <div class="card-body">
                 <table-tools class="mb-4"></table-tools>
-                <table :id="tableId"
-                       :class="{ 'table-hover': this.getObjects.length > 0 }"
-                       :data-update-sequence-url="updateSequenceUrl"
+                <table :class="{ 'table-hover': this.getObjects.length > 0 }"
                        class="table table-responsive-sm table-bordered border-top-0 mb-0">
                     <slot>
                         <!-- TableHeadComponent -->
@@ -37,12 +35,7 @@ export default {
     name: "Table",
     components: {TableTools},
     props: {
-        tableId: String,
-        collection: Array,
-        pagination: Object,
-        columns: Array,
-        tools: Object,
-        filters: Array,
+        'table': Object
     },
     computed: {
         ...mapGetters([
@@ -52,13 +45,20 @@ export default {
     },
     methods: {
         ...mapMutations([
+            'setTools',
+            'setColumns',
+            'setFilters',
             'setPagination',
-            'setCollection'
+            'setCollection',
         ]),
     },
     created() {
-        this.setPagination(this.pagination)
-        this.setCollection(this.collection)
+        const _table = this.table
+        this.setTools(_table.tools)
+        this.setColumns(_table.columns)
+        this.setFilters(_table.filters)
+        this.setPagination(_table.pagination)
+        this.setCollection(_table.collection)
     }
 }
 </script>

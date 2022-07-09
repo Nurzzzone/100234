@@ -1,6 +1,6 @@
 <?php
 
-namespace Nurzzzone\AdminPanel\Controllers\Contracts;
+namespace Nurzzzone\AdminPanel\Support\Contracts;
 
 /**
  * @className FromTable

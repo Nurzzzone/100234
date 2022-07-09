@@ -11,6 +11,6 @@ class Title extends MenuElement
 
     public function render()
     {
-        return view('components.menu.title');
+        return view('admin-panel::components.menu.title');
     }
 }

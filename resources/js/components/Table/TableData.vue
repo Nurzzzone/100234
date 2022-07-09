@@ -48,15 +48,17 @@ export default {
     data() {
         return {
             id: "",
+            label: null
         }
     },
     props: {
-        label: [String, Number, Array],
         object: Object,
         column: Object,
+        type: String,
     },
     created() {
-        this.id = this.uuid4();
+        this.id = this.uuid4()
+        this.resolveLabel(this.object, this.column.columnName)
     },
     computed: {
         ...mapGetters([
@@ -67,13 +69,13 @@ export default {
             'isButtonsEnabled',
         ]),
         getTextLabel() {
-            return this.label? this.label: 'Отсутствует';
+            return this.label? this.label: 'Отсутствует'
         },
         getCheckClass() {
-            return Boolean(this.label)? 'text-success': 'text-danger';
+            return Boolean(this.label)? 'text-success': 'text-danger'
         },
         getCheckLabel() {
-            return Boolean(this.label)? 'cil-check': 'cil-x';
+            return Boolean(this.label)? 'cil-check': 'cil-x'
         }
     },
     methods: {
@@ -87,6 +89,7 @@ export default {
                 (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
             );
         },
+
         updateToggleState(e) {
             e.target.setAttribute('disabled', true);
 
@@ -123,7 +126,26 @@ export default {
                     el.removeAttribute('disabled');
                 });
             });
-        }
+        },
+
+        resolveLabel(object, columnName) {
+            if (! columnName.includes('.')) {
+                return this.label =  object[columnName];
+            }
+
+            if ((columnName.match('\.+') || []).length === 1) {
+                let relationName = columnName.split('.')[0];
+                columnName = columnName.split('.')[1];
+
+                return this.label = object[relationName][columnName];
+            }
+
+            return this.getNestedColumn();
+        },
+
+        getNestedColumn() {
+            return 'надо дописать';
+        },
     }
 }
 </script>

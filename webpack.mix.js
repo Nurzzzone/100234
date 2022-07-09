@@ -4,7 +4,7 @@ mix.js('resources/js/app.js', 'public/js');
 //******************* CSS ***********************
 
 mix.copy([
-    'resources/vendors/quill/css/quill.css',
+    // 'resources/vendor/quill/css/quill.css',
     'node_modules/cropperjs/dist/cropper.css',
     'node_modules/@coreui/icons/css/flag.min.css',
     'node_modules/@coreui/icons/css/brand.min.css',
@@ -16,7 +16,7 @@ mix.sass('resources/sass/style.scss', 'public/css');
 //**************** END: CSS ********************
 
 //******************* SCRIPTS ***********************
-mix.copy('resources/vendors/quill/js', 'public/js/vendors/quill');
+// mix.copy('resources/vendor/quill/js', 'public/js/vendor/quill');
 
 mix.js('resources/js/modal.js',         'public/js/src/modal.js')
     .js('resources/js/quill.js',        'public/js/src/quill.js')
@@ -30,14 +30,14 @@ mix.js('resources/js/modal.js',         'public/js/src/modal.js')
     .js('resources/js/menu.js',         'public/js/src/menu.js')
 
 mix.js([
-    'resources/vendors/sidebar/sidebar.js',
-    'resources/vendors/sidebar/class-toggler.js',
-    'resources/vendors/sidebar/dom/data.js',
-    'resources/vendors/sidebar/dom/event-handler.js',
-    'resources/vendors/sidebar/dom/manipulator.js',
-    'resources/vendors/sidebar/util/index.js',
-],'public/js/vendors/sidebar/sidebar.js')
-//**************** END: SCRIPTS ********************
+    'resources/vendor/sidebar/sidebar.js',
+    'resources/vendor/sidebar/class-toggler.js',
+    'resources/vendor/sidebar/dom/data.js',
+    'resources/vendor/sidebar/dom/event-handler.js',
+    'resources/vendor/sidebar/dom/manipulator.js',
+    'resources/vendor/sidebar/util/index.js',
+],'public/js/vendor/sidebar/sidebar.js')
+// **************** END: SCRIPTS ********************
 
 //******************* OTHER ***********************
 mix.copy('node_modules/@coreui/icons/fonts', 'public/fonts');           // fonts

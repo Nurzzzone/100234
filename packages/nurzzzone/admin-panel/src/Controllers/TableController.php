@@ -2,7 +2,7 @@
 
 namespace Nurzzzone\AdminPanel\Controllers;
 
-use Nurzzzone\AdminPanel\Controllers\Contracts\FromTable;
+use Nurzzzone\AdminPanel\Support\Contracts\FromTable;
 
 abstract class TableController extends Controller implements FromTable
 {

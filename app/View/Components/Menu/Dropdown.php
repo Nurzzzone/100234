@@ -18,6 +18,6 @@ class Dropdown extends MenuElement
 
     public function render()
     {
-        return view('components.menu.dropdown');
+        return view('admin-panel::components.menu.dropdown');
     }
 }

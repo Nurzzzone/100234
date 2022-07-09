@@ -14,6 +14,7 @@ class ForteBankPaymentController extends \Nurzzzone\AdminPanel\Controllers\Table
         return (new Table())
             ->setBuilder(ForteBankPayment::query()->tableQuery())
             ->enablePagination()
+            ->enableSearch()
             ->addColumn(new Table\Column\Text('Идентификатор сессии', 'session_id'))
             ->addColumn(new Table\Column\Text('Идентификатор заказа', 'order_id'))
             ->addColumn(new Table\Column\Text('Сумма', 'payment.amount'))

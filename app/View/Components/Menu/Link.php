@@ -18,6 +18,6 @@ class Link extends MenuElement
 
     public function render()
     {
-        return view('components.menu.link');
+        return view('admin-panel::components.menu.link');
     }
 }

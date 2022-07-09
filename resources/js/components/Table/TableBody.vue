@@ -1,15 +1,12 @@
 <template>
     <tbody>
-        <tr v-for="object in this.getObjects" :key="object.id" data-name="tableRow">
-            <v-table-data v-for="(column, index) in this.getColumns"
-                          :key="index"
-                          :type="column.type"
+        <tr v-for="object in getObjects" :key="object.id" data-name="tableRow">
+            <v-table-data v-for="(column, index) in getColumns" :key="index"
                           :column="column"
-                          :label="resolveLabel(object, column.columnName)"
                           :object="object"
             ></v-table-data>
 
-            <v-table-data :type="'buttons'" :object="object"></v-table-data>
+            <v-table-data v-if="isButtonsEnabled" :type="'buttons'" :object="object"></v-table-data>
         </tr>
     </tbody>
 </template>
@@ -23,28 +20,9 @@ export default {
         ...mapGetters([
             'getColumns',
             'getObjects',
+            'isButtonsEnabled'
         ])
     },
-    methods: {
-        resolveLabel(object, columnName) {
-            if (! columnName.includes('.')) {
-                return object[columnName];
-            }
-
-            if ((columnName.match('\.+') || []).length === 1) {
-                let relationName = columnName.split('.')[0];
-                columnName = columnName.split('.')[1];
-
-                return object[relationName][columnName];
-            }
-
-            return this.getNestedColumn();
-        },
-
-        getNestedColumn() {
-            return 'надо дописать';
-        },
-    }
 }
 </script>
 

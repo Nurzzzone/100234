@@ -42,7 +42,7 @@ export default {
 
     actions: {
         updatePaginationInstance({ commit, state, getters }, url = undefined) {
-            url = url ?? getters.getTableTools.searchUrl ?? location.href;
+            url = url ?? getters.getTools.searchUrl;
 
             return axios.get(url, {
                 params: {
@@ -50,7 +50,7 @@ export default {
                     searchKeyword: state.searchKeyword,
                     perPage: getters.getActivePerPageButton,
                 }
-            }).then((response) => commit('setPaginationInstance', response.data));
+            }).then((response) => commit('setPagination', response.data));
         },
 
         updateToggle(commit, {url, columnName, toggleValue}) {

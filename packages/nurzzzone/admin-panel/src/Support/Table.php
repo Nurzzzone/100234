@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Nurzzzone\AdminPanel\Controllers\Contracts\Collectable;
-use Nurzzzone\AdminPanel\Controllers\Contracts\Paginatable;
+use Nurzzzone\AdminPanel\Support\Contracts\Collectable;
+use Nurzzzone\AdminPanel\Support\Contracts\Paginatable;
 use Nurzzzone\AdminPanel\Support\Table\Column\Column;
 use Nurzzzone\AdminPanel\Support\Table\Filter\Filter;
 
@@ -97,14 +97,14 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
     /**
      * Enable ajax searching in table
      *
-     * @param string $searchUrl
+     * @param ?string $searchUrl
      * @return $this
      */
-    public function enableSearch(string $searchUrl): self
+    public function enableSearch(?string $searchUrl = null): self
     {
         $this->searchEnabled = true;
 
-        $this->searchUrl = $searchUrl;
+        $this->searchUrl = $searchUrl ?? url()->current();
 
         return $this;
     }
@@ -277,13 +277,13 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         ];
     }
 
-    public function objects()
+    public function objects(): array
     {
         if ($this->isPaginationEnabled()) {
-            return $this->pagination();
+            return ['pagination' => $this->pagination()];
         }
 
-        return $this->collection();
+        return ['collection' => $this->collection()];
     }
 
     /**
@@ -337,9 +337,9 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
      *
      * @return string
      */
-    public function render(): string
+    public function render()
     {
-        return view('admin-panel::index', $this->toArray());
+        return view('admin-panel::index', ['table' => $this->toJson(256)]);
     }
 
     /**
@@ -349,12 +349,11 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
      */
     public function toArray(): array
     {
-        return [
+        return array_merge([
             'tools'     => $this->tools(),
             'columns'   => $this->columns,
             'filters'   => $this->filters,
-            'objects'   => $this->objects(),
-        ];
+        ], $this->objects());
     }
 
     /**
