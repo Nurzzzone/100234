@@ -177,7 +177,7 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         $this->setSearchQuery();
 
         return $this->builder
-            ->when(request()->filled('searchKeyword'), function($query) {
+            ->when($this->searchQuery, function($query) {
                 foreach($this->columns as $column) {
                     /**
                      * Если используется столбец из Join Clause-а, то нужно использовать значение указанное
@@ -252,7 +252,7 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
          * Для фильтрации по связи сущности, необходимо реализовать метод с названием $relation ($relation - это
          * название столбца до первой точки, который указан в TableConfig)
          */
-        if ($this->builder instanceof EloquentBuilder && method_exists($this->builder, $relation)) {
+        if ($this->builder instanceof EloquentBuilder && method_exists($this->builder->getModel(), $relation)) {
             $query->orWhereRelation($relation, $column, 'LIKE', "%$this->searchQuery%");
         }
 
