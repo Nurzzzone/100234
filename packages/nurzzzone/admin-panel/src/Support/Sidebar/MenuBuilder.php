@@ -1,14 +1,13 @@
 <?php
-/*
-*   07.11.2019
-*   MenuBuilder
-*/
 
-namespace App\MenuBuilder;
+namespace Nurzzzone\AdminPanel\Support\Sidebar;
 
+/**
+ * @className MenuBuilder
+ * @package Nurzzzone\AdminPanel\Support\Sidebar
+ */
 class MenuBuilder
 {
-
     private $menu;
     private $dropdown;
     private $dropdownDeep;
@@ -32,7 +31,7 @@ class MenuBuilder
     private function addDropdownLink($id, $name, $href, $icon, $iconType, $sequence = 0)
     {
         $num = count($this->menu);
-        $hasIcon = ($icon === false || strlen($icon) === 0) ? false : true;
+        $hasIcon = !(($icon === false || strlen($icon) === 0));
         if ($hasIcon) {
             $this->addElementToMenuLastPosition(array(
                 'id' => $id,
@@ -80,7 +79,7 @@ class MenuBuilder
 
     private function addRegularLink($id, $name, $href, $icon, $iconType, $sequence = 0)
     {
-        $hasIcon = ($icon === false || strlen($icon) === 0) ? false : true;
+        $hasIcon = !(($icon === false || strlen($icon) === 0));
         if ($hasIcon) {
             array_push($this->menu, array(
                 'id' => $id,
@@ -106,7 +105,7 @@ class MenuBuilder
 
     public function addTitle($id, $name, $icon = false, $iconType = 'coreui', $sequence = 0)
     {
-        $hasIcon = ($icon === false || strlen($icon) === 0) ? false : true;
+        $hasIcon = !(($icon === false || strlen($icon) === 0));
         if ($hasIcon) {
             array_push($this->menu, array(
                 'id' => $id,
@@ -132,7 +131,7 @@ class MenuBuilder
     {
         $this->dropdown = true;
         $this->dropdownDeep++;
-        $hasIcon = ! ($icon === false || strlen($icon) === 0);
+        $hasIcon = !($icon === false || strlen($icon) === 0);
         if ($this->dropdownDeep === 1) {
             if ($hasIcon) {
                 array_push($this->menu, array(

@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Menus;
+namespace Nurzzzone\AdminPanel\Support\Sidebar;
 
-use App\MenuBuilder\RenderFromDatabaseData;
 use App\Models\Menus;
 
-class GetSidebarMenu implements MenuInterface
+/**
+ * @className GetSidebarMenu
+ * @package Nurzzzone\AdminPanel\Support\Sidebar
+ */
+class GetSidebarMenu
 {
     public function get($roles, $menuId = 2)
     {

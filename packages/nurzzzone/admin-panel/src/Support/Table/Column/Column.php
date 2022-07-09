@@ -3,6 +3,7 @@
 namespace Nurzzzone\AdminPanel\Support\Table\Column;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
 
 /**
  * @className Column

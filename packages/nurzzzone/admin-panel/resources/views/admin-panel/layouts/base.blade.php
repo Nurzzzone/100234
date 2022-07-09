@@ -22,7 +22,7 @@
             integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
             crossorigin="anonymous"></script>
     @yield('header-scripts')
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('vendor/admin-panel/js/main.min.js') }}" defer></script>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
     <div class="global-loader"></div>
     <span class="global-loader-text font-lg mt-4">Пожалуйста подождите осталось совсем немного</span>
 </div>
-<div class="c-app" id="app">
+<div class="c-app" id="admin-panel-app">
     <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
         @include('admin-panel::shared.sidebar.brand')
         @include('admin-panel::shared.sidebar.nav-builder')

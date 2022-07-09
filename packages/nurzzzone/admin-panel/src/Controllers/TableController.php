@@ -10,11 +10,11 @@ abstract class TableController extends Controller implements FromTable
     {
         $table = $this->fromTable();
 
-        if (! request()->ajax()) {
+        if (!request()->ajax()) {
             return $table->render();
         }
 
-        if (! $table->isPaginationEnabled()) {
+        if (!$table->isPaginationEnabled()) {
             return $table->collection();
         }
 

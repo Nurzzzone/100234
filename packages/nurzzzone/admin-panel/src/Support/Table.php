@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Nurzzzone\AdminPanel\Reflection\ExtendedReflectionClass;
 use Nurzzzone\AdminPanel\Support\Contracts\Collectable;
 use Nurzzzone\AdminPanel\Support\Contracts\Paginatable;
 use Nurzzzone\AdminPanel\Support\Table\Column\Column;

@@ -3,7 +3,7 @@
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth', 'get.menu']], function () {
+Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/', function () { return view('pages.homepage'); });
     Route::resource('contact', 'Marketing\ContactController');

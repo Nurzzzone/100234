@@ -5,7 +5,6 @@ mix.js('resources/js/app.js', 'public/js');
 
 mix.copy([
     // 'resources/vendor/quill/css/quill.css',
-    'node_modules/cropperjs/dist/cropper.css',
     'node_modules/@coreui/icons/css/flag.min.css',
     'node_modules/@coreui/icons/css/brand.min.css',
     'node_modules/@coreui/icons/css/free.min.css'
