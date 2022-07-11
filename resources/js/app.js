@@ -13,6 +13,8 @@ Vue.component('v-table-tools', require('./components/Table/TableTools.vue').defa
 Vue.component('v-pagination', require('./components/Pagination/Pagination.vue').default);
 Vue.component('v-sidebar-search', require('./components/Sidebar/SidebarSearch.vue').default);
 
+Vue.component('v-form', require('./components/Form/Form.vue').default);
+
 new Vue({
     el: '#admin-panel-app',
     store

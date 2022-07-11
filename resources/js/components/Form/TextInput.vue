@@ -1,11 +1,11 @@
 <template>
     <tr>
-        <Label :label="label" :required="required"/>
+        <Label :label="field.label" :required="field.required"/>
         <td>
             <input class="form-control"
-                   :disabled="isDisabled"
-                   :required="isRequired"
-                   :placeholder="placeholder"
+                   :disabled="field.disabled"
+                   :required="field.required"
+                   :placeholder="field.label"
                    type="text">
         </td>
     </tr>
@@ -16,7 +16,8 @@ import Label from "./Label";
 
 export default {
     name: "TextInput",
-    components: {Label}
+    components: {Label},
+    props: ['field']
 }
 </script>
 

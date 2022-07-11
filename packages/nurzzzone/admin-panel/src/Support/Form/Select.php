@@ -2,6 +2,8 @@
 
 namespace Nurzzzone\AdminPanel\Support\Form;
 
+use Illuminate\Support\Arr;
+
 /**
  * @className Select
  * @package Nurzzzone\AdminPanel\Support\Form
@@ -20,7 +22,7 @@ class Select extends Field
 
     public function __construct(string $label, string $columnName, array $options = [])
     {
-        if (array_key_exists('options', $options)) {
+        if (array_key_exists('options', $options) && Arr::isAssoc($options['options'])) {
             $this->options = $options['options'];
         }
 

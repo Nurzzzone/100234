@@ -22,7 +22,8 @@
             integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
             crossorigin="anonymous"></script>
     @yield('header-scripts')
-    <script src="{{ asset('vendor/admin-panel/js/main.min.js') }}" defer></script>
+{{--    <script src="{{ asset('vendor/admin-panel/js/main.min.js') }}" defer></script>--}}
+    <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 
 <body>

@@ -10,6 +10,8 @@ class AdminPanelServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views/admin-panel', 'admin-panel');
 
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+
         $this->publishes([
             __DIR__ . '/../resources/static' => public_path('vendor/admin-panel')
         ], 'admin-panel-assets');

@@ -4,9 +4,8 @@ namespace Nurzzzone\AdminPanel\Controllers;
 
 use App\Models\Menulist;
 use App\Models\RoleHierarchy;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Nurzzzone\AdminPanel\Support\Contracts\FromForm;
-use Nurzzzone\AdminPanel\Support\Contracts\FromTable;
 use Nurzzzone\AdminPanel\Support\Form;
 use Nurzzzone\AdminPanel\Support\Sidebar\GetSidebarMenu;
 use Nurzzzone\AdminPanel\Support\Table;
@@ -18,51 +17,25 @@ class AdminController extends \Illuminate\Routing\Controller
      */
     protected $pageTitle;
 
+    /**
+     * @var array
+     */
+    protected $urlParams = [];
+
+    /**
+     * @var Table
+     */
+    protected $table;
+
     public function __construct()
     {
         \Illuminate\Support\Facades\View::share('pageTitle', $this->pageTitle);
 
+        if (method_exists(static::class, 'fromTable')) {
+            $this->table = $this->fromTable();
+        }
+
         $this->renderSidebar();
-    }
-
-    final public function index()
-    {
-        $reflectionClass = new \ReflectionClass(static::class);
-
-        if ($reflectionClass->implementsInterface(FromTable::class) && method_exists(static::class, 'fromTable')) {
-            return $this->renderTableComponent($this->fromTable());
-        }
-
-        throw new \RuntimeException('Unable to render component');
-    }
-
-    final public function create()
-    {
-        $reflectionClass = new \ReflectionClass(static::class);
-
-        if ($reflectionClass->implementsInterface(FromForm::class) && method_exists(static::class, 'fromForm')) {
-            return $this->renderFormComponent($this->fromForm());
-        }
-
-        throw new \RuntimeException('Unable to render component');
-    }
-
-    protected function renderTableComponent(Table $table)
-    {
-        if (! request()->ajax()) {
-            return $table->render();
-        }
-
-        if (! $table->isPaginationEnabled()) {
-            return $table->collection();
-        }
-
-        return $table->pagination();
-    }
-
-    protected function renderFormComponent(Form $form)
-    {
-
     }
 
     public function renderSidebar()
@@ -103,5 +76,53 @@ class AdminController extends \Illuminate\Routing\Controller
         }
 
         view()->share('appMenus', $result);
+    }
+
+    final public function index()
+    {
+        if (is_null($this->table)) {
+            throw new \RuntimeException('Unable to render component');
+        }
+
+        if (! empty($this->urlParams)) {
+            $this->table->setUrlDependencies($this->urlParams, func_get_args());
+        }
+
+        if (! request()->ajax()) {
+            return $this->table->render();
+        }
+
+        if (! $this->table->isPaginationEnabled()) {
+            return $this->table->collection();
+        }
+
+        return $this->table->pagination();
+    }
+
+    public function create()
+    {
+        return $this->renderFormComponent($this->fromForm());
+    }
+
+    protected function renderFormComponent(Form $form)
+    {
+        if (!request()->ajax()) {
+            return $form->render();
+        }
+
+        if (request()->method() === Request::METHOD_POST) {
+            return $form->handleStoreRequest();
+        }
+
+        if (request()->method() === Request::METHOD_PUT || request()->method() === Request::METHOD_PATCH) {
+            return $form->handleUpdateRequest();
+        }
+
+        throw new \RuntimeException(sprintf('Cannot handle request method %s', request()->method()));
+    }
+
+    public function addUrlParam(string $name, ?string $className = null)
+    {
+        $this->urlParams[] = compact('name', 'className');
     }
 }
