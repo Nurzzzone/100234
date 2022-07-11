@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
  * @className Column
  * @package Nurzzzone\AdminPanel\Support\Table\Column
  */
-abstract class Column implements Arrayable
+class Column implements Arrayable
 {
     /**
      * @var string
