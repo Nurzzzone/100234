@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Outside\Outside;
+use Illuminate\Database\Eloquent\Model;
 
-class Menurole extends Outside
+/**
+ * @className Menurole
+ * @package Nurzzzone\AdminPanel\Models
+ */
+class Menurole extends Model
 {
     protected $table = 'menu_role';
     public $timestamps = false;

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Outside\Outside;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @className Menu
+ * @package Nurzzzone\AdminPanel\Models
  * @method static Builder dropdown()
  */
-class Menus extends Outside
+class Menus extends Model
 {
     protected $table = 'menus';
     public $timestamps = false;
