@@ -15,7 +15,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('help', 'Marketing\HelpController');
     Route::post('help/updateSequence', 'Marketing\HelpController@updateSequence')->name('help.updateSequence');
 //    Route::resource('flashNotification', 'FlashNotificationController');
-    Route::resource('forteBankPayment', 'ForteBankPaymentController');
+//    Route::resource('forteBankPayment', 'ForteBankPaymentController');
     Route::resource('kaspiQrPayment', 'KaspiQrPaymentController');
     Route::resource('halykBankPayment', 'HalykBankPaymentController');
 

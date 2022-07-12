@@ -134,7 +134,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\js\sortable.js */"./resources/js/sortable.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\10032\resources\js\sortable.js */"./resources/js/sortable.js");
 
 
 /***/ })

@@ -14,7 +14,9 @@ class ForteBankPaymentController extends AdminController implements FromTable
     public function fromTable(): Table
     {
         return (new Table())
-            ->setBuilder(ForteBankPayment::query()->tableQuery())
+            ->setBuilder(function(Table $table) {
+                return ForteBankPayment::tableQuery();
+            })
             ->enablePagination()
             ->enableSearch()
             ->addColumn(new Table\Column\Text('Идентификатор сессии', 'session_id'))

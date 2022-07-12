@@ -141,7 +141,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\js\table-row.js */"./resources/js/table-row.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\10032\resources\js\table-row.js */"./resources/js/table-row.js");
 
 
 /***/ })

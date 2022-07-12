@@ -26,34 +26,53 @@ class Form implements Jsonable, Renderable
      */
     private $fields = [];
 
+    /**
+     * @var string
+     */
+    private $tableUrl;
+
+    /**
+     * @var string
+     */
+    private $method;
+
+    /**
+     * @var string
+     */
+    private $action;
+
     public function __construct(array $options = [])
     {
         if (array_key_exists('model', $options)) {
             $this->from($options['model']);
         }
-    }
 
-    protected function availableRequestMethods(): array
-    {
-        return [
-            Request::METHOD_PUT,
-            Request::METHOD_POST,
-            Request::METHOD_PATCH,
-        ];
+        $this->action = url()->current();
     }
 
     public function handleStoreRequest(): \Illuminate\Http\JsonResponse
     {
-        dd($this->model);
-
+        dd(request()->all());
 
         return response()->json(['message' => 'success']);
     }
 
-    public function handleUpdateRequest(): \Illuminate\Http\JsonResponse
+    public function handleUpdateRequest(Model $model): \Illuminate\Http\JsonResponse
     {
+        dd(request()->all());
 
         return response()->json(['message' => 'success']);
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setTableUrl(string $value): self
+    {
+        $this->tableUrl = $value;
+
+        return $this;
     }
 
     /**
@@ -79,7 +98,9 @@ class Form implements Jsonable, Renderable
     public function toJson($options = 0): string
     {
         return collect([
-            'fields' => $this->fields
+            'fields' => $this->fields,
+            'action' => $this->action,
+            'method' => $this->method,
         ])->toJson();
     }
 

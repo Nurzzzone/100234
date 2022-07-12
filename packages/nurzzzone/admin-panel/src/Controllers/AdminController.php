@@ -4,28 +4,32 @@ namespace Nurzzzone\AdminPanel\Controllers;
 
 use App\Models\Menulist;
 use App\Models\RoleHierarchy;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
-use Nurzzzone\AdminPanel\Support\Form;
 use Nurzzzone\AdminPanel\Support\Sidebar\GetSidebarMenu;
 use Nurzzzone\AdminPanel\Support\Table;
+use Illuminate\Routing\Controller as BaseController;
 
-class AdminController extends \Illuminate\Routing\Controller
+class AdminController extends BaseController
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     /**
      * @var string
      */
     protected $pageTitle;
 
     /**
-     * @var array
-     */
-    protected $urlParams = [];
-
-    /**
      * @var Table
      */
     protected $table;
+
+    /**
+     * @var string
+     */
+    protected $routeName;
 
     public function __construct()
     {
@@ -81,18 +85,18 @@ class AdminController extends \Illuminate\Routing\Controller
     final public function index()
     {
         if (is_null($this->table)) {
-            throw new \RuntimeException('Unable to render component');
+            throw new \RuntimeException('Unable to render component.');
         }
 
-        if (! empty($this->urlParams)) {
+        if (!empty($this->urlParams)) {
             $this->table->setUrlDependencies($this->urlParams, func_get_args());
         }
 
-        if (! request()->ajax()) {
+        if (!request()->ajax()) {
             return $this->table->render();
         }
 
-        if (! $this->table->isPaginationEnabled()) {
+        if (!$this->table->isPaginationEnabled()) {
             return $this->table->collection();
         }
 
@@ -101,28 +105,42 @@ class AdminController extends \Illuminate\Routing\Controller
 
     public function create()
     {
-        return $this->renderFormComponent($this->fromForm());
-    }
+        if (!method_exists(static::class, 'fromForm')) {
+            throw new \RuntimeException('Cannot render unknown component.');
+        }
 
-    protected function renderFormComponent(Form $form)
-    {
         if (!request()->ajax()) {
-            return $form->render();
+            return $this->fromForm()->render();
         }
 
-        if (request()->method() === Request::METHOD_POST) {
-            return $form->handleStoreRequest();
-        }
-
-        if (request()->method() === Request::METHOD_PUT || request()->method() === Request::METHOD_PATCH) {
-            return $form->handleUpdateRequest();
-        }
-
-        throw new \RuntimeException(sprintf('Cannot handle request method %s', request()->method()));
+        return $this->fromForm()->handleStoreRequest();
     }
 
-    public function addUrlParam(string $name, ?string $className = null)
+    public function edit()
     {
-        $this->urlParams[] = compact('name', 'className');
+        if (!method_exists(static::class, 'fromForm')) {
+            throw new \RuntimeException('Cannot render unknown component.');
+        }
+
+        if (!request()->ajax()) {
+            return $this->fromForm()->render();
+        }
+
+        return $this->fromForm()->handleUpdateRequest();
+    }
+
+    public function destroy()
+    {
+
+    }
+
+    public function getRouteName(): string
+    {
+        return $this->routeName;
+    }
+
+    public function appendRoute()
+    {
+
     }
 }

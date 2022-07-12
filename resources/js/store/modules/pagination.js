@@ -15,6 +15,9 @@ export default {
         getPaginationObjects(state) {
             return state.pagination.data;
         },
+        getPerPageButtons(state) {
+            return state.perPageButtons;
+        },
         getActivePerPageButton(state) {
             return state.perPageButtons.find((button) => button.active).value;
         },

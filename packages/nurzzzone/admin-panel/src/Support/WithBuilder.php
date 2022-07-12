@@ -22,6 +22,10 @@ trait WithBuilder
      */
     public function setBuilder($value): self
     {
+        if (is_callable($value) && $value instanceof \Closure) {
+            $value = $value($this);
+        }
+
         if (!$value instanceof Builder && !$value instanceof EloquentBuilder) {
             $errorMessage = sprintf('Builder must be instance of %s or %s', Builder::class, EloquentBuilder::class);
 

@@ -3248,12 +3248,12 @@ var getjQuery = function getjQuery() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\vendor\sidebar\sidebar.js */"./resources/vendor/sidebar/sidebar.js");
-__webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\vendor\sidebar\class-toggler.js */"./resources/vendor/sidebar/class-toggler.js");
-__webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\vendor\sidebar\dom\data.js */"./resources/vendor/sidebar/dom/data.js");
-__webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\vendor\sidebar\dom\event-handler.js */"./resources/vendor/sidebar/dom/event-handler.js");
-__webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\vendor\sidebar\dom\manipulator.js */"./resources/vendor/sidebar/dom/manipulator.js");
-module.exports = __webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\vendor\sidebar\util\index.js */"./resources/vendor/sidebar/util/index.js");
+__webpack_require__(/*! C:\OpenServer\domains\10032\resources\vendor\sidebar\sidebar.js */"./resources/vendor/sidebar/sidebar.js");
+__webpack_require__(/*! C:\OpenServer\domains\10032\resources\vendor\sidebar\class-toggler.js */"./resources/vendor/sidebar/class-toggler.js");
+__webpack_require__(/*! C:\OpenServer\domains\10032\resources\vendor\sidebar\dom\data.js */"./resources/vendor/sidebar/dom/data.js");
+__webpack_require__(/*! C:\OpenServer\domains\10032\resources\vendor\sidebar\dom\event-handler.js */"./resources/vendor/sidebar/dom/event-handler.js");
+__webpack_require__(/*! C:\OpenServer\domains\10032\resources\vendor\sidebar\dom\manipulator.js */"./resources/vendor/sidebar/dom/manipulator.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\10032\resources\vendor\sidebar\util\index.js */"./resources/vendor/sidebar/util/index.js");
 
 
 /***/ })

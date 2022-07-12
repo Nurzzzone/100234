@@ -38,7 +38,7 @@
             </button>
 
             <div class="dropdown-menu w-100 mt-1" aria-labelledby="perPageDropdown">
-                <button v-for="button in perPageButtons"
+                <button v-for="button in getPerPageButtons"
                         @click="changePerPageItems(button.value)"
                         class="dropdown-item"
                         :disabled="button.active">{{ button.value }}
@@ -60,10 +60,10 @@ export default {
     computed: {
         ...mapState({
             searchKeyword: state => state.table.searchKeyword,
-            perPageButtons: state => state.table.perPageButtons
         }),
         ...mapGetters([
             'getTools',
+            'getPerPageButtons',
             'getActivePerPageButton',
             'showPerPageButton',
             'showFilters',

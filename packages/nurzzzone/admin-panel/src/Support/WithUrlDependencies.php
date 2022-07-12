@@ -18,7 +18,7 @@ trait WithUrlDependencies
      * @param array $arguments
      * @return $this
      */
-    public function setUrlDependencies(array $params, array $arguments): self
+    protected function setUrlDependencies(array $params, array $arguments): self
     {
         if (empty($arguments)) {
             return $this;
@@ -43,5 +43,17 @@ trait WithUrlDependencies
     public function getUrlDependencies(): array
     {
         return $this->urlDependencies;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrlDependency(string $keyName)
+    {
+        if (! array_key_exists($keyName, $this->urlDependencies)) {
+            throw new \InvalidArgumentException(sprintf('Url dependency %s is not defined.', $keyName));
+        }
+
+        return $this->urlDependencies[$keyName];
     }
 }

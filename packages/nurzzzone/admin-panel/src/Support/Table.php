@@ -77,10 +77,15 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
      */
     private $columns = [];
 
+    /**
+     * @var array
+     */
+    protected $urlParams = [];
+
     public function __construct(array $options = [])
     {
         if (array_key_exists('builder', $options)) {
-            $this->builder = $options['builder'];
+            $this->setBuilder($options['builder']);
         }
     }
 
@@ -160,6 +165,11 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
         return $this;
     }
 
+    public function addUrlParam(string $name, ?string $className = null)
+    {
+        $this->urlParams[] = compact('name', 'className');
+    }
+
     /**
      * Set search input value from request
      *
@@ -175,6 +185,10 @@ class Table implements Arrayable, Jsonable, Renderable, Paginatable, Collectable
     public function handle()
     {
         $this->setSearchQuery();
+
+        if (is_null($this->builder)) {
+            throw new \RuntimeException('Table must have specified builder.');
+        }
 
         return $this->builder
             ->when($this->searchQuery, function($query) {

@@ -161,7 +161,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Nurdaulet\web\laravel-admin-panel\resources\js\menu-edit.js */"./resources/js/menu-edit.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\10032\resources\js\menu-edit.js */"./resources/js/menu-edit.js");
 
 
 /***/ })
